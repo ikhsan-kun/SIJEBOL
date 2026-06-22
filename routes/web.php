@@ -256,7 +256,7 @@ Route::get('/run-school-migration', function() {
 
 
 Route::get('/debug-sekolah', function() {
-    $users   = \App\Models\Admin::where('role', 'cabang')->select('id','name','kecamatan')->get();
+    $users   = \App\Models\User::whereIn('role', ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])->select('id','name','kecamatan')->get();
     $schools = \Illuminate\Support\Facades\DB::table('schools')->get();
     $cols    = \Illuminate\Support\Facades\Schema::getColumnListing('schools');
     
@@ -1377,7 +1377,7 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
         $validated['status_jempol'] = 'Belum';
         
         // Auto-assign to correct Cabang based on kecamatan
-        $petugas = \App\Models\Admin::where('role', 'cabang')->where('kecamatan', $request->kecamatan)->first();
+        $petugas = \App\Models\User::whereIn('role', ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])->where('kecamatan', $request->kecamatan)->first();
         $validated['cabang_id'] = $petugas ? $petugas->id : 1; 
 
         \App\Models\School::create($validated);
@@ -1401,8 +1401,8 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
         $users = $userQuery->orderBy('created_at', 'desc')->paginate(10);
         
         $totalCount = \App\Models\User::count();
-        $adminCount = \App\Models\Admin::where('role', 'admin')->count();
-        $petugasCount = \App\Models\Admin::where('role', 'cabang')->count();
+        $adminCount = \App\Models\User::whereIn('role', ['admin', 'admin pusat'])->count();
+        $petugasCount = \App\Models\User::whereIn('role', ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])->count();
         $citizenCount = \App\Models\Masyarakat::query()->count();
 
         return view('admin.users', compact(
