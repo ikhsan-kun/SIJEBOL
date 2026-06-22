@@ -1721,7 +1721,7 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
             'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
         
-        $user = auth()->user();
+        $user = Auth::guard('admin')->user() ?? Auth::guard('masyarakat')->user();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
@@ -1747,7 +1747,7 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
 
 
         ]);
-        $user = auth()->user();
+        $user = Auth::guard('admin')->user() ?? Auth::guard('masyarakat')->user();
         if (!Hash::check($request->current_password, $user->password)) {
             return back()->withErrors(['current_password' => 'Password lama tidak cocok']);
         }

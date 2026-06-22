@@ -238,15 +238,27 @@
 
         <!-- Actions -->
         <div class="nav-actions">
-            @auth
+            @if(auth()->guard('masyarakat')->check())
                 <a href="{{ route('masyarakat.dashboard') }}" class="btn-dashboard">
                     <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
                     Dashboard
                 </a>
+            @elseif(auth()->guard('admin')->check())
+                @if(in_array(auth()->guard('admin')->user()->role, ['cabang_dinas', 'cabang', 'petugas']))
+                    <a href="{{ route('cabang.dashboard') }}" class="btn-dashboard">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
+                        Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('admin.dashboard') }}" class="btn-dashboard">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
+                        Dashboard
+                    </a>
+                @endif
             @else
                 <a href="{{ route('login') }}" class="btn-login">Login</a>
                 <a href="/register" class="btn-register">Registrasi</a>
-            @endauth
+            @endif
 
             <!-- Mobile Menu Button -->
             <button @click="mobileMenuOpen = !mobileMenuOpen" class="mobile-menu-btn">
@@ -295,15 +307,27 @@
         </div>
         
         <div class="mobile-actions">
-            @auth
+            @if(auth()->guard('masyarakat')->check())
                 <a href="{{ route('masyarakat.dashboard') }}" class="mobile-btn-register" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                     <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
                     Dashboard
                 </a>
+            @elseif(auth()->guard('admin')->check())
+                @if(in_array(auth()->guard('admin')->user()->role, ['cabang_dinas', 'cabang', 'petugas']))
+                    <a href="{{ route('cabang.dashboard') }}" class="mobile-btn-register" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
+                        Dashboard
+                    </a>
+                @else
+                    <a href="{{ route('admin.dashboard') }}" class="mobile-btn-register" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                        <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
+                        Dashboard
+                    </a>
+                @endif
             @else
                 <a href="{{ route('login') }}" class="mobile-btn-login">Login</a>
                 <a href="/register" class="mobile-btn-register">Registrasi</a>
-            @endauth
+            @endif
         </div>
     </div>
 </header>

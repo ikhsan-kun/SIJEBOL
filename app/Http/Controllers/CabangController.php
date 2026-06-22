@@ -825,7 +825,7 @@ class CabangController extends Controller
 
     public function profil()
     {
-        $user = auth()->user();
+        $user = auth('admin')->user() ?? auth()->user();
         return view('cabang.profil', compact('user'));
     }
 }

@@ -270,6 +270,15 @@
             margin-bottom: 20px;
             line-height: 1.5;
         }
+        @media (max-width: 480px) {
+            .field-row {
+                grid-template-columns: 1fr !important;
+                gap: 12px !important;
+            }
+            .page-wrap {
+                padding: 24px 16px !important;
+            }
+        }
     </style>
 </head>
 <body>
@@ -414,6 +423,13 @@
 
         <div class="login-link">
             Sudah memiliki akun? <a href="{{ route('login') }}">Masuk di sini</a>
+        </div>
+        
+        <div style="text-align: center; margin-top: 20px; border-top: 1px solid #f1f5f9; padding-top: 16px;">
+            <a href="{{ route('home') }}" style="color: #64748b; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='#003178'" onmouseout="this.style.color='#64748b'">
+                <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
+                Kembali ke Beranda
+            </a>
         </div>
     </form>
 </div>
