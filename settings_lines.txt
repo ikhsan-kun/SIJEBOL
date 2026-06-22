@@ -1,0 +1,91 @@
+389: Route::get('/run-settings-migration', function() {
+395:         if (!$schema->hasColumn('app_settings', 'agency_logo')) {
+396:             $db->exec("ALTER TABLE app_settings ADD COLUMN agency_logo VARCHAR(255) NULL");
+428:         // 2. Update tabel app_settings dengan kolom baru
+429:         $cols = $schema->getColumnListing('app_settings');
+431:             $db->exec("ALTER TABLE app_settings ADD COLUMN operational_hours TEXT NULL");
+433:         if (!in_array('notification_settings', $cols)) {
+434:             $db->exec("ALTER TABLE app_settings ADD COLUMN notification_settings TEXT NULL");
+437:             $db->exec("ALTER TABLE app_settings ADD COLUMN document_templates TEXT NULL");
+441:         $settings = \Illuminate\Support\Facades\DB::table('app_settings')->first();
+442:         if ($settings) {
+443:             \Illuminate\Support\Facades\DB::table('app_settings')->update([
+444:                 'operational_hours' => $settings->operational_hours ?? json_encode([
+450:                 'notification_settings' => $settings->notification_settings ?? json_encode([
+455:                 'document_templates' => $settings->document_templates ?? json_encode([
+461:             \Illuminate\Support\Facades\DB::table('app_settings')->insert([
+471:                 'notification_settings' => json_encode([
+540:             <a href="/admin/settings" style="background:#003178;color:white;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold">→ Kembali ke Pengaturan</a>
+990:             return view('masyarakat.settings');
+991:         })->name('settings');
+994:             return view('masyarakat.settings-security');
+995:         })->name('settings.security');
+998:             return view('masyarakat.settings-notifications');
+999:         })->name('settings.notifications');
+1006:         Route::post('/pengaturan', [App\Http\Controllers\PermohonanController::class, 'updateSettings'])->name('settings.update');
+1007:         Route::post('/pengaturan/password', [App\Http\Controllers\PermohonanController::class, 'updatePassword'])->name('settings.password.update');
+1008:         Route::delete('/pengaturan/foto', [App\Http\Controllers\PermohonanController::class, 'deletePhoto'])->name('settings.photo.delete');
+1294:     Route::get('/settings', function (Request $request) {
+1295:         $settings = \Illuminate\Support\Facades\DB::table('app_settings')->first();
+1325:         return view('admin.settings', compact(
+1326:             'settings', 'services', 'adminUsers', 'regionalTargets', 'regions',
+1329:     })->name('admin.settings');
+1332:         return redirect()->route('admin.settings');
+1362:         return redirect()->route('admin.settings')->with('success', 'User ' . $request->name . ' berhasil ditambahkan!');
+1386:         return redirect()->route('admin.settings')->with('success', 'User berhasil diperbarui!');
+1422:     Route::post('/settings/agency', function (Request $request) {
+1433:         \Illuminate\Support\Facades\DB::table('app_settings')->where('id', 1)->update($updateData);
+1436:     })->name('admin.settings.agency');
+1438:     Route::post('/settings/services', function (Request $request) {
+1442:             'icon' => $request->icon ?? 'settings_suggest',
+1451:     Route::delete('/settings/services/{id}', function ($id) {
+1456:     Route::post('/settings/targets', function (Request $request) {
+1468:     })->name('admin.settings.targets');
+1471:     Route::post('/settings/regions', function (Request $request) {
+1480:     })->name('admin.settings.regions.store');
+1482:     Route::delete('/settings/regions/{id}', function ($id) {
+1485:     })->name('admin.settings.regions.delete');
+1488:     Route::post('/settings/operational', function (Request $request) {
+1495:         \Illuminate\Support\Facades\DB::table('app_settings')->where('id', 1)->update([
+1499:     })->name('admin.settings.operational');
+1502:     Route::post('/settings/notifications', function (Request $request) {
+1508:         \Illuminate\Support\Facades\DB::table('app_settings')->where('id', 1)->update([
+1509:             'notification_settings' => json_encode($notif)
+1512:     })->name('admin.settings.notifications');
+1515:     Route::post('/settings/templates', function (Request $request) {
+1516:         $settings = \Illuminate\Support\Facades\DB::table('app_settings')->first();
+1517:         $templates = json_decode($settings->document_templates, true) ?? ['kop_surat' => null, 'stempel' => null];
+1527:         \Illuminate\Support\Facades\DB::table('app_settings')->where('id', 1)->update([
+1531:     })->name('admin.settings.templates');
+1534:     Route::post('/settings/gateway', function (Request $request) {
+1535:         $settings = \Illuminate\Support\Facades\DB::table('app_settings')->first();
+1536:         $notif = json_decode($settings->notification_settings ?? '{}', true);
+1542:         \Illuminate\Support\Facades\DB::table('app_settings')->where('id', 1)->update([
+1543:             'notification_settings' => json_encode($notif)
+1547:     })->name('admin.settings.gateway');
+1550:     Route::post('/settings/gateway/test', function (Illuminate\Http\Request $request) {
+1560:     })->name('admin.settings.test_wa');
+1578:     Route::get('/settings/preferences', function () {
+1579:         return view('admin.settings-preferences');
+1580:     })->name('admin.settings.preferences');
+1582:     // Halaman Notifikasi (Settings)
+1583:     Route::get('/settings/notifications', function () {
+1584:         return view('admin.settings-notifications');
+1585:     })->name('admin.settings.notifications_page');
+1588:     Route::get('/settings/security', function () {
+1594:         return view('admin.settings-security', compact('histories'));
+1595:     })->name('admin.settings.security');
+1598:     Route::get('/settings/about', function () {
+1599:         $settings = \Illuminate\Support\Facades\DB::table('app_settings')->first();
+1600:         return view('admin.settings-about', compact('settings'));
+1601:     })->name('admin.settings.about');
+1603:     Route::post('/settings/about', function (Illuminate\Http\Request $request) {
+1618:             $file->move(public_path('uploads/settings'), $filename);
+1619:             $data['agency_logo'] = 'uploads/settings/' . $filename;
+1622:         \Illuminate\Support\Facades\DB::table('app_settings')->where('id', 1)->update($data);
+1625:     })->name('admin.settings.about.update');
+1675:     Route::post('/settings/preferences', function (Illuminate\Http\Request $request) {
+1687:     })->name('admin.settings.preferences.update');
+1691:     Route::post('/settings/targets', [\App\Http\Controllers\LaporanController::class, 'updateTarget'])->name('admin.settings.targets');
+1802: Route::get('/run-settings-migration', function() {
+1826:         return "Migration settings berhasil!";
