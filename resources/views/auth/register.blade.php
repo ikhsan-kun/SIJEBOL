@@ -1,5 +1,9 @@
 @php
-    $schools = \App\Models\School::orderBy('nama_sekolah')->pluck('nama_sekolah');
+    try {
+        $schools = \App\Models\School::orderBy('nama_sekolah')->pluck('nama_sekolah');
+    } catch (\Exception $e) {
+        $schools = collect([]);
+    }
 @endphp
 <!DOCTYPE html>
 <html lang="id">

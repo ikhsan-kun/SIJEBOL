@@ -13,7 +13,22 @@ class SchoolSeeder extends Seeder
     public function run(): void
     {
         $cabang = \App\Models\User::where('role', 'petugas')->first();
-        if (!$cabang) return;
+        if (!$cabang) {
+            $cabang = \App\Models\User::where('role', 'cabang_dinas')->first()
+                      ?? \App\Models\User::where('role', 'admin')->first();
+        }
+        if (!$cabang) {
+            $cabang = \App\Models\User::create([
+                'name' => 'Default Petugas',
+                'email' => 'petugas@jebol.com',
+                'password' => \Illuminate\Support\Facades\Hash::make('petugas123'),
+                'role' => 'petugas',
+                'nik' => '3328010101010001',
+                'phone' => '082233445566',
+                'location_type' => 'kecamatan',
+                'kecamatan' => 'Tegal Timur'
+            ]);
+        }
 
         $schools = [
             // SD Negeri
