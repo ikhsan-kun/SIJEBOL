@@ -708,7 +708,7 @@ Route::get('/debug-db', function() {
 });
 
 Route::get('/', function () { 
-    $services = \Illuminate\Support\Facades\DB::table('services')->where('status', 'AKTIF')->get();
+    $services = \Illuminate\Support\Facades\DB::table('master_jenis_layanan')->where('status', 'Aktif')->get();
     $recentReviews = \App\Models\KepuasanWarga::with('masyarakat')->whereNotNull('kritik_saran')->where('nilai_kepuasan', '>=', 4)->orderBy('tanggal_input', 'desc')->take(3)->get();
     
     $totalServices = $services->count();
@@ -722,7 +722,7 @@ Route::get('/kontak', function () { return view('pengunjung.kontak'); })->name('
 Route::get('/tentang', function () { return view('pengunjung.tentang'); })->name('tentang');
 Route::get('/bantuan', function () { return view('pengunjung.bantuan'); })->name('bantuan');
 Route::get('/layanan', function () { 
-    $services = \Illuminate\Support\Facades\DB::table('services')->where('status', 'AKTIF')->get();
+    $services = \Illuminate\Support\Facades\DB::table('master_jenis_layanan')->where('status', 'Aktif')->get();
     return view('pengunjung.layanan', compact('services')); 
 })->name('services');
 Route::get('/jadwal', [App\Http\Controllers\JadwalController::class, 'publicIndex'])->name('jadwal');
@@ -1692,7 +1692,10 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
 
     // Halaman Pengaturan Pengguna
     Route::get('/settings/users', function () {
-        $users = \App\Models\User::all();
+        $users = \App\Models\User::whereIn('role', ['admin', 'admin pusat', 'cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])
+            ->orderByRaw("CASE WHEN LOWER(role) LIKE '%admin%' THEN 1 ELSE 2 END")
+            ->orderBy('id', 'asc')
+            ->get();
         return view('admin.settings-users', compact('users'));
     })->name('admin.settings.users');
 
@@ -1834,14 +1837,14 @@ Route::get('/admin/login', function () {
     return view('admin.login');
 })->name('admin.login');
 
-Route::post('/admin/login', function (Request $request) {
+Route::post('/admin/login', function (\Illuminate\Http\Request $request) {
     $request->validate([
         'nik' => 'required',
         'password' => 'required',
     ]);
-    if (Auth::guard('web')->attempt(['nik' => $request->nik, 'password' => $request->password])) {
+    if (\Illuminate\Support\Facades\Auth::guard('web')->attempt(['nik' => $request->nik, 'password' => $request->password])) {
         $request->session()->regenerate();
-        $user = Auth::guard('web')->user();
+        $user = \Illuminate\Support\Facades\Auth::guard('web')->user();
         
         \Illuminate\Support\Facades\DB::table('login_histories')->insert([
             'user_id' => $user->id,
@@ -1852,8 +1855,12 @@ Route::post('/admin/login', function (Request $request) {
         ]);
 
         // ensure admin role
-        if ($user->role === 'admin') {
+        if (in_array(trim(strtolower($user->role)), ['admin', 'admin pusat'])) {
             return redirect('/admin/dashboard');
+        } else {
+            \Illuminate\Support\Facades\Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         }
     }
     return back()->withErrors(['nik' => 'Invalid credentials for admin.']);
@@ -1864,15 +1871,20 @@ Route::get('/cabang/login', function () {
     return view('cabang.login');
 })->name('cabang.login');
 
-Route::post('/cabang/login', function (Request $request) {
+Route::post('/cabang/login', function (\Illuminate\Http\Request $request) {
     $request->validate([
         'nik' => 'required',
         'password' => 'required',
     ]);
-    if (Auth::guard('web')->attempt(['nik' => $request->nik, 'password' => $request->password])) {
+    if (\Illuminate\Support\Facades\Auth::guard('web')->attempt(['nik' => $request->nik, 'password' => $request->password])) {
         $request->session()->regenerate();
-        if (Auth::guard('web')->user()->role === 'cabang_dinas') {
+        $user = \Illuminate\Support\Facades\Auth::guard('web')->user();
+        if (in_array(trim(strtolower($user->role)), ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])) {
             return redirect('/cabang/dashboard');
+        } else {
+            \Illuminate\Support\Facades\Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
         }
     }
     return back()->withErrors(['nik' => 'Invalid credentials for cabang dinas.']);
@@ -1887,6 +1899,14 @@ Route::middleware(['auth:web'])->group(function () {
         return redirect('/');
     })->name('panel.logout');
 });
+
+Route::post('/admin/verify-password', function (\Illuminate\Http\Request $request) {
+    if ($request->password === '123456') {
+        return response()->json(['success' => true]);
+    }
+    return response()->json(['success' => false], 401);
+})->name('admin.verify-password');
+
 
 
 Route::get('/run-settings-migration', function() {

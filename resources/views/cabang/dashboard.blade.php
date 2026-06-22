@@ -6,7 +6,7 @@
 <style>
     .dashboard-grid {
         display: grid;
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
         gap: 24px;
         margin-bottom: 32px;
     }
@@ -241,6 +241,16 @@
         <div class="stat-info">
             <span class="stat-label">Selesai Diproses</span>
             <span class="stat-value">{{ number_format($selesaiCount) }}</span>
+        </div>
+    </div>
+    
+    <div class="stat-card">
+        <div class="stat-icon" style="background: #e0f2fe; color: #0ea5e9;">
+            <i data-lucide="user-check" style="width: 28px; height: 28px;"></i>
+        </div>
+        <div class="stat-info">
+            <span class="stat-label">Siswa Terlayani</span>
+            <span class="stat-value">{{ number_format($siswaTerlayani) }}</span>
         </div>
     </div>
 </div>

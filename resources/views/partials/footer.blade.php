@@ -112,8 +112,12 @@
         text-decoration: none;
         transition: all 0.2s;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         gap: 8px;
+        line-height: 1.5;
+    }
+    .footer-link-item a .material-symbols-outlined {
+        margin-top: 2px;
     }
     .footer-link-item a:hover {
         color: #3b82f6;
@@ -228,14 +232,14 @@
                     Sistem Informasi Jemput Bola (SI JEBOL) merupakan layanan administrasi kependudukan berbasis digital yang memudahkan masyarakat dalam mengakses layanan KTP-el, KIA, dan IKD melalui program pelayanan jemput bola.
                 </p>
                 <div class="footer-socials">
-                    <a href="#" class="footer-social-link">
-                        <i data-lucide="instagram" width="20" height="20"></i>
+                    <a href="#" class="footer-social-link" title="Instagram">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
                     </a>
-                    <a href="#" class="footer-social-link">
-                        <i data-lucide="facebook" width="20" height="20"></i>
+                    <a href="#" class="footer-social-link" title="Facebook">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
                     </a>
-                    <a href="#" class="footer-social-link">
-                        <i data-lucide="twitter" width="20" height="20"></i>
+                    <a href="#" class="footer-social-link" title="Twitter">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
                     </a>
                 </div>
             </div>
@@ -276,9 +280,9 @@
                 <h4 class="footer-heading">Pusat Informasi</h4>
                 <ul class="footer-links">
                     <li class="footer-link-item">
-                        <a href="{{ route('tentang') }}">
+                        <a href="{{ route('bantuan') }}">
                             <span class="material-symbols-outlined" style="font-size: 16px;">arrow_forward_ios</span>
-                            Tentang JEBOL
+                            Bantuan
                         </a>
                     </li>
                     <li class="footer-link-item">
@@ -318,7 +322,7 @@
                     </li>
                     <li class="footer-contact-item">
                         <span class="material-symbols-outlined footer-contact-icon">call</span>
-                        <a href="tel:0283XXXXXXX">(0283) XXXXXXX</a>
+                        <a href="tel:0283351001">(0283) 351001</a>
                     </li>
                     <li class="footer-contact-item">
                         <span class="material-symbols-outlined footer-contact-icon">mail</span>

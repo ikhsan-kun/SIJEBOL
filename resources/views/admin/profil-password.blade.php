@@ -65,9 +65,6 @@
         box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
         border: 1px solid #f1f5f9;
         margin-bottom: 24px;
-        max-width: 600px;
-        margin-left: auto;
-        margin-right: auto;
     }
 
     .section-title {

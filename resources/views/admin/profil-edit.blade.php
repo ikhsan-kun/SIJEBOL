@@ -144,13 +144,6 @@
     .alert-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; font-weight: 500; }
 </style>
 
-@if(session('success'))
-<div class="alert-success">
-    <i data-lucide="check-circle" style="width: 20px;"></i>
-    <span>{{ session('success') }}</span>
-</div>
-@endif
-
 <div class="page-header">
     <div class="header-content">
         <h1 class="header-title">
@@ -167,6 +160,13 @@
 </div>
 
 <div class="panel-box">
+    @if(session('success'))
+    <div class="alert-success">
+        <i data-lucide="check-circle" style="width: 20px;"></i>
+        <span>{{ session('success') }}</span>
+    </div>
+    @endif
+
     <form action="{{ route('admin.profil.update') }}" method="POST" enctype="multipart/form-data">
         @csrf
         

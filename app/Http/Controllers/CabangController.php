@@ -44,6 +44,17 @@ class CabangController extends Controller
               });
         })->where('status', 'selesai')->count();
 
+        $siswaTerlayani = PengajuanLayanan::where(function($q) {
+            $q->where('lokasi_pelayanan', 'LIKE', 'Sekolah%')
+              ->orWhere('jenis_pengajuan', 'Sekolah')
+              ->orWhereHas('user', function($uq) {
+                  $uq->where('location_type', 'sekolah');
+              })
+              ->orWhereHas('masyarakat', function($mq) {
+                  $mq->where('tipe_pendaftar', 'sekolah');
+              });
+        })->where('status', 'selesai')->sum('jumlah_realisasi');
+
         // Jadwal Pelayanan Terdekat
         $nextSchedule = JadwalJebol::where('tanggal_pelayanan', '>=', Carbon::today())
             ->where('status', 'Terjadwal')
@@ -153,7 +164,7 @@ class CabangController extends Controller
 
         return view('cabang.dashboard', compact(
             'sekolahCount', 'totalSiswa', 'pengajuanCount', 'terjadwalCount', 
-            'selesaiCount', 'nextSchedule', 'aktivitas', 'recentSchools', 'upcomingJadwals',
+            'selesaiCount', 'siswaTerlayani', 'nextSchedule', 'aktivitas', 'recentSchools', 'upcomingJadwals',
             'chartLabels', 'chartData', 'chartSelesaiData', 'sebaranLayanan'
         ));
     }

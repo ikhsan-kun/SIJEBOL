@@ -907,7 +907,7 @@
                                 <a href="{{ route('services') }}" class="btn-premium">
                                     🚀 Lihat Layanan
                                 </a>
-                                <a href="#kontak" class="btn-glass">
+                                <a href="{{ route('contact') }}" class="btn-glass">
                                     📞 Hubungi Kami
                                 </a>
                             </div>
@@ -965,7 +965,7 @@
                             <h1 class="hero-title">Melayani dengan <br> <span class="jbl-407">Sepenuh Hati</span></h1>
                             <p class="hero-subtitle">Kepuasan Anda adalah prioritas kami. Berikan feedback untuk pelayanan yang lebih baik.</p>
                             <div class="hero-btns">
-                                <a href="#kontak" class="btn-premium">
+                                <a href="{{ route('contact') }}" class="btn-premium">
                                     <span style="font-size: 1.1rem; margin-right: 4px;">💬</span> HUBUNGI KAMI
                                 </a>
                             </div>
@@ -1261,7 +1261,7 @@
                     <p>Daftarkan diri Anda sekarang dan nikmati layanan administrasi kependudukan tanpa harus keluar rumah melalui sistem JEBOL.</p>
                     <div class="cta-actions">
                         <a href="/register" class="btn btn-primary">Register Sekarang</a>
-                        <a href="#kontak" class="btn btn-outline">Butuh Bantuan?</a>
+                        <a href="{{ route('bantuan') }}" class="btn btn-outline">Butuh Bantuan?</a>
                     </div>
                 </div>
             </div>

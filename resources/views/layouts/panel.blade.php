@@ -938,6 +938,15 @@
         <div class="content-body">
             @yield('content')
         </div>
+
+        <!-- Global Footer -->
+        <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
+            <div>&copy; {{ date('Y') }} Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
+            <div style="display:flex; gap:16px;">
+                <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
+                <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
+            </div>
+        </div>
     </div>
 
     <script>

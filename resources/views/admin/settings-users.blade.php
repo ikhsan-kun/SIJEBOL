@@ -116,7 +116,40 @@
     </div>
 </div>
 
-<div class="settings-container" x-data="{ showAddModal: false, showEditModal: false, editData: null }">
+<div class="settings-container" x-data="{ 
+    showAddModal: false, 
+    showEditModal: false, 
+    editData: null,
+    showPasswordPrompt: false,
+    targetEditData: null,
+    inputPassword: '',
+    passwordError: false,
+    async verifyPassword() {
+        this.passwordError = false;
+        try {
+            const res = await fetch('{{ route('admin.verify-password') }}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                },
+                body: JSON.stringify({ password: this.inputPassword })
+            });
+            const data = await res.json();
+            if (res.ok && data.success) {
+                this.showPasswordPrompt = false;
+                this.editData = this.targetEditData;
+                this.inputPassword = '';
+                this.showEditModal = true;
+            } else {
+                this.passwordError = true;
+            }
+        } catch (e) {
+            this.passwordError = true;
+        }
+    }
+}">
     <!-- Sidebar Menu -->
     <div class="settings-sidebar">
 
@@ -175,7 +208,7 @@
                         </td>
                         <td>
                             <div style="display: flex; gap: 8px;">
-                                <button @click='editData = @json($user); showEditModal = true' class="action-btn edit" title="Edit">
+                                <button @click='targetEditData = @json($user); showPasswordPrompt = true; inputPassword = ""; passwordError = false;' class="action-btn edit" title="Edit">
                                     <i data-lucide="edit-2" style="width: 16px; height: 16px;"></i>
                                 </button>
                                 <form action="{{ route('admin.master-data.petugas.destroy', $user->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus pengguna ini?');" style="margin: 0;">
@@ -224,6 +257,10 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="form-label">Foto Profil <span style="font-weight: 400; color: var(--text-muted); font-size: 0.8rem;">(Opsional)</span></label>
+                        <input type="file" name="foto_profil" accept="image/*" class="form-input" style="padding: 9px 16px;">
+                    </div>
+                    <div class="form-group">
                         <label class="form-label">Email / Username</label>
                         <input type="text" name="email" class="form-input" placeholder="email@contoh.com" required>
                     </div>
@@ -260,6 +297,31 @@
         </div>
     </div>
 
+    <!-- Password Prompt Modal -->
+    <div x-show="showPasswordPrompt" style="display: none;" class="modal-overlay" x-transition.opacity>
+        <div class="modal-container" @click.away="showPasswordPrompt = false" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3 style="margin: 0; font-size: 1.25rem; font-weight: 800; display: flex; align-items: center;"><i data-lucide="lock" style="width: 20px; color: var(--primary); margin-right: 8px;"></i>Konfirmasi Keamanan</h3>
+                <button @click="showPasswordPrompt = false" style="background: transparent; border: none; cursor: pointer; color: var(--text-muted);">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="margin-bottom: 16px; color: var(--text-muted); font-size: 0.95rem;">Silakan masukkan password akun Anda untuk melanjutkan proses pengeditan.</p>
+                <div class="form-group" style="margin-bottom: 0;">
+                    <input type="password" x-model="inputPassword" class="form-input" placeholder="Masukkan password Anda" @keyup.enter="verifyPassword()">
+                    <p x-show="passwordError" style="color: #ef4444; font-size: 0.85rem; margin-top: 8px; font-weight: 500;">
+                        <i data-lucide="alert-circle" style="width: 14px; display: inline-block; vertical-align: middle;"></i> Password salah!
+                    </p>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" @click="showPasswordPrompt = false" style="background: #f1f5f9; color: var(--text-main); padding: 10px 20px; border-radius: 12px; font-weight: 700; border: none; cursor: pointer;">Batal</button>
+                <button type="button" @click="verifyPassword()" class="btn-primary" style="padding: 10px 20px;">Lanjut</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Edit Modal -->
     <div x-show="showEditModal" style="display: none;" class="modal-overlay" x-transition.opacity>
         <div class="modal-container" @click.away="showEditModal = false">
@@ -281,6 +343,10 @@
                             <label class="form-label">Nama Lengkap</label>
                             <input type="text" name="nama" :value="editData?.name" class="form-input" required>
                         </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Foto Profil <span style="font-weight: 400; color: var(--text-muted); font-size: 0.8rem;">(Opsional)</span></label>
+                        <input type="file" name="foto_profil" accept="image/*" class="form-input" style="padding: 9px 16px;">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Email / Username</label>

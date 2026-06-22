@@ -154,13 +154,6 @@
     .alert-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; font-weight: 500; }
 </style>
 
-@if(session('success'))
-<div class="alert-success">
-    <i data-lucide="check-circle" style="width: 20px;"></i>
-    <span>{{ session('success') }}</span>
-</div>
-@endif
-
 <div class="page-header">
     <div class="header-content">
         @if(auth()->user()->foto_profil)
@@ -184,6 +177,13 @@
         </a>
     </div>
 </div>
+
+@if(session('success'))
+<div class="alert-success">
+    <i data-lucide="check-circle" style="width: 20px;"></i>
+    <span>{{ session('success') }}</span>
+</div>
+@endif
 
 <div class="main-grid">
     <!-- Kolom Kiri: Informasi Detail -->

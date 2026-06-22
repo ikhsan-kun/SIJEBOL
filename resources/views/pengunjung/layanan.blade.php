@@ -315,6 +315,187 @@
 
         @media (max-width: 768px) {
             .hero-container h1 { font-size: 3rem; }
+            .custom-modal { border-radius: 20px 20px 0 0; position: absolute; bottom: 0; width: 100%; max-height: 90vh; overflow-y: auto; }
+            .custom-modal-overlay { align-items: flex-end; padding: 0; }
+        }
+
+        /* Premium Modal Styles */
+        .custom-modal-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(8px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .custom-modal {
+            background: white;
+            width: 100%;
+            max-width: 500px;
+            border-radius: 28px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .custom-modal-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 32px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            position: relative;
+            border-bottom: 4px solid var(--accent);
+        }
+
+        .custom-modal-header::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url('/img/batik-pattern.png');
+            background-size: 300px;
+            opacity: 0.1;
+            mix-blend-mode: overlay;
+        }
+
+        .custom-modal-header .icon-bg {
+            width: 56px;
+            height: 56px;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .custom-modal-header .header-text {
+            position: relative;
+            z-index: 10;
+        }
+
+        .custom-modal-header h3 {
+            font-family: 'Outfit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .custom-modal-header p {
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin: 0;
+        }
+
+        .custom-modal-close {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 20;
+        }
+
+        .custom-modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: rotate(90deg) scale(1.1);
+        }
+
+        .custom-modal-body {
+            padding: 32px;
+            background: var(--background);
+        }
+
+        .custom-modal-list {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .custom-modal-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            font-size: 0.95rem;
+            color: var(--text-main);
+            line-height: 1.6;
+            background: white;
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 49, 120, 0.03);
+            border: 1px solid rgba(0, 49, 120, 0.03);
+            transition: transform 0.2s;
+        }
+
+        .custom-modal-list li:hover {
+            transform: translateX(4px);
+            border-color: rgba(59, 130, 246, 0.2);
+        }
+
+        .custom-modal-list .check-icon {
+            color: #10b981;
+            background: #ecfdf5;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .custom-modal-list .check-icon .material-symbols-outlined {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .custom-modal-footer {
+            padding: 0 32px 32px;
+            background: var(--background);
+        }
+
+        .custom-btn-close {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-weight: 800;
+            font-size: 1.05rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 20px rgba(0, 49, 120, 0.15);
+        }
+
+        .custom-btn-close:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 30px rgba(0, 49, 120, 0.25);
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
         }
     </style>
 </head>
@@ -426,77 +607,125 @@
 
         <!-- Modals -->
         <!-- Modal KTP -->
-        <div x-show="openModal === 'ktp'" class="jbl-524 jbl-1062 jbl-543 jbl-1293 jbl-1426 jbl-141 jbl-156 jbl-1085 jbl-637" x-transition x-cloak>
-            <div @click.away="openModal = null" class="jbl-434 jbl-1382 jbl-1241 jbl-768 jbl-1539 jbl-641 jbl-1109" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
-                <button @click="openModal = null" class="jbl-91 jbl-510 jbl-378 jbl-13 jbl-314 jbl-632">
+        <div x-show="openModal === 'ktp'" class="custom-modal-overlay" x-transition.opacity.duration.300ms x-cloak>
+            <div @click.away="openModal = null" class="custom-modal" x-show="openModal === 'ktp'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-8 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 scale-100" x-transition:leave-end="opacity-0 translate-y-8 scale-95">
+                <button @click="openModal = null" class="custom-modal-close" aria-label="Close modal">
                     <span class="material-symbols-outlined">close</span>
                 </button>
-                <div class="jbl-1293 jbl-1426 jbl-701 jbl-454">
-                    <div class="jbl-27 jbl-1040 jbl-176 jbl-1066 jbl-1320 jbl-1293 jbl-1426 jbl-141">
-                        <span class="material-symbols-outlined jbl-742">badge</span>
+                <div class="custom-modal-header">
+                    <div class="icon-bg">
+                        <span class="material-symbols-outlined" style="font-size: 28px;">badge</span>
                     </div>
-                    <div>
-                        <h3 class="jbl-390 jbl-959 jbl-386">Syarat KTP-el</h3>
-                        <p class="jbl-166 jbl-147">Perekaman Baru / Ganti / Hilang</p>
+                    <div class="header-text">
+                        <h3>Syarat KTP-el</h3>
+                        <p>Perekaman Baru / Ganti / Hilang</p>
                     </div>
                 </div>
-                <ul class="jbl-1052 jbl-59 jbl-1574 jbl-166">
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Fotokopi Kartu Keluarga (KK).</span></li>
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Telah berusia 17 tahun atau sudah/pernah kawin.</span></li>
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Untuk <b>KTP Hilang</b>: Wajib melampirkan Surat Keterangan Kehilangan dari Kepolisian.</span></li>
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Untuk <b>KTP Rusak/Ganti Data</b>: Wajib melampirkan KTP-el fisik yang lama/rusak.</span></li>
-                </ul>
-                <button @click="openModal = null" class="jbl-1539 jbl-1569 jbl-995 jbl-212 jbl-431 jbl-959 jbl-1320 jbl-1288">Mengerti, Tutup</button>
+                <div class="custom-modal-body">
+                    <ul class="custom-modal-list">
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Fotokopi Kartu Keluarga (KK).</span>
+                        </li>
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Telah berusia 17 tahun atau sudah/pernah kawin.</span>
+                        </li>
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Untuk <b>KTP Hilang</b>: Wajib melampirkan Surat Keterangan Kehilangan dari Kepolisian.</span>
+                        </li>
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Untuk <b>KTP Rusak/Ganti Data</b>: Wajib melampirkan KTP-el fisik yang lama/rusak.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="custom-modal-footer">
+                    <button @click="openModal = null" class="custom-btn-close">Mengerti, Tutup</button>
+                </div>
             </div>
         </div>
 
         <!-- Modal KIA -->
-        <div x-show="openModal === 'kia'" class="jbl-524 jbl-1062 jbl-543 jbl-1293 jbl-1426 jbl-141 jbl-156 jbl-1085 jbl-637" x-transition x-cloak>
-            <div @click.away="openModal = null" class="jbl-434 jbl-1382 jbl-1241 jbl-768 jbl-1539 jbl-641 jbl-1109" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
-                <button @click="openModal = null" class="jbl-91 jbl-510 jbl-378 jbl-13 jbl-314 jbl-632">
+        <div x-show="openModal === 'kia'" class="custom-modal-overlay" x-transition.opacity.duration.300ms x-cloak>
+            <div @click.away="openModal = null" class="custom-modal" x-show="openModal === 'kia'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-8 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 scale-100" x-transition:leave-end="opacity-0 translate-y-8 scale-95">
+                <button @click="openModal = null" class="custom-modal-close" aria-label="Close modal">
                     <span class="material-symbols-outlined">close</span>
                 </button>
-                <div class="jbl-1293 jbl-1426 jbl-701 jbl-454">
-                    <div class="jbl-27 jbl-1040 jbl-176 jbl-1066 jbl-1320 jbl-1293 jbl-1426 jbl-141">
-                        <span class="material-symbols-outlined jbl-742">assignment_ind</span>
+                <div class="custom-modal-header">
+                    <div class="icon-bg">
+                        <span class="material-symbols-outlined" style="font-size: 28px;">assignment_ind</span>
                     </div>
-                    <div>
-                        <h3 class="jbl-390 jbl-959 jbl-386">Syarat KIA</h3>
-                        <p class="jbl-166 jbl-147">Kartu Identitas Anak (Usia 0-17 th)</p>
+                    <div class="header-text">
+                        <h3>Syarat KIA</h3>
+                        <p>Kartu Identitas Anak (Usia 0-17 th)</p>
                     </div>
                 </div>
-                <ul class="jbl-1052 jbl-59 jbl-1574 jbl-166">
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Fotokopi Kutipan Akta Kelahiran Anak.</span></li>
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Fotokopi Kartu Keluarga (KK) orang tua.</span></li>
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Fotokopi KTP-el kedua orang tua/wali.</span></li>
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Pas foto berwarna Anak (ukuran 2x3 atau 3x4) sebanyak 2 lembar (Khusus anak usia 5-17 tahun kurang satu hari). Anak di bawah 5 tahun tidak perlu melampirkan foto.</span></li>
-                </ul>
-                <button @click="openModal = null" class="jbl-1539 jbl-1569 jbl-995 jbl-212 jbl-431 jbl-959 jbl-1320 jbl-1288">Mengerti, Tutup</button>
+                <div class="custom-modal-body">
+                    <ul class="custom-modal-list">
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Fotokopi Kutipan Akta Kelahiran Anak.</span>
+                        </li>
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Fotokopi Kartu Keluarga (KK) orang tua.</span>
+                        </li>
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Fotokopi KTP-el kedua orang tua/wali.</span>
+                        </li>
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Pas foto berwarna Anak (ukuran 2x3 atau 3x4) sebanyak 2 lembar (Khusus anak usia 5-17 tahun kurang satu hari). Anak di bawah 5 tahun tidak perlu melampirkan foto.</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="custom-modal-footer">
+                    <button @click="openModal = null" class="custom-btn-close">Mengerti, Tutup</button>
+                </div>
             </div>
         </div>
 
         <!-- Modal IKD -->
-        <div x-show="openModal === 'ikd'" class="jbl-524 jbl-1062 jbl-543 jbl-1293 jbl-1426 jbl-141 jbl-156 jbl-1085 jbl-637" x-transition x-cloak>
-            <div @click.away="openModal = null" class="jbl-434 jbl-1382 jbl-1241 jbl-768 jbl-1539 jbl-641 jbl-1109" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100">
-                <button @click="openModal = null" class="jbl-91 jbl-510 jbl-378 jbl-13 jbl-314 jbl-632">
+        <div x-show="openModal === 'ikd'" class="custom-modal-overlay" x-transition.opacity.duration.300ms x-cloak>
+            <div @click.away="openModal = null" class="custom-modal" x-show="openModal === 'ikd'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 translate-y-8 scale-95" x-transition:enter-end="opacity-100 translate-y-0 scale-100" x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100 translate-y-0 scale-100" x-transition:leave-end="opacity-0 translate-y-8 scale-95">
+                <button @click="openModal = null" class="custom-modal-close" aria-label="Close modal">
                     <span class="material-symbols-outlined">close</span>
                 </button>
-                <div class="jbl-1293 jbl-1426 jbl-701 jbl-454">
-                    <div class="jbl-27 jbl-1040 jbl-176 jbl-1066 jbl-1320 jbl-1293 jbl-1426 jbl-141">
-                        <span class="material-symbols-outlined jbl-742">contact_page</span>
+                <div class="custom-modal-header">
+                    <div class="icon-bg">
+                        <span class="material-symbols-outlined" style="font-size: 28px;">contact_page</span>
                     </div>
-                    <div>
-                        <h3 class="jbl-390 jbl-959 jbl-386">Syarat Aktivasi IKD</h3>
-                        <p class="jbl-166 jbl-147">Identitas Kependudukan Digital</p>
+                    <div class="header-text">
+                        <h3>Syarat Aktivasi IKD</h3>
+                        <p>Identitas Kependudukan Digital</p>
                     </div>
                 </div>
-                <ul class="jbl-1052 jbl-59 jbl-1574 jbl-166">
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Memiliki KTP-el fisik atau setidaknya sudah melakukan perekaman KTP-el.</span></li>
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Memiliki smartphone (Android/iOS) yang terhubung dengan akses internet.</span></li>
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Memiliki Nomor WhatsApp (HP) yang aktif.</span></li>
-                    <li class="jbl-1293 jbl-1046 jbl-985"><span class="material-symbols-outlined jbl-1183 jbl-105 jbl-709">check_circle</span> <span>Memiliki Alamat Email pribadi yang aktif (bisa diakses).</span></li>
-                </ul>
-                <button @click="openModal = null" class="jbl-1539 jbl-1569 jbl-995 jbl-212 jbl-431 jbl-959 jbl-1320 jbl-1288">Mengerti, Tutup</button>
+                <div class="custom-modal-body">
+                    <ul class="custom-modal-list">
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Memiliki KTP-el fisik atau setidaknya sudah melakukan perekaman KTP-el.</span>
+                        </li>
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Memiliki smartphone (Android/iOS) yang terhubung dengan akses internet.</span>
+                        </li>
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Memiliki Nomor WhatsApp (HP) yang aktif.</span>
+                        </li>
+                        <li>
+                            <div class="check-icon"><span class="material-symbols-outlined">check</span></div>
+                            <span>Memiliki Alamat Email pribadi yang aktif (bisa diakses).</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="custom-modal-footer">
+                    <button @click="openModal = null" class="custom-btn-close">Mengerti, Tutup</button>
+                </div>
             </div>
         </div>
     </div>
