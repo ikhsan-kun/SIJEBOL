@@ -16,9 +16,6 @@ return Application::configure(basePath: dirname(__DIR__))
             'role' => \App\Http\Middleware\RoleMiddleware::class,
         ]);
         $middleware->redirectGuestsTo(function (\Illuminate\Http\Request $request) {
-            if ($request->is('admin') || $request->is('admin/*') || $request->is('cabang') || $request->is('cabang/*') || $request->is('cabang_dinas') || $request->is('cabang_dinas/*')) {
-                return route('admin.login');
-            }
             return route('login');
         });
     })

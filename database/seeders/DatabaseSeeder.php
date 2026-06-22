@@ -30,7 +30,5 @@ class DatabaseSeeder extends Seeder
             'password' => \Illuminate\Support\Facades\Hash::make('admin123'),
             'role' => 'admin',
         ]);
-
-// Test user placeholder removed – no default user needed
     }
 }

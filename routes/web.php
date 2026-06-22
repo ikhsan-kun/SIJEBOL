@@ -597,83 +597,70 @@ Route::get('/reset-admin', function () {
     return "Admin tidak ditemukan";
 });
 
-// Login Admin & Petugas
-Route::get('/jebolkotategal', function () {
+// Unified Login Route (Admin, Cabang/Petugas, and Warga/Masyarakat)
+Route::get('/login', function () {
     if (Auth::guard('admin')->check()) {
         $role = trim(strtolower(Auth::guard('admin')->user()->role ?? ''));
-        if (in_array($role, ['admin', 'admin pusat'])) return redirect()->route('admin.dashboard');
-        if (in_array($role, ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])) return redirect()->route('cabang.dashboard');
-    }
-    return view('admin.login');
-})->name('admin.login');
-
-Route::post('/jebolkotategal', function (Request $request) {
-    $credentials = $request->validate([
-        'nik' => 'required',
-        'password' => 'required',
-    ]);
-
-    $user = \App\Models\User::where('nik', $credentials['nik'])->first();
-
-    if ($user && in_array(trim(strtolower($user->role ?? '')), ['admin', 'admin pusat'])) {
-        if (Hash::check($credentials['password'], $user->password)) {
-            Auth::guard('admin')->login($user);
-            $request->session()->regenerate();
-            $request->session()->save();
+        if (in_array($role, ['admin', 'admin pusat'])) {
             return redirect()->route('admin.dashboard');
+        } elseif (in_array($role, ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])) {
+            return redirect()->route('cabang.dashboard');
         }
     }
-
-    return back()->withErrors(['nik' => 'Kredensial admin tidak valid.'])->withInput($request->only('nik'));
-})->name('admin.login.post');
-
-// Login Petugas Cabang (Pintu Khusus Cabang)
-Route::get('/jebolcabang', function () {
-    if (Auth::guard('admin')->check()) {
-        $role = trim(strtolower(Auth::guard('admin')->user()->role ?? ''));
-        if (in_array($role, ['admin', 'admin pusat'])) return redirect()->route('admin.dashboard');
-        if (in_array($role, ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])) return redirect()->route('cabang.dashboard');
+    if (Auth::guard('masyarakat')->check()) {
+        return redirect()->route('masyarakat.dashboard');
     }
-    return view('cabang.login');
-})->name('cabang.login');
+    return view('auth.login');
+})->name('login');
 
-Route::post('/jebolcabang', function (Request $request) {
+Route::post('/login', function (Request $request) {
     $credentials = $request->validate([
         'nik' => 'required',
         'password' => 'required',
     ]);
 
-    $user = \App\Models\User::where('nik', $credentials['nik'])->first();
+    // 1. Check in User table (admin & cabang/petugas)
+    $adminUser = \App\Models\User::where('nik', $credentials['nik'])->first();
+    if ($adminUser && Hash::check($credentials['password'], $adminUser->password)) {
+        Auth::guard('admin')->login($adminUser);
+        $request->session()->regenerate();
+        $request->session()->save();
 
-    if ($user && in_array(trim(strtolower($user->role ?? '')), ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])) {
-        if (Hash::check($credentials['password'], $user->password)) {
-            Auth::guard('admin')->login($user);
-            $request->session()->regenerate();
-            $request->session()->save();
+        $role = trim(strtolower($adminUser->role ?? ''));
+        if (in_array($role, ['admin', 'admin pusat'])) {
+            return redirect()->route('admin.dashboard');
+        } elseif (in_array($role, ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])) {
             return redirect()->route('cabang.dashboard');
         }
     }
 
-    return back()->withErrors(['nik' => 'Kredensial cabang tidak valid.'])->withInput($request->only('nik'));
-})->name('cabang.login.post');
+    // 2. Check in Masyarakat table (warga / sekolah)
+    if (Auth::guard('masyarakat')->attempt(['nik' => $credentials['nik'], 'password' => $credentials['password']])) {
+        $request->session()->regenerate();
+        $request->session()->save();
+        return redirect()->route('masyarakat.dashboard');
+    }
+
+    return back()->withErrors(['nik' => 'NIK atau password salah.'])->withInput($request->only('nik'));
+})->name('login.post');
+
+// Backwards compatibility / alias redirects for old login pages
+Route::get('/jebolkotategal', function () {
+    return redirect()->route('login');
+})->name('admin.login');
+
+Route::get('/jebolcabang', function () {
+    return redirect()->route('login');
+})->name('cabang.login');
 
 // Logout Global
 Route::post('/logout', function () {
-    $role = 'user';
     if (Auth::guard('admin')->check()) {
-        $role = trim(strtolower(Auth::guard('admin')->user()->role ?? ''));
         Auth::guard('admin')->logout();
     } else {
         Auth::guard('masyarakat')->logout();
     }
-    
-    if (in_array($role, ['admin', 'admin pusat'])) {
-        return redirect()->route('admin.login');
-    } elseif (in_array($role, ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])) {
-        return redirect()->route('cabang.login');
-    }
-    
-    return redirect('/');
+    return redirect()->route('login');
 })->name('logout');
 
 
@@ -837,19 +824,11 @@ Route::post('/register', function (Request $request) {
     return redirect()->route('login')->with('status', 'Akun berhasil dibuat! Silakan login.');
 });
 
-Route::get('/register/login', function () { return view('auth.login'); })->name('login')->middleware('guest');
-Route::post('/register/login', function (Request $request) {
-    $credentials = $request->validate([
-        'nik' => 'required',
-        'password' => 'required'
-    ]);
-
-    if (Auth::guard('masyarakat')->attempt(['nik' => $credentials['nik'], 'password' => $credentials['password']])) {
-        $user = Auth::guard('masyarakat')->user();
-        
-        return redirect()->route('masyarakat.dashboard');
-    }
-    return back()->withErrors(['nik' => 'NIK atau password salah.'])->withInput($request->only('nik'));
+Route::get('/register/login', function () {
+    return redirect()->route('login');
+});
+Route::post('/register/login', function () {
+    return redirect()->route('login');
 });
 
 // Lupa Password (Verifikasi via NIK & Email)
