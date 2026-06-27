@@ -175,6 +175,52 @@
         color: white;
         font-weight: 600;
     }
+    .footer-uhn-container {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.3s ease;
+    }
+    .footer-uhn-container:hover {
+        border-top-color: rgba(59, 130, 246, 0.3);
+    }
+    .footer-uhn-logo {
+        width: 46px;
+        height: 46px;
+        object-fit: contain;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 50%;
+        padding: 4px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease;
+    }
+    .footer-uhn-container:hover .footer-uhn-logo {
+        transform: scale(1.1) rotate(5deg);
+    }
+    .footer-uhn-info {
+        display: flex;
+        flex-direction: column;
+    }
+    .footer-uhn-name {
+        font-family: 'Outfit', 'Inter', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: #f1f5f9;
+        letter-spacing: 0.3px;
+        line-height: 1.3;
+    }
+    .footer-uhn-prodi {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: #3b82f6;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 2px;
+    }
     .footer-bottom {
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         padding: 24px 0;
@@ -240,7 +286,13 @@
                     </a>
                     <a href="#" class="footer-social-link" title="Twitter">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
-                    </a>
+                </div>
+                <div class="footer-uhn-container">
+                    <img src="{{ asset('images/uhn.png') }}" alt="Universitas Harkat Negeri" class="footer-uhn-logo">
+                    <div class="footer-uhn-info">
+                        <span class="footer-uhn-name">Universitas Harkat Negeri</span>
+                        <span class="footer-uhn-prodi">D3 Teknik Komputer</span>
+                    </div>
                 </div>
             </div>
 
