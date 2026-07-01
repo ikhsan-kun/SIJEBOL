@@ -1,322 +1,291 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profil Saya - SI JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>
-        :root {
-            --primary: #003178;
-            --accent: #f59e0b;
+@extends('layouts.masyarakat')
+
+@push('styles')
+<style>
+@media (max-width: 1024px) {
+            
         }
 
-        body {
-            background-color: #f8faff;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #1e293b;
-        }
-
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 0 0 0;
-            transition: all 0.3s ease;
-            display: flex; flex-direction: column; min-height: 100vh;
-}
-
-        @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-                padding: 80px 0 0 0;
-                display: flex; flex-direction: column; min-height: 100vh;
-}
-        }
-
-        .profile-card-premium {
-            background: white;
+        /* ADMIN PROFIL STYLE ADAPTED FOR MASYARAKAT */
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #0044a8 100%);
             border-radius: 0;
+            color: white;
+            padding: 40px;
+            position: relative;
             overflow: hidden;
-            box-shadow: none;
-            border: none;
-            width: 100%;
-            min-height: calc(100vh - 80px);
+            margin: -24px -24px 24px -24px;
+            box-shadow: 0 10px 30px rgba(0, 49, 120, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 6px solid var(--accent, #f59e0b);
         }
 
-        .profile-cover {
-            height: 240px;
-            background-color: var(--primary);
-            background-image: linear-gradient(rgba(0, 49, 120, 0.8), rgba(0, 49, 120, 0.9)), url('{{ asset('images/batik-tegal-premium.jpg') }}');
-            background-size: 600px;
+        .page-header::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('{{ asset("images/batik-tegal-premium.jpg") }}');
+            background-size: cover;
             background-position: center;
-            position: relative;
-            border-bottom: 4px solid var(--accent);
+            opacity: 0.15;
+            mix-blend-mode: overlay;
+            pointer-events: none;
         }
 
-        .profile-header-content {
-            padding: 0 48px;
-            margin-top: -60px;
-            position: relative;
-            z-index: 10;
-            display: flex;
-            align-items: flex-end;
-            gap: 32px;
-            margin-bottom: 48px;
-        }
-
+        .header-content { position: relative; z-index: 10; display: flex; align-items: center; gap: 24px; }
+        
         .profile-avatar-large {
-            width: 160px;
-            height: 160px;
-            background: white;
-            border: 6px solid white;
-            border-radius: 48px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: var(--primary);
-        }
-
-        .profile-avatar-large img {
-            width: 100%;
-            height: 100%;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
             object-fit: cover;
-        }
-
-        .profile-name-section h1 {
-            font-size: 2.25rem;
-            font-weight: 900;
-            color: #0f172a;
-            letter-spacing: -1px;
-            margin-bottom: 8px;
-        }
-
-        .profile-name-section p {
-            font-size: 1.1rem;
-            color: #64748b;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .profile-details-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 40px;
-            padding: 0 48px 48px;
-        }
-
-        .detail-item-v2 {
-            display: flex;
-            gap: 20px;
-        }
-
-        .detail-icon-box {
-            width: 54px;
-            height: 54px;
-            background: #f1f5f9;
-            border-radius: 18px;
+            background: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary);
-            flex-shrink: 0;
-        }
-
-        .detail-info label {
-            display: block;
-            font-size: 0.75rem;
+            font-size: 2rem;
             font-weight: 800;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
+            color: var(--primary);
+        }
+        
+        .header-title { font-size: 2rem; font-weight: 800; margin: 0 0 4px 0; letter-spacing: -0.5px; color: white; }
+        .header-subtitle { font-size: 1rem; color: rgba(255,255,255,0.8); margin: 0; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+
+        .header-actions { position: relative; z-index: 10; display: flex; gap: 12px; }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
         }
 
-        .detail-info p {
-            font-size: 1rem;
+        .btn-light-outline { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; backdrop-filter: blur(5px); }
+        .btn-light-outline:hover { background: rgba(255,255,255,0.2); }
+        
+        .btn-warning { background: #f59e0b; color: #78350f; }
+        .btn-warning:hover { background: #d97706; color: white; transform: translateY(-2px); }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+        
+        @media (max-width: 1024px) { 
+            .main-grid { grid-template-columns: 1fr; } 
+            .page-header { flex-direction: column; text-align: center; gap: 20px; margin: -16px -16px 24px -16px; }
+            .header-content { flex-direction: column; text-align: center; }
+        }
+
+        .panel-box {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            border: 1px solid #f1f5f9;
+            margin-bottom: 24px;
+        }
+
+        .section-title {
+            font-size: 1.1rem;
             font-weight: 700;
             color: #1e293b;
-        }
-
-        .stats-strip {
-            background: #fcfdfe;
-            border-top: 1px solid #f1f5f9;
-            padding: 32px 48px;
-            display: flex;
-            gap: 48px;
-        }
-
-        .stat-small {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .stat-small span {
-            font-size: 0.7rem;
-            font-weight: 800;
-            color: #94a3b8;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .stat-small strong {
-            font-size: 1.25rem;
-            font-weight: 900;
-            color: var(--primary);
-        }
-
-        .btn-edit-profile-v2 {
-            background: var(--primary);
-            color: white;
-            padding: 14px 28px;
-            border-radius: 16px;
-            font-weight: 800;
-            font-size: 0.95rem;
             display: flex;
             align-items: center;
             gap: 10px;
-            transition: all 0.3s;
-            margin-left: auto;
-            border: none;
-            cursor: pointer;
+            margin: 0 0 24px 0;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #e2e8f0;
         }
 
-        .btn-edit-profile-v2:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 49, 120, 0.2);
+        .info-list { display: flex; flex-direction: column; gap: 20px; }
+        
+        .info-item { display: flex; align-items: flex-start; gap: 16px; }
+        
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            background: #f8fafc;
+            color: var(--primary);
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            border: 1px solid #e2e8f0;
         }
+        
+        .info-content { flex: 1; }
+        .info-label { font-size: 0.8rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .info-value { font-size: 1rem; font-weight: 600; color: #1e293b; }
 
-        @media (max-width: 768px) {
-            .profile-cover { height: 160px; }
-            .profile-header-content { 
-                flex-direction: column; 
-                align-items: center; 
-                text-align: center; 
-                padding: 0 24px;
-                margin-top: -80px;
-            }
-            .profile-avatar-large { width: 140px; height: 140px; border-radius: 32px; }
-            .profile-details-grid { grid-template-columns: 1fr; padding: 0 24px 32px; gap: 24px; }
-            .profile-header-content { gap: 16px; }
-            .btn-edit-profile-v2 { margin: 16px auto 0; width: 100%; justify-content: center; }
-            .stats-strip { flex-direction: column; gap: 20px; padding: 32px 24px; }
-            .profile-name-section h1 { font-size: 1.75rem; }
+        .stat-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            transition: all 0.2s;
         }
-    </style>
-</head>
-<body x-data="{ sidebarOpen: false }">
-    <div class="dashboard-layout jbl-1293">
-        @include('partials.sidebar-masyarakat')
+        .stat-card:hover { border-color: var(--primary); background: white; box-shadow: 0 4px 12px rgba(0, 49, 120, 0.05); }
+        .stat-card:last-child { margin-bottom: 0; }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+        }
+        
+        .icon-success { background: #d1fae5; color: #047857; }
+        .icon-primary { background: #dbeafe; color: #1d4ed8; }
+        .icon-warning { background: #fef3c7; color: #d97706; }
+        
+        .stat-text { flex: 1; }
+        .stat-title { font-size: 0.85rem; font-weight: 700; color: #64748b; margin-bottom: 4px; }
+        .stat-val { font-size: 1.1rem; font-weight: 800; color: #1e293b; }
+        .stat-desc { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
+</style>
+@endpush
 
-        <main class="main-content">
-            <div class="profile-card-premium">
-                <!-- Cover -->
-                <div class="profile-cover"></div>
-
-                <!-- Header Content -->
-                <div class="profile-header-content">
+@section('content')
+<div class="page-header">
+                <div class="header-content">
                     <div class="profile-avatar-large">
                         @if(auth()->user()->foto_profil ?? auth()->user()->profile_photo_path)
-                            <img src="{{ asset('storage/' . (auth()->user()->foto_profil ?? auth()->user()->profile_photo_path)) }}" alt="Profile Photo">
+                            <img src="{{ asset('storage/' . (auth()->user()->foto_profil ?? auth()->user()->profile_photo_path)) }}" alt="Avatar" style="width:100%;height:100%;object-fit:cover;border-radius:50%;">
                         @else
                             {{ strtoupper(substr(auth()->user()->nama ?? auth()->user()->name ?? 'U', 0, 2)) }}
                         @endif
                     </div>
-                    <div class="profile-name-section">
-                        <div class="jbl-1293 jbl-1426 jbl-985 jbl-1429">
-                            <span class="jbl-451 jbl-678 jbl-1105 jbl-586 jbl-1462 jbl-1471 jbl-525 jbl-145 jbl-835">Warga Digital</span>
-                            <span class="jbl-1452 jbl-416 jbl-1105 jbl-586 jbl-1462 jbl-1471 jbl-525 jbl-145 jbl-835">Terverifikasi</span>
-                        </div>
-                        <h1>{{ auth()->user()->nama ?? auth()->user()->name ?? 'Pengguna' }}</h1>
-                        <p>
-                            <i data-lucide="map-pin" width="18"></i>
-                            {{ auth()->user()->kecamatan ?? 'Kota Tegal' }}, Jawa Tengah
+                    <div>
+                        <h1 class="header-title">{{ auth()->user()->nama ?? auth()->user()->name ?? 'Pengguna' }}</h1>
+                        <p class="header-subtitle">
+                            <i data-lucide="shield" style="width: 16px;"></i> Warga Digital Terverifikasi
                         </p>
                     </div>
-                    <a href="{{ route('masyarakat.settings') }}" class="btn-edit-profile-v2">
-                        <i data-lucide="edit-3" width="18"></i>
-                        Ubah Profil
+                </div>
+                <div class="header-actions">
+                    <a href="{{ route('masyarakat.settings') }}" class="btn btn-warning">
+                        <i data-lucide="edit-3" style="width: 18px;"></i> Ubah Profil
+                    </a>
+                    <a href="{{ route('masyarakat.settings.password') }}" class="btn btn-light-outline">
+                        <i data-lucide="lock" style="width: 18px;"></i> Keamanan
                     </a>
                 </div>
+            </div>
 
-                <!-- Details Grid -->
-                <div class="profile-details-grid">
-                    <div class="detail-item-v2">
-                        <div class="detail-icon-box"><i data-lucide="credit-card" width="24"></i></div>
-                        <div class="detail-info">
-                            <label>Nomor NIK</label>
-                            <p>{{ auth()->user()->nik }}</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-v2">
-                        <div class="detail-icon-box"><i data-lucide="mail" width="24"></i></div>
-                        <div class="detail-info">
-                            <label>Email Terdaftar</label>
-                            <p class="jbl-159">{{ auth()->user()->email }}</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-v2">
-                        <div class="detail-icon-box"><i data-lucide="phone" width="24"></i></div>
-                        <div class="detail-info">
-                            <label>Nomor WhatsApp</label>
-                            <p>{{ auth()->user()->phone ?? '-' }}</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-v2">
-                        <div class="detail-icon-box"><i data-lucide="home" width="24"></i></div>
-                        <div class="detail-info">
-                            <label>Kecamatan</label>
-                            <p>{{ auth()->user()->kecamatan ?? '-' }}</p>
-                        </div>
-                    </div>
-                    <div class="detail-item-v2 jbl-1010">
-                        <div class="detail-icon-box"><i data-lucide="map" width="24"></i></div>
-                        <div class="detail-info">
-                            <label>Alamat Lengkap</label>
-                            <p>{{ auth()->user()->alamat_lengkap ?? 'Alamat belum dilengkapi.' }}</p>
+            <div class="main-grid">
+                <!-- Kolom Kiri: Informasi Detail -->
+                <div>
+                    <div class="panel-box">
+                        <h3 class="section-title"><i data-lucide="user" style="color: var(--primary);"></i> Informasi Detail Profil</h3>
+                        
+                        <div class="info-list">
+                            <div class="info-item">
+                                <div class="info-icon"><i data-lucide="credit-card"></i></div>
+                                <div class="info-content">
+                                    <div class="info-label">Nomor NIK</div>
+                                    <div class="info-value">{{ auth()->user()->nik }}</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon"><i data-lucide="user"></i></div>
+                                <div class="info-content">
+                                    <div class="info-label">Nama Lengkap</div>
+                                    <div class="info-value">{{ auth()->user()->nama ?? auth()->user()->name ?? '-' }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item">
+                                <div class="info-icon"><i data-lucide="mail"></i></div>
+                                <div class="info-content">
+                                    <div class="info-label">Email Address</div>
+                                    <div class="info-value">{{ auth()->user()->email ?? '-' }}</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon"><i data-lucide="phone"></i></div>
+                                <div class="info-content">
+                                    <div class="info-label">Nomor Handphone</div>
+                                    <div class="info-value">{{ auth()->user()->no_hp ?? auth()->user()->phone ?? '-' }}</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon"><i data-lucide="home"></i></div>
+                                <div class="info-content">
+                                    <div class="info-label">Kecamatan Domisili</div>
+                                    <div class="info-value">{{ auth()->user()->kecamatan ?? '-' }}</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item">
+                                <div class="info-icon"><i data-lucide="map-pin"></i></div>
+                                <div class="info-content">
+                                    <div class="info-label">Alamat Lengkap</div>
+                                    <div class="info-value">{{ auth()->user()->alamat ?? auth()->user()->alamat_lengkap ?? '-' }}</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Stats Strip -->
-                <div class="stats-strip">
-                    <div class="stat-small">
-                        <span>Total Layanan</span>
-                        <strong>{{ \App\Models\PengajuanLayanan::where('nik', auth()->user()->nik)->count() }}</strong>
-                    </div>
-                    <div class="stat-small">
-                        <span>Bergabung Sejak</span>
-                        <strong>{{ auth()->user()->created_at->format('M Y') }}</strong>
-                    </div>
-                    <div class="stat-small">
-                        <span>Status Akun</span>
-                        <strong class="jbl-625">Aktif</strong>
+                <!-- Kolom Kanan: Status & Info Akun -->
+                <div>
+                    <div class="panel-box">
+                        <h3 class="section-title"><i data-lucide="info" style="color: var(--primary);"></i> Status Akun</h3>
+                        
+                        <!-- Status Aktif -->
+                        <div class="stat-card">
+                            <div class="stat-icon icon-success"><i data-lucide="check-circle"></i></div>
+                            <div class="stat-text">
+                                <div class="stat-title">Status Akun</div>
+                                <div class="stat-val" style="color: #047857;">Aktif</div>
+                                <div class="stat-desc">Akun Anda dalam kondisi aktif</div>
+                            </div>
+                        </div>
+
+                        <!-- Role -->
+                        <div class="stat-card">
+                            <div class="stat-icon icon-primary"><i data-lucide="shield"></i></div>
+                            <div class="stat-text">
+                                <div class="stat-title">Hak Akses</div>
+                                <div class="stat-val">Masyarakat</div>
+                                <div class="stat-desc">Akses sebagai warga (publik)</div>
+                            </div>
+                        </div>
+
+                        <!-- Bergabung Sejak -->
+                        <div class="stat-card">
+                            <div class="stat-icon icon-warning"><i data-lucide="calendar"></i></div>
+                            <div class="stat-text">
+                                <div class="stat-title">Bergabung Sejak</div>
+                                <div class="stat-val" style="font-size: 0.95rem;">{{ auth()->user()->created_at ? auth()->user()->created_at->translatedFormat('d M Y') : '-' }}</div>
+                                <div class="stat-desc">Tanggal pendaftaran akun</div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
-                    <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <script>
-        lucide.createIcons();
-    </script>
-</body>
-</html>
-
+@endsection

@@ -181,11 +181,12 @@
 
         /* Stats Card */
         .stats-float-wrapper {
-            position: absolute;
-            bottom: -60px;
-            left: 0;
-            width: 100%;
+            position: relative;
+            background: #ffffff;
             z-index: 40;
+            padding: 40px 0;
+            box-shadow: 0 4px 20px rgba(0, 49, 120, 0.08);
+            border-bottom: 1px solid rgba(0, 49, 120, 0.06);
         }
 
         .stats-float-card {
@@ -237,24 +238,43 @@
         }
 
         @media (max-width: 768px) {
-            .stats-float-card { 
-                display: grid;
-                grid-template-columns: repeat(4, 1fr);
-                margin-top: -30px; 
-                padding: 16px 8px; 
-                gap: 4px;
-                border-radius: 20px;
+            .stats-float-wrapper {
+                padding: 8px 0 !important;
             }
-            .stat-box { 
-                border-right: 1px solid rgba(0, 49, 120, 0.1) !important; 
+            .stats-float-card {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                padding: 0 !important;
+                gap: 0 !important;
+                border-radius: 12px !important;
+                box-shadow: none !important;
+            }
+            .stat-box {
+                border-right: 1px solid rgba(0, 49, 120, 0.1) !important;
                 border-bottom: none !important;
-                padding: 0 4px !important;
+                padding: 10px 4px !important;
+                text-align: center !important;
+                border-left: none !important;
+                border-top: none !important;
             }
             .stat-box:last-child { border-right: none !important; }
-            .stat-num { font-size: 18px !important; margin-bottom: 4px; }
-            .stat-label { font-size: 8px !important; letter-spacing: 0.5px; }
-            .hero-premium { height: auto; padding-bottom: 60px; overflow: visible !important; }
-            .slide-content { padding-top: 30px; }
+            .stat-num { font-size: 13px !important; margin-bottom: 2px !important; display: block !important; font-weight: 900 !important; }
+            .stat-label { font-size: 6px !important; letter-spacing: 0.3px !important; line-height: 1.2 !important; }
+
+            /* Fix hero height on mobile - slides are absolute so need explicit height */
+            .hero-premium {
+                height: 55vh !important;
+                min-height: 420px !important;
+                padding-bottom: 0 !important;
+                overflow: visible !important;
+            }
+            .hero-slider {
+                height: 100% !important;
+            }
+            .slide-content {
+                padding-top: 80px !important;
+                padding-bottom: 40px !important;
+            }
         }
 
         .features {
@@ -340,6 +360,45 @@
             font-size: 1.05rem !important;
             line-height: 1.6 !important;
             color: #cbd5e1 !important;
+        }
+
+        /* Mobile: compact feature cards so all 3 fit on one screen */
+        @media (max-width: 480px) {
+            .features-grid {
+                gap: 10px !important;
+            }
+            .features .section-header {
+                margin-bottom: 20px !important;
+            }
+            .features .section-header h2 {
+                font-size: 1.4rem !important;
+                margin-bottom: 6px !important;
+            }
+            .features .section-header p {
+                font-size: 0.85rem !important;
+            }
+            .feature-card {
+                padding: 14px 16px !important;
+                border-radius: 16px !important;
+            }
+            .feature-icon {
+                width: 40px !important;
+                height: 40px !important;
+                border-radius: 11px !important;
+                margin-bottom: 8px !important;
+            }
+            .feature-icon svg {
+                width: 20px !important;
+                height: 20px !important;
+            }
+            .feature-card h3 {
+                font-size: 0.95rem !important;
+                margin-bottom: 4px !important;
+            }
+            .feature-card p {
+                font-size: 0.78rem !important;
+                line-height: 1.4 !important;
+            }
         }
 
         /* View All Button */
@@ -553,6 +612,59 @@
             margin: 0 !important;
             font-size: 1rem !important;
         }
+
+        /* Mobile: FAQ fixes */
+        @media (max-width: 768px) {
+            .faq {
+                padding: 48px 0 !important;
+            }
+            .faq .section-header {
+                margin-bottom: 24px !important;
+                text-align: center;
+            }
+            .faq .section-header h2 {
+                font-size: 1.5rem !important;
+            }
+            .faq-list {
+                gap: 10px !important;
+                max-width: 100% !important;
+            }
+            .faq-item {
+                border-radius: 14px !important;
+                overflow: hidden !important;
+            }
+            .faq-item:hover {
+                transform: none !important;
+            }
+            .faq-question {
+                padding: 14px 16px !important;
+                align-items: flex-start !important;
+                gap: 12px !important;
+            }
+            .faq-question h4 {
+                font-size: 0.85rem !important;
+                line-height: 1.4 !important;
+                flex: 1;
+            }
+            .faq-icon {
+                width: 28px !important;
+                height: 28px !important;
+                flex-shrink: 0 !important;
+                margin-top: 2px !important;
+            }
+            .faq-icon svg {
+                width: 14px !important;
+                height: 14px !important;
+            }
+            .faq-answer {
+                overflow: hidden !important;
+            }
+            .faq-answer p {
+                padding: 12px 16px 16px 16px !important;
+                font-size: 0.82rem !important;
+                line-height: 1.6 !important;
+            }
+        }
         /* Schedule Section Enhancement */
         .schedule {
             background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%) !important;
@@ -671,6 +783,54 @@
             box-shadow: 0 15px 30px rgba(245, 158, 11, 0.3) !important;
         }
 
+        /* Mobile: schedule section fixes */
+        @media (max-width: 768px) {
+            .schedule {
+                padding: 48px 24px !important;
+                border-radius: 24px !important;
+                margin: 20px 12px !important;
+            }
+            .schedule .section-header {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 16px !important;
+                margin-bottom: 28px !important;
+            }
+            .schedule .section-header h2 {
+                font-size: 1.8rem !important;
+                margin-bottom: 6px !important;
+            }
+            .schedule .section-header p {
+                font-size: 0.9rem !important;
+            }
+            .btn-white {
+                padding: 12px 22px !important;
+                font-size: 0.85rem !important;
+                align-self: flex-start !important;
+            }
+            .schedule-grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 12px !important;
+            }
+            .schedule-card {
+                padding: 20px 16px !important;
+                border-radius: 16px !important;
+            }
+            .schedule-card h4 {
+                font-size: 0.85rem !important;
+                letter-spacing: 1px !important;
+                margin-bottom: 8px !important;
+            }
+            .schedule-card p {
+                font-size: 1rem !important;
+                margin-bottom: 10px !important;
+            }
+            .schedule-card span {
+                font-size: 0.75rem !important;
+                padding: 5px 10px !important;
+            }
+        }
+
         /* Maps Section Enhancement */
         .maps {
             padding: 120px 0 !important;
@@ -756,6 +916,56 @@
             height: 100% !important;
             min-height: 400px !important;
             display: block !important;
+        }
+
+        /* Mobile: maps section fixes */
+        @media (max-width: 768px) {
+            .maps {
+                padding: 48px 0 0 0 !important;
+            }
+            .maps .section-header {
+                margin-bottom: 28px !important;
+                padding: 0 16px !important;
+            }
+            .maps .section-header h2 {
+                font-size: 1.8rem !important;
+            }
+            .maps .section-header p {
+                font-size: 0.9rem !important;
+            }
+            .maps-container {
+                grid-template-columns: 1fr !important;
+            }
+            .maps-info {
+                padding: 0 16px 24px 16px !important;
+                gap: 12px !important;
+            }
+            .info-card {
+                padding: 16px !important;
+                gap: 14px !important;
+            }
+            .info-card:hover {
+                transform: none !important;
+            }
+            .info-icon {
+                width: 40px !important;
+                height: 40px !important;
+                flex-shrink: 0 !important;
+            }
+            .info-card h4 {
+                font-size: 0.95rem !important;
+                margin-bottom: 4px !important;
+            }
+            .info-card p {
+                font-size: 0.82rem !important;
+                line-height: 1.5 !important;
+            }
+            .maps-frame {
+                min-height: 260px !important;
+            }
+            .maps-frame iframe {
+                min-height: 260px !important;
+            }
         }
 
         /* CTA Section Enhancement */
@@ -877,6 +1087,281 @@
             color: white !important;
         }
 
+        /* ============================================
+           COMPREHENSIVE MOBILE RESPONSIVE STYLES
+           Covers ALL sections of the homepage
+        ============================================ */
+
+        @media (max-width: 768px) {
+
+            /* --- Global --- */
+            .content-container {
+                padding: 0 16px !important;
+            }
+
+            /* --- Hero Section --- */
+            .hero-premium {
+                height: 55vh !important;
+                min-height: 420px !important;
+                padding-bottom: 0 !important;
+            }
+            .slide-content {
+                padding-top: 80px !important;
+                padding-bottom: 40px !important;
+            }
+            .hero-title {
+                font-size: 1.8rem !important;
+                line-height: 1.2 !important;
+                margin-bottom: 14px !important;
+            }
+            .hero-subtitle {
+                font-size: 0.9rem !important;
+                margin-bottom: 24px !important;
+            }
+            .hero-btns {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                gap: 10px !important;
+            }
+            .btn-premium, .btn-glass {
+                padding: 12px 20px !important;
+                font-size: 0.85rem !important;
+                border-radius: 12px !important;
+            }
+            .premium-badge {
+                font-size: 10px !important;
+                padding: 6px 12px !important;
+                margin-bottom: 14px !important;
+            }
+
+            /* --- Stats Float Card --- */
+            .stats-float-wrapper {
+                padding: 8px 0 !important;
+            }
+            .stats-float-card {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                padding: 0 !important;
+                gap: 0 !important;
+                border-radius: 12px !important;
+                box-shadow: none !important;
+            }
+            .stat-box {
+                border-right: 1px solid rgba(0, 49, 120, 0.1) !important;
+                border-bottom: none !important;
+                padding: 10px 4px !important;
+                text-align: center !important;
+            }
+            .stat-box:last-child { border-right: none !important; }
+            .stat-num { font-size: 13px !important; margin-bottom: 2px !important; display: block !important; font-weight: 900 !important; }
+            .stat-label { font-size: 6px !important; letter-spacing: 0.3px !important; line-height: 1.2 !important; }
+
+            /* --- Features Section --- */
+            .features {
+                padding: 60px 0 60px !important;
+                margin-top: 0 !important;
+            }
+            .features .section-header {
+                margin-bottom: 24px !important;
+            }
+            .features .section-header h2 {
+                font-size: 1.6rem !important;
+            }
+            .features .section-header p {
+                font-size: 0.88rem !important;
+            }
+            .features-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            .feature-card {
+                padding: 24px !important;
+                border-radius: 20px !important;
+            }
+            .feature-icon {
+                width: 52px !important;
+                height: 52px !important;
+                margin-bottom: 16px !important;
+            }
+            .feature-card h3 {
+                font-size: 1.1rem !important;
+                margin-bottom: 10px !important;
+            }
+            .feature-card p {
+                font-size: 0.88rem !important;
+            }
+
+            /* --- Steps Section --- */
+            .steps {
+                padding: 60px 0 !important;
+            }
+            .steps-content {
+                grid-template-columns: 1fr !important;
+            }
+            .steps-image {
+                display: none !important;
+            }
+            .steps-info {
+                padding: 24px 16px !important;
+                border-radius: 20px !important;
+            }
+            .steps-info .section-header {
+                margin-bottom: 24px !important;
+            }
+            .steps-info .section-header h2 {
+                font-size: 1.6rem !important;
+            }
+            .steps-list {
+                gap: 14px !important;
+            }
+            .steps-list::before {
+                left: 42px !important;
+            }
+            .step-item {
+                padding: 16px !important;
+                gap: 16px !important;
+                border-radius: 18px !important;
+            }
+            .step-item:hover {
+                transform: none !important;
+            }
+            .step-number {
+                width: 48px !important;
+                height: 48px !important;
+                font-size: 1.1rem !important;
+                border-radius: 14px !important;
+            }
+            .step-text h4 {
+                font-size: 1rem !important;
+                margin-bottom: 4px !important;
+            }
+            .step-text p {
+                font-size: 0.82rem !important;
+                line-height: 1.5 !important;
+            }
+
+            /* --- FAQ Section --- */
+            .faq {
+                padding: 60px 0 !important;
+            }
+            .faq .section-header {
+                margin-bottom: 28px !important;
+            }
+            .faq .section-header h2 {
+                font-size: 1.6rem !important;
+            }
+            .faq-question {
+                padding: 16px 20px !important;
+            }
+            .faq-question h4 {
+                font-size: 0.9rem !important;
+            }
+            .faq-icon {
+                width: 28px !important;
+                height: 28px !important;
+                flex-shrink: 0 !important;
+            }
+            .faq-answer p {
+                padding: 14px 20px 20px 20px !important;
+                font-size: 0.85rem !important;
+            }
+
+            /* --- Testimonials Section --- */
+            .testimonials {
+                padding: 60px 0 !important;
+            }
+            .testimonials .section-header {
+                margin-bottom: 32px !important;
+            }
+            .testimonials .section-header h2 {
+                font-size: 1.6rem !important;
+            }
+            .testimonials-grid {
+                grid-template-columns: 1fr !important;
+            }
+            .testimonial-card {
+                padding: 20px !important;
+                border-radius: 20px !important;
+            }
+            .testimonial-text {
+                font-size: 0.88rem !important;
+                line-height: 1.6 !important;
+            }
+            .testimonial-user {
+                margin-top: 16px !important;
+            }
+            .user-avatar {
+                width: 36px !important;
+                height: 36px !important;
+                font-size: 0.9rem !important;
+            }
+
+            /* --- CTA Section --- */
+            .cta {
+                padding: 40px 0 60px 0 !important;
+            }
+            .cta-container {
+                border-radius: 24px !important;
+                padding: 40px 20px !important;
+            }
+            .cta-container h2 {
+                font-size: 1.6rem !important;
+                margin-bottom: 12px !important;
+            }
+            .cta-container p {
+                font-size: 0.88rem !important;
+                margin-bottom: 24px !important;
+            }
+            .cta-actions {
+                flex-direction: column !important;
+                align-items: center !important;
+                gap: 12px !important;
+            }
+            .cta-actions .btn-primary,
+            .cta-actions .btn-outline {
+                width: 100% !important;
+                text-align: center !important;
+                padding: 14px 24px !important;
+                font-size: 0.95rem !important;
+            }
+        }
+
+        /* Extra small screens (≤480px) */
+        @media (max-width: 480px) {
+
+            /* Stats: keep 2-col but smaller */
+            .stats-float-card {
+                margin: 0 8px !important;
+                padding: 14px 10px !important;
+                gap: 8px !important;
+            }
+            .stat-num { font-size: 18px !important; }
+            .stat-label { font-size: 8px !important; }
+
+            /* Features: 1 column very compact */
+            .features {
+                margin-top: 50px !important;
+                padding: 60px 0 40px !important;
+            }
+            .features .section-header h2 { font-size: 1.3rem !important; }
+            .feature-card {
+                padding: 16px !important;
+                border-radius: 16px !important;
+            }
+            .feature-icon {
+                width: 42px !important;
+                height: 42px !important;
+                margin-bottom: 10px !important;
+            }
+            .feature-icon svg { width: 20px !important; height: 20px !important; }
+            .feature-card h3 { font-size: 0.95rem !important; }
+            .feature-card p { font-size: 0.78rem !important; }
+
+            /* Hero */
+            .hero-title { font-size: 1.5rem !important; }
+            .hero-subtitle { font-size: 0.82rem !important; }
+        }
+
     </style>
 </head>
 <body style="background-color: #ffffff; background-image: none !important;">
@@ -978,30 +1463,32 @@
                 <button class="slide-arrow next"><i data-lucide="chevron-right"></i></button>
             </div>
 
-            <!-- Floating Stats -->
-            <div class="stats-float-wrapper">
-                <div class="content-container">
-                    <div class="stats-float-card">
-                        <div class="stat-box">
-                            <span class="stat-num">{{ $totalServices }}</span>
-                            <span class="stat-label">JENIS LAYANAN</span>
-                        </div>
-                        <div class="stat-box">
-                            <span class="stat-num">{{ $dokumenTerbit }}</span>
-                            <span class="stat-label">DOKUMEN TERBIT</span>
-                        </div>
-                        <div class="stat-box">
-                            <span class="stat-num">{{ $persenKepuasan }}%</span>
-                            <span class="stat-label">PENILAIAN LAYANAN</span>
-                        </div>
-                        <div class="stat-box">
-                            <span class="stat-num">1 Hari</span>
-                            <span class="stat-label">RATA RATA PROSES</span>
-                        </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <div class="stats-float-wrapper">
+            <div class="content-container">
+                <div class="stats-float-card">
+                    <div class="stat-box">
+                        <span class="stat-num">{{ $totalServices }}</span>
+                        <span class="stat-label">JENIS LAYANAN</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num">{{ $dokumenTerbit }}</span>
+                        <span class="stat-label">DOKUMEN TERBIT</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num">{{ $persenKepuasan }}%</span>
+                        <span class="stat-label">PENILAIAN LAYANAN</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-num">1 Hari</span>
+                        <span class="stat-label">RATA RATA PROSES</span>
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
 
 
         <section id="layanan" class="features">
@@ -1136,33 +1623,114 @@
                     <h2>Penilaian Layanan</h2>
                     <p>Apa kata mereka tentang pengalaman menggunakan layanan JEBOL.</p>
                 </div>
-                <div class="testimonials-grid">
+                <style>
+                    .premium-testimonials-grid {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                        gap: 24px;
+                        margin-top: 40px;
+                    }
+                    .premium-testi-card {
+                        background: #ffffff;
+                        border-radius: 24px;
+                        padding: 30px;
+                        box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+                        border: 1px solid rgba(0,0,0,0.02);
+                        display: flex;
+                        flex-direction: column;
+                        transition: all 0.3s ease;
+                        position: relative;
+                        overflow: hidden;
+                    }
+                    .premium-testi-card:hover {
+                        transform: translateY(-8px);
+                        box-shadow: 0 20px 40px -15px rgba(0, 49, 120, 0.15);
+                    }
+                    .premium-testi-quote-icon {
+                        position: absolute;
+                        top: 20px;
+                        right: 20px;
+                        color: rgba(0, 49, 120, 0.05);
+                        transform: scale(3);
+                    }
+                    .premium-testi-text {
+                        font-size: 1rem;
+                        color: #475569;
+                        line-height: 1.6;
+                        margin-bottom: 20px;
+                        flex: 1;
+                        font-style: italic;
+                        position: relative;
+                        z-index: 2;
+                    }
+                    .premium-testi-img {
+                        width: 100%;
+                        height: 160px;
+                        object-fit: cover;
+                        border-radius: 12px;
+                        margin-bottom: 20px;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+                        border: 1px solid #f1f5f9;
+                    }
+                    .premium-testi-user {
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                        margin-top: auto;
+                        position: relative;
+                        z-index: 2;
+                    }
+                    .premium-testi-avatar {
+                        width: 44px;
+                        height: 44px;
+                        border-radius: 50%;
+                        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+                        color: white;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        font-weight: 700;
+                        font-size: 1.1rem;
+                        box-shadow: 0 4px 10px rgba(0, 49, 120, 0.2);
+                    }
+                    .premium-testi-info h4 {
+                        margin: 0 0 4px 0;
+                        font-size: 1rem;
+                        color: #0f172a;
+                        font-weight: 700;
+                    }
+                    .premium-testi-stars {
+                        display: flex;
+                        gap: 2px;
+                    }
+                </style>
+                <div class="premium-testimonials-grid">
                     @forelse($recentReviews as $review)
-                        <div class="testimonial-card">
-                            <div class="quote-icon"><i data-lucide="quote"></i></div>
-                            <p class="testimonial-text">"{{ Str::limit($review->kritik_saran, 120) }}"</p>
+                        <div class="premium-testi-card">
+                            <p class="premium-testi-text">"{{ Str::limit($review->kritik_saran, 120) }}"</p>
+                            
                             @if($review->foto_path)
-                                <div style="margin-top: 15px; border-radius: 12px; overflow: hidden; max-height: 200px;">
-                                    <img src="{{ Storage::url($review->foto_path) }}" alt="Foto Review" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
-                                </div>
+                                <img src="{{ Storage::url($review->foto_path) }}" alt="Foto Review" class="premium-testi-img">
                             @endif
-                            <div class="testimonial-user">
-                                <div class="user-avatar" style="background: var(--primary); color: white;">
+                            
+                            <div class="premium-testi-user">
+                                <div class="premium-testi-avatar">
                                     {{ $review->masyarakat ? strtoupper(substr($review->masyarakat->name ?? $review->masyarakat->nama ?? 'A', 0, 1)) : 'A' }}
                                 </div>
-                                <div>
+                                <div class="premium-testi-info">
                                     <h4>{{ $review->masyarakat ? ($review->masyarakat->name ?? $review->masyarakat->nama) : 'Anonim' }}</h4>
-                                    <span style="display: flex; align-items: center; gap: 4px;">
+                                    <div class="premium-testi-stars">
                                         @for($i=1; $i<=5; $i++)
-                                            <i data-lucide="star" width="12" height="12" {{ $i <= $review->nilai_kepuasan ? 'fill="#FFC107" color="#FFC107"' : 'color="#cbd5e1"' }}></i>
+                                            <i data-lucide="star" width="14" height="14" style="stroke: {{ $i <= $review->nilai_kepuasan ? '#f59e0b' : '#cbd5e1' }}; fill: {{ $i <= $review->nilai_kepuasan ? '#f59e0b' : '#f8fafc' }};"></i>
                                         @endfor
-                                    </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     @empty
-                        <div style="grid-column: 1 / -1; text-align: center; padding: 40px; color: var(--text-muted); background: white; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
-                            Belum ada ulasan dengan bintang 4 ke atas. Jadilah yang pertama memberikan ulasan!
+                        <div style="grid-column: 1 / -1; text-align: center; padding: 60px 40px; color: var(--text-muted); background: white; border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.02);">
+                            <i data-lucide="message-square-dashed" style="width: 48px; height: 48px; color: #cbd5e1; margin-bottom: 16px; opacity: 0.5;"></i>
+                            <p style="font-size: 1.1rem; margin: 0;">Belum ada ulasan dengan bintang 4 ke atas.<br>Jadilah yang pertama memberikan ulasan!</p>
                         </div>
                     @endforelse
                 </div>
@@ -1210,8 +1778,8 @@
                     </div>
                 </div>
                 <div style="text-align: center; margin-top: 40px;">
-                    <a href="{{ route('contact') }}" class="btn-testimoni">
-                        Hubungi Kontak Kami <i data-lucide="arrow-right" width="18" height="18" style="margin-left: 8px;"></i>
+                    <a href="{{ route('bantuan') }}" class="btn-testimoni">
+                        Pusat Bantuan <i data-lucide="arrow-right" width="18" height="18" style="margin-left: 8px;"></i>
                     </a>
                 </div>
             </div>

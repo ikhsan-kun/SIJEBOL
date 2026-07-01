@@ -1,56 +1,20 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lokasi Layanan - SI JEBOL Kota Tegal</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>
-        :root {
-            --primary: #003178;
-            --primary-dark: #001f4d;
-            --primary-light: #f0f7ff;
-            --accent: #FFC107;
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            --card-shadow: 0 20px 50px rgba(0, 49, 120, 0.1);
-        }
+﻿@extends('layouts.masyarakat')
 
-        body {
-            background-color: #f8faff;
-            background-image: url('{{ asset('img/batik-pattern.png') }}');
+@push('styles')
+<style>
+}');
             background-size: 400px;
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
         }
 
         /* Sidebar Layout Integration */
-        .dashboard-layout {
-            display: flex;
-            min-height: 100vh;
-        }
+        
 
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 48px 0 ;
-            background: #f4f7fb;
-            min-width: 0;
-            transition: all 0.3s ease;
-            display: flex; flex-direction: column; min-height: 100vh;
-}
+        
 
         @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-                padding: 100px 20px 0 ;
-                display: flex; flex-direction: column; min-height: 100vh;
-}
+            
         }
 
         .location-hero {
@@ -348,15 +312,11 @@
             .address-box h3 { font-size: 1.5rem; }
             .branch-header h2 { font-size: 2rem; }
         }
-    </style>
-</head>
-<body x-data="{ sidebarOpen: false }">
+</style>
+@endpush
 
-    <div class="dashboard-layout">
-        @include('partials.sidebar-masyarakat')
-
-        <main class="main-content">
-            <section class="location-hero">
+@section('content')
+<section class="location-hero">
                 <div class="jbl-1109 jbl-1117">
                     <h1 class="hero-title">
                         Lokasi <span style="color: #f59e0b;">Pelayanan</span>
@@ -458,21 +418,4 @@
 
        
     </div>
-
-                    <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <script>
-        lucide.createIcons();
-    </script>
-</body>
-</html>
-
+@endsection

@@ -1,51 +1,9 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pusat Bantuan - SI JEBOL Kota Tegal</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>
-        :root {
-            --primary: #003178;
-            --primary-dark: #002252;
-            --primary-light: #e0f2fe;
-            --accent: #FFC107;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-        }
+@extends('layouts.masyarakat')
 
-        body { 
-            background-color: #f8fafc; 
-            background-image: none !important;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            color: var(--text-main);
-        }
-
-        .dashboard-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 0 0 0;
-            background: white;
-            min-width: 0;
-            transition: all 0.3s ease;
-            display: flex; flex-direction: column; min-height: 100vh;
-        }
-
-        @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-                padding: 80px 0 0 0;
-                display: flex; flex-direction: column; min-height: 100vh;
-            }
+@push('styles')
+<style>
+@media (max-width: 1024px) {
+            
         }
 
         .content-container {
@@ -409,14 +367,11 @@
             .contact-buttons { flex-direction: column; align-items: center; }
             .btn-premium-light { width: 100%; max-width: 350px; justify-content: center; }
         }
-    </style>
-</head>
-<body x-data="{ sidebarOpen: false }">
-    <div class="dashboard-layout">
-        @include('partials.sidebar-masyarakat')
+</style>
+@endpush
 
-        <main class="main-content">
-            <section class="help-hero">
+@section('content')
+<section class="help-hero">
                 <div class="content-container">
                     <h1 class="hero-title">
                         Pusat <span class="jbl-407">Bantuan</span> Masyarakat
@@ -523,44 +478,7 @@
                 </div>
             </section>
 
-            <section class="download-section">
-                <div class="content-container download-grid">
-                    <div>
-                        <h2 class="section-title" style="font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 24px;">Unduh Panduan Resmi</h2>
-                        <p class="section-subtitle" style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 40px;">Kami menyediakan panduan lengkap dalam bentuk dokumen dan video tutorial untuk memudahkan Anda menggunakan seluruh fitur di portal SI JEBOL.</p>
 
-                        <a href="{{ asset('Buku Panduan Masyarakat V2.pdf') }}" download class="download-card">
-                            <div class="dl-info">
-                                <div class="dl-icon pdf"><i data-lucide="file-type" width="28" height="28"></i></div>
-                                <div class="dl-text">
-                                    <h4>Buku Panduan Masyarakat V2.pdf</h4>
-                                    <p>Panduan Lengkap • PDF • 5.8 MB</p>
-                                </div>
-                            </div>
-                            <i data-lucide="download-cloud" style="color: var(--primary);" width="24" height="24"></i>
-                        </a>
-
-                        <a href="#" class="download-card">
-                            <div class="dl-info">
-                                <div class="dl-icon video"><i data-lucide="monitor-play" width="28" height="28"></i></div>
-                                <div class="dl-text">
-                                    <h4>Video Tutorial Registrasi & Pengajuan</h4>
-                                    <p>Durasi 8 Menit • MP4 • 15.2 MB</p>
-                                </div>
-                            </div>
-                            <i data-lucide="play" style="color: var(--primary);" width="24" height="24"></i>
-                        </a>
-                    </div>
-                    
-                    <div class="download-image-wrapper">
-                        <img src="{{ asset('images/steps.png') }}" alt="User Guide Illustration" class="download-image">
-                        <div class="image-badge" style="position: absolute; bottom: 30px; right: -20px; background: white; padding: 24px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-left: 5px solid var(--accent); max-width: 250px;">
-                            <p style="font-size: 0.9rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">Update Sistem Mei 2024</p>
-                            <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0; line-height: 1.4;">Fitur baru pengecekan status via WhatsApp kini telah tersedia.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <section class="contact-section">
                 <div class="content-container">
@@ -576,82 +494,4 @@
                     </div>
                 </div>
             </section>
-
-            <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <script>
-        try {
-            lucide.createIcons();
-        } catch (e) {
-            console.warn("Lucide icons failed to load:", e);
-        }
-        
-        // FAQ Toggle Logic
-        document.querySelectorAll('.faq-question').forEach(item => {
-            item.addEventListener('click', () => {
-                const parent = item.parentElement;
-                const answer = item.nextElementSibling;
-                const icon = item.querySelector('svg, i');
-                
-                // Toggle Answer Visibility
-                if (answer.style.display === 'block') {
-                    answer.style.display = 'none';
-                    if (icon) icon.style.transform = 'rotate(0deg)';
-                    parent.classList.remove('active');
-                } else {
-                    answer.style.display = 'block';
-                    if (icon) icon.style.transform = 'rotate(180deg)';
-                    parent.classList.add('active');
-                }
-            });
-        });
-
-        // Category Card Click Logic
-        document.querySelectorAll('.cat-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                e.preventDefault();
-                const targetId = card.getAttribute('data-faq-target');
-                const targetFaq = document.getElementById(targetId);
-                
-                if (targetFaq) {
-                    // Close all FAQs
-                    document.querySelectorAll('.faq-item').forEach(item => {
-                        item.classList.remove('active');
-                        item.querySelector('.faq-answer').style.display = 'none';
-                        const icon = item.querySelector('svg, i');
-                        if (icon) icon.style.transform = 'rotate(0deg)';
-                    });
-                    
-                    // Open target FAQ
-                    targetFaq.classList.add('active');
-                    targetFaq.querySelector('.faq-answer').style.display = 'block';
-                    const targetIcon = targetFaq.querySelector('svg, i');
-                    if (targetIcon) targetIcon.style.transform = 'rotate(180deg)';
-
-                    // Scroll to target FAQ centered
-                    targetFaq.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            });
-        });
-
-        // Initialize first FAQ as open and active
-        const firstFAQItem = document.querySelector('.faq-item');
-        if (firstFAQItem) {
-            firstFAQItem.classList.add('active');
-            const firstAnswer = firstFAQItem.querySelector('.faq-answer');
-            if (firstAnswer) firstAnswer.style.display = 'block';
-            const firstIcon = firstFAQItem.querySelector('svg, i');
-            if (firstIcon) firstIcon.style.transform = 'rotate(180deg)';
-        }
-    </script>
-</body>
-</html>
+@endsection

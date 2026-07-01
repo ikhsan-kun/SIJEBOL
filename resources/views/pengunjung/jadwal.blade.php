@@ -16,7 +16,7 @@
             --accent: #f59e0b;
         }
 
-        body {
+        body.no-batik {
             background-color: #f8fafc !important;
             background-image: none !important;
             font-family: 'Inter', sans-serif;
@@ -33,13 +33,29 @@
         }
 
         .content-container {
-            padding: 40px 96px;
+            padding: 40px 24px;
         }
 
         @media (max-width: 1024px) {
             .content-container {
-                padding: 40px 40px;
+                padding: 32px 24px;
             }
+            .schedule-item { grid-template-columns: 1fr !important; gap: 8px !important; justify-items: start !important; padding: 12px !important; }
+            .sch-icon { display: none !important; }
+        }
+
+        @media (max-width: 768px) {
+            .content-container {
+                padding: 24px 16px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .stats-grid { grid-template-columns: 1fr; }
+            .cal-cell { width: 28px; height: 28px; font-size: 0.75rem; border-radius: 50%; }
+            .cal-grid { gap: 4px; }
+            .cal-day-header { font-size: 0.7rem; padding-bottom: 8px; }
+            .panel-card { padding: 16px; }
         }
 
         /* Hero Banner */
@@ -55,7 +71,7 @@
         }
 
         .hero-inner {
-            padding: 0 96px;
+            padding: 0 24px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -286,7 +302,9 @@
         }
 
         .cal-cell {
-            height: 40px;
+            width: 32px;
+            height: 32px;
+            margin: 0 auto;
             display: grid;
             place-items: center;
             font-size: 0.9rem;
@@ -294,33 +312,23 @@
             color: #334155;
             position: relative;
             cursor: pointer;
-            border-radius: 8px;
-            transition: background 0.2s;
+            border-radius: 50%;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            background: transparent;
+            padding: 0;
+            font-family: inherit;
         }
 
         .cal-cell:hover:not(.muted) {
             background: #f1f5f9;
         }
 
-        .cal-cell.active-date {
-            background: #dbeafe;
-        }
-
         .cal-cell.muted { color: #cbd5e1; }
 
-        .cal-indicator {
-            position: absolute;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .cal-indicator.blue { border: 2px solid #3b82f6; background: #eff6ff; }
-        .cal-indicator.yellow { border: 2px solid #eab308; background: #fefce8; }
-        .cal-indicator.green { border: 2px solid #22c55e; background: #f0fdf4; }
-
-        .cal-cell span { position: relative; z-index: 1; }
+        .cal-cell.blue { border-color: #3b82f6; background: #eff6ff; color: #2563eb; font-weight: 700; }
+        .cal-cell.green { border-color: #10b981; background: #f0fdf4; color: #059669; font-weight: 700; }
+        .cal-cell.yellow { border-color: #f59e0b; background: #fefce8; color: #d97706; font-weight: 700; }
 
         .cal-legend {
             display: flex;
@@ -337,7 +345,6 @@
         .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
         .dot-blue { background: #3b82f6; }
         .dot-green { background: #22c55e; }
-        .dot-yellow { background: #eab308; }
 
         /* Schedule List */
         .schedule-list {
@@ -389,7 +396,7 @@
         }
     </style>
 </head>
-<body>
+<body class="no-batik">
     @include('partials.navbar')
 
     <main class="main-content">
@@ -511,21 +518,19 @@
                                 else $indicatorClass = 'blue';
                             }
                         @endphp
-                        <div class="cal-cell {{ !$item['isCurrentMonth'] ? 'muted' : '' }}" 
+                        <button class="cal-cell {{ !$item['isCurrentMonth'] ? 'muted' : '' }} {{ $hasEvent ? $indicatorClass : '' }}" 
                             @if($hasEvent) 
                                 onclick="showCalDetail('{{ $dateString }}', this)" 
                                 data-date="{{ $dateString }}"
                             @endif
                         >
-                            @if($hasEvent) <div class="cal-indicator {{ $indicatorClass }}"></div> @endif
-                            <span>{{ $item['date']->day }}</span>
-                        </div>
+                            {{ $item['date']->day }}
+                        </button>
                     @endforeach
                 </div>
                 <div class="cal-legend">
                     <div class="legend-item"><div class="legend-dot dot-blue"></div> Terjadwal</div>
                     <div class="legend-item"><div class="legend-dot dot-green"></div> Selesai</div>
-                    <div class="legend-item"><div class="legend-dot dot-yellow"></div> Ditunda</div>
                 </div>
 
                 <div id="cal-detail" style="display:none; margin-top: 16px; padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
@@ -540,8 +545,9 @@
             <!-- Schedule List Panel -->
             <div class="panel-card">
                 <div class="panel-header">
-                    <h3 class="panel-title">Jadwal Terdekat</h3>
-                    <a href="#calendar-panel" class="view-all">Lihat Semua</a>
+                    <h3 class="panel-title">
+                        <i data-lucide="clock"></i> Jadwal Mendatang
+                    </h3>
                 </div>
                 <div class="schedule-list">
                     @forelse($upcoming as $index => $act)
@@ -608,6 +614,7 @@
                     @endif
                 </div>
             </div>
+        </div>
         </div>
     </main>
 

@@ -48,11 +48,12 @@ class PermohonanController extends Controller
             'lokasi_pelayanan'  => 'required',
             'kelurahan'         => 'required|string|max:255',
             'persetujuan'       => 'accepted',
-            'nik'               => 'nullable|string|max:16',
-            'nik_anak'          => 'nullable|string|max:16',
+            'nik'               => 'nullable|digits:16',
+            'nik_anak'          => 'nullable|digits:16',
         ], [
             'required'          => 'Kolom :attribute wajib diisi.',
             'accepted'          => 'Anda harus menyetujui pernyataan.',
+            'digits'            => 'Kolom :attribute harus terdiri dari :digits digit angka.',
             'max'               => 'Kolom :attribute maksimal :max karakter.',
         ]);
 
@@ -109,17 +110,25 @@ class PermohonanController extends Controller
                 \App\Services\WhatsAppService::send(Auth::user()->phone ?? '081234567890', $pesanWa);
             }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Pengajuan berhasil terkirim!',
-                'nomor_tiket' => $nomor_tiket
-            ]);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Pengajuan berhasil terkirim!',
+                    'nomor_tiket' => $nomor_tiket
+                ]);
+            }
+
+            return redirect('/masyarakat/cek-status?search=' . $nomor_tiket)->with('success', 'Pengajuan berhasil terkirim! Nomor tiket: ' . $nomor_tiket);
 
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Terjadi kesalahan: ' . $e->getMessage()
-            ], 500);
+            if ($request->ajax() || $request->wantsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Terjadi kesalahan: ' . $e->getMessage()
+                ], 500);
+            }
+            
+            return back()->withInput()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
     }
 
@@ -268,6 +277,8 @@ class PermohonanController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:' . $table . ',email,' . $user->$idField . ',' . $idField,
             'phone' => 'nullable|string|max:20',
+            'kecamatan' => 'nullable|string|max:100',
+            'alamat' => 'nullable|string|max:500',
             'profile_photo' => 'nullable|image|mimes:jpg,jpeg,png|max:1024',
         ]);
 
@@ -277,6 +288,13 @@ class PermohonanController extends Controller
                 'email' => $request->email,
                 'no_hp' => $request->phone,
             ];
+            
+            if ($request->has('kecamatan')) {
+                $data['kecamatan'] = $request->kecamatan;
+            }
+            if ($request->has('alamat')) {
+                $data['alamat'] = $request->alamat;
+            }
 
             if ($request->hasFile('profile_photo')) {
                 if ($user->foto_profil) {
@@ -424,7 +442,7 @@ class PermohonanController extends Controller
         
         // Rekap Lokasi untuk Dashboard Monitoring
         $rekapLokasi = PengajuanLayanan::selectRaw('lokasi_pelayanan, status, COUNT(*) as total')
-            ->whereIn('status', ['menunggu_verifikasi', 'menunggu_kuota', 'terverifikasi', 'terjadwal', 'diproses'])
+            ->whereIn('status', ['menunggu_kuota', 'terverifikasi', 'terjadwal', 'diproses'])
             ->where(function($q) {
                 $q->where('jenis_pengajuan', '!=', 'Sekolah')
                   ->where('jenis_pengajuan', '!=', 'sekolah')

@@ -138,5 +138,21 @@ class JadwalController extends Controller
         return view($view, compact('activities', 'monthName', 'upcoming', 'currentDate', 'calendar', 'nearest', 'selectedDate'));
     }
 
+    public function updateStatus(Request $request, $id)
+    {
+        $request->validate([
+            'tanggal_pelayanan' => 'required|date',
+            'jam_mulai' => 'required',
+            'jam_selesai' => 'required'
+        ]);
 
+        $jadwal = JadwalJebol::findOrFail($id);
+        $jadwal->tanggal_pelayanan = $request->tanggal_pelayanan;
+        $jadwal->jam_mulai = $request->jam_mulai;
+        $jadwal->jam_selesai = $request->jam_selesai;
+        $jadwal->status = 'Terjadwal'; // Automatically set back to Terjadwal after reschedule
+        $jadwal->save();
+
+        return back()->with('success', 'Jadwal berhasil diubah.');
+    }
 }

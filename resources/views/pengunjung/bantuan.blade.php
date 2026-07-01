@@ -487,44 +487,7 @@
             </div>
         </section>
 
-        <section class="download-section">
-            <div class="content-container download-grid">
-                <div>
-                    <h2 class="section-title" style="font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 24px;">Unduh Panduan Resmi</h2>
-                    <p class="section-subtitle" style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 40px;">Kami menyediakan panduan lengkap dalam bentuk dokumen dan video tutorial untuk memudahkan Anda menggunakan seluruh fitur di portal SI JEBOL.</p>
 
-                    <a href="{{ asset('Buku Panduan Masyarakat V2.pdf') }}" download class="download-card">
-                        <div class="dl-info">
-                            <div class="dl-icon pdf"><i data-lucide="file-type" width="28" height="28"></i></div>
-                            <div class="dl-text">
-                                <h4>Buku Panduan Masyarakat V2.pdf</h4>
-                                <p>Panduan Lengkap • PDF • 5.8 MB</p>
-                            </div>
-                        </div>
-                        <i data-lucide="download-cloud" style="color: var(--primary);" width="24" height="24"></i>
-                    </a>
-
-                    <a href="#" class="download-card">
-                        <div class="dl-info">
-                            <div class="dl-icon video"><i data-lucide="monitor-play" width="28" height="28"></i></div>
-                            <div class="dl-text">
-                                <h4>Video Tutorial Registrasi & Pengajuan</h4>
-                                <p>Durasi 8 Menit • MP4 • 15.2 MB</p>
-                            </div>
-                        </div>
-                        <i data-lucide="play" style="color: var(--primary);" width="24" height="24"></i>
-                    </a>
-                </div>
-                
-                <div class="download-image-wrapper">
-                    <img src="{{ asset('images/steps.png') }}" alt="User Guide Illustration" class="download-image">
-                    <div class="image-badge" style="position: absolute; bottom: 30px; right: -20px; background: white; padding: 24px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-left: 5px solid var(--accent); max-width: 250px;">
-                        <p style="font-size: 0.9rem; font-weight: 700; color: var(--primary); margin-bottom: 8px;">Update Sistem Mei 2024</p>
-                        <p style="font-size: 0.8rem; color: var(--text-muted); margin: 0; line-height: 1.4;">Fitur baru pengecekan status via WhatsApp kini telah tersedia.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
 
         <section class="contact-section">
             <div class="content-container">
@@ -547,6 +510,20 @@
     <script>
         try {
             lucide.createIcons();
+            
+            function openVideoModal() {
+                document.getElementById('videoModal').classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+            
+            function closeVideoModal() {
+                document.getElementById('videoModal').classList.remove('show');
+                document.body.style.overflow = 'auto';
+                const videoElement = document.getElementById('tutorialVideo');
+                if (videoElement) {
+                    videoElement.pause();
+                }
+            }
         } catch (e) {
             console.warn("Lucide icons failed to load:", e);
         }
@@ -608,7 +585,31 @@
             const firstIcon = firstFAQItem.querySelector('svg, i');
             if (firstIcon) firstIcon.style.transform = 'rotate(180deg)';
         }
+        }
     </script>
+
+    <!-- VIDEO MODAL -->
+    <div id="videoModal" class="modal-backdrop" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); z-index: 9999; display: none; place-items: center; opacity: 0; transition: opacity 0.3s ease;">
+        <div class="modal-content" style="background: white; border-radius: 20px; width: 100%; max-width: 900px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5); overflow: hidden; transform: scale(0.95); transition: all 0.3s ease;">
+            <div class="modal-header" style="background: var(--primary); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; color: white;">
+                <h3 style="margin: 0; font-size: 1.1rem; font-weight: 700; display: flex; align-items: center; gap: 10px;">
+                    <i data-lucide="monitor-play" style="width: 20px;"></i> Video Tutorial SI JEBOL
+                </h3>
+                <button type="button" onclick="closeVideoModal()" style="background: none; border: none; font-size: 1.5rem; color: rgba(255,255,255,0.8); cursor: pointer; line-height: 1;">&times;</button>
+            </div>
+            <div class="modal-body" style="padding: 0; background: #000; aspect-ratio: 16/9; position: relative;">
+                <video id="tutorialVideo" controls style="width: 100%; height: 100%; object-fit: contain;">
+                    <source src="{{ asset('videos/tutorial.mp4') }}" type="video/mp4">
+                    Maaf, browser Anda tidak mendukung pemutaran video.
+                </video>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        #videoModal.show { display: grid !important; opacity: 1 !important; }
+        #videoModal.show .modal-content { transform: scale(1) !important; }
+    </style>
 </body>
 </html>
 

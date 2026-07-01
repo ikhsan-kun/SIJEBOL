@@ -1,61 +1,16 @@
-@php
-    $hour = now()->hour;
-    $greeting = 'Selamat Malam';
-    if ($hour >= 5 && $hour < 11) {
-        $greeting = 'Selamat Pagi';
-    } elseif ($hour >= 11 && $hour < 15) {
-        $greeting = 'Selamat Siang';
-    } elseif ($hour >= 15 && $hour < 18) {
-        $greeting = 'Selamat Sore';
-    }
-@endphp
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SI JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    
-    <style>
-        body { 
-            background-color: #f6f9fc;
-            font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
-            margin: 0;
-            color: #1e293b;
-            position: relative;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+﻿@extends('layouts.masyarakat')
 
-        /* Background styling simplified */
+@push('styles')
+<style>
+/* Background styling simplified */
 
-        .dashboard-layout {
-            display: flex;
-            min-height: 100vh;
-        }
+        
 
         /* Main Content Styling */
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 48px 0 ;
-            background: transparent;
-            min-width: 0;
-            transition: all 0.3s ease;
-            display: flex; flex-direction: column; min-height: 100vh;
-}
+        
 
         @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-                padding: 80px 20px 0 ;
-                display: flex; flex-direction: column; min-height: 100vh;
-}
+            
         }
 
         /* Bento Grid - Top */
@@ -320,13 +275,7 @@
             letter-spacing: 0.5px;
         }
 
-        .calendar-pass-body {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 8px 0;
-            width: 100%;
-        }
+        .calendar-pass-
 
         .calendar-pass-day {
             font-size: 1.5rem;
@@ -919,17 +868,11 @@
             background: #2563eb;
             color: white;
         }
-    </style>
-</head>
-<body x-data="{ sidebarOpen: false }">
+</style>
+@endpush
 
-
-    <div class="dashboard-layout">
-        <!-- Vertical Sidebar -->
-        @include('partials.sidebar-masyarakat')
-
-        <main class="main-content">
-            <!-- Hero & Schedule Section -->
+@section('content')
+<!-- Hero & Schedule Section -->
             <div class="dashboard-grid-top">
                 <div class="hero-banner">
                     
@@ -1100,32 +1043,4 @@
                     </div>
                 </div>
             </div>
-                    <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Include Chart.js CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // Chart placeholder for Kecamatan if needed later
-        });
-
-        function filterTableByStatus(status) {
-            console.log('Filter called:', status);
-            // Logic to filter table for kecamatan (wip)
-        }
-    </script>
-    <script>
-        lucide.createIcons();
-    </script>
-</body>
-</html>
-
+@endsection

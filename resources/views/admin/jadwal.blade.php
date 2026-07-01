@@ -380,7 +380,39 @@
         .main-grid { grid-template-columns: 1fr; }
         .schedule-item { grid-template-columns: 1fr; gap: 8px; justify-items: start; }
         .sch-icon { display: none; }
+        .custom-hero {
+            margin: -1.5rem -1rem 32px -1rem;
+        }
     }
+
+    @media (max-width: 768px) {
+        .dashboard-grid { grid-template-columns: 1fr; }
+        .custom-hero {
+            flex-direction: column;
+            text-align: center;
+            gap: 24px;
+            padding: 32px 24px;
+        }
+        .hero-actions {
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+    }
+
+    .modal-backdrop { 
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0; 
+        background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(4px); 
+        z-index: 1000; display: none; place-items: center; opacity: 0; 
+        transition: opacity 0.3s ease; 
+    }
+    .modal-backdrop.show { display: grid; opacity: 1; }
+    .modal-content {
+        background: white; border-radius: 20px; width: 100%;
+        max-width: 500px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        transform: scale(0.95); transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+    .modal-backdrop.show .modal-content { transform: scale(1); opacity: 1; }
 </style>
 
 <div class="custom-hero">
@@ -420,12 +452,13 @@
             </select>
         </div>
         
-        
         <button type="submit" class="btn btn-primary" style="height: 42px;">
             <i data-lucide="filter" style="width: 18px; height: 18px;"></i> Terapkan
         </button>
     </form>
 </div>
+
+
 
 <div class="dashboard-grid">
     <div class="stat-card">
@@ -504,7 +537,6 @@
                     if ($hasEvent) {
                         $firstEventStatus = $dayActivities->first()->status ?? 'Terjadwal';
                         if (strtolower($firstEventStatus) == 'selesai') $indicatorClass = 'green';
-                        elseif (strtolower($firstEventStatus) == 'ditunda') $indicatorClass = 'yellow';
                         else $indicatorClass = 'blue';
                     }
                 @endphp
@@ -523,7 +555,6 @@
         <div class="cal-legend">
             <div class="legend-item"><div class="legend-dot dot-blue"></div> Terjadwal</div>
             <div class="legend-item"><div class="legend-dot dot-green"></div> Selesai</div>
-            <div class="legend-item"><div class="legend-dot dot-yellow"></div> Ditunda</div>
         </div>
 
         <!-- Popup Detail Kalender -->
@@ -537,17 +568,16 @@
     </div>
     
     <!-- Schedule List Panel -->
-    <div class="panel-box">
-        <div class="panel-header">
-            <h3 class="panel-title"><i data-lucide="list-todo" style="color: var(--primary);"></i> Jadwal Terdekat</h3>
-            <a href="#calendar-panel" style="font-size: 0.85rem; font-weight: 600; color: var(--primary); text-decoration: none;">Lihat Semua</a>
+    <div class="panel-box" style="padding-bottom: 20px; border-bottom: 1px solid #f1f5f9; margin-bottom: 20px; display: flex; flex-direction: column;">
+        <div class="panel-header" style="margin-bottom: 20px;">
+            <h3 class="panel-title"><i data-lucide="clock" style="color: #f59e0b;"></i> Jadwal Mendatang</h3>
         </div>
         
         <div class="schedule-list">
             @forelse($upcoming as $index => $act)
                 @php
                     $statusText = ucfirst($act->status ?? 'Terjadwal');
-                    if (strtolower($statusText) == 'ditunda') $statusClass = 'badge-ditunda';
+                    if (strtolower($statusText) == 'ubah jadwal') $statusClass = 'badge-ditunda';
                     elseif (strtolower($statusText) == 'selesai') $statusClass = 'badge-selesai';
                     else $statusClass = 'badge-terjadwal';
                 @endphp
@@ -580,7 +610,7 @@
                         <div class="sch-name">Kelurahan Margadana</div>
                         <div class="sch-detail"><i data-lucide="calendar" style="width:16px; height: 16px;"></i> 22 Mei 2025</div>
                         <div class="sch-detail"><i data-lucide="clock" style="width:16px; height: 16px;"></i> 08.00 - 12.00</div>
-                        <div class="status-badge badge-ditunda">Ditunda</div>
+                        <div class="status-badge badge-ditunda">Ubah Jadwal</div>
                     </div>
                 @endif
             @endforelse
@@ -594,8 +624,12 @@
         $jadwalJson = $activities->map(function($dayItems) {
             return $dayItems->map(function($item) {
                 return [
+                    'id' => $item->id_jadwal,
                     'lokasi' => $item->lokasi,
                     'tanggal' => \Carbon\Carbon::parse($item->tanggal_pelayanan)->translatedFormat('d F Y'),
+                    'tanggal_raw' => \Carbon\Carbon::parse($item->tanggal_pelayanan)->format('Y-m-d'),
+                    'jam_mulai_raw' => \Carbon\Carbon::parse($item->jam_mulai)->format('H:i'),
+                    'jam_selesai_raw' => \Carbon\Carbon::parse($item->jam_selesai)->format('H:i'),
                     'jam' => \Carbon\Carbon::parse($item->jam_mulai)->format('H.i') . ' - ' . \Carbon\Carbon::parse($item->jam_selesai)->format('H.i') . ' WIB',
                     'status' => ucfirst($item->status ?? 'Terjadwal'),
                     'kegiatan' => $item->nama_kegiatan ?? '-',
@@ -634,7 +668,7 @@
             let iconColor = '#3b82f6';
             let bgClass = '#eff6ff';
             
-            if (item.status.toLowerCase() === 'ditunda') {
+            if (item.status.toLowerCase() === 'ubah jadwal') {
                 badgeClass = 'badge-ditunda';
                 iconColor = '#f59e0b';
                 bgClass = '#fffbeb';
@@ -659,6 +693,10 @@
             html += '    <div><strong>Layanan:</strong> ' + item.jenis_layanan + '</div>';
             html += '    <div><strong>Petugas:</strong> ' + item.petugas + '</div>';
             html += '    <div style="grid-column: span 2;"><strong>Keterangan:</strong> ' + item.deskripsi + '</div>';
+            html += '  </div>';
+
+            html += '  <div style="padding-top:12px; border-top:1px solid #e2e8f0; display:flex; justify-content:flex-end;">';
+            html += '    <button onclick="openStatusModal(\'' + item.id + '\', \'' + item.tanggal_raw + '\', \'' + item.jam_mulai_raw + '\', \'' + item.jam_selesai_raw + '\')" style="background:var(--primary); color:white; border:none; padding:8px 16px; border-radius:8px; font-weight:600; cursor:pointer; font-size:0.85rem; display:flex; align-items:center; gap:6px;"><i data-lucide="edit-3" style="width:14px;"></i> Ubah Jadwal</button>';
             html += '  </div>';
 
             if (item.foto) {
@@ -708,4 +746,65 @@
     </div>
     <button onclick="closeLightbox()" style="margin-top:20px; background:#ffffff; color:#1e293b; border:none; padding:12px 24px; border-radius:30px; font-weight:700; font-size:0.9rem; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 10px 15px -3px rgba(0,0,0,0.3); transition:all 0.2s;"><i data-lucide="arrow-left" style="width:18px; height:18px;"></i> Kembali</button>
 </div>
+<!-- Modal Edit Status Jadwal -->
+<div id="statusModal" class="modal-backdrop">
+    <div class="modal-content" style="max-width: 400px;">
+        <div class="modal-header" style="padding: 20px 24px; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center;">
+            <h3 style="margin: 0; font-size: 1.1rem; color: #0f172a;">Ubah Jadwal</h3>
+            <button onclick="closeStatusModal()" style="background: none; border: none; font-size: 1.5rem; color: #94a3b8; cursor: pointer; line-height: 1;">&times;</button>
+        </div>
+        <div class="modal-body" style="padding: 24px;">
+            <form id="statusForm" method="POST" action="{{ route('admin.jadwal') }}/_ID_/status">
+                @csrf
+                @method('PATCH')
+                
+                <div class="form-group" style="margin-bottom: 16px;">
+                    <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #475569; font-size: 0.9rem;">Tanggal Pelayanan</label>
+                    <input type="date" name="tanggal_pelayanan" id="modalTanggal" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem;" required>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+                    <div class="form-group">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #475569; font-size: 0.9rem;">Jam Mulai</label>
+                        <input type="time" name="jam_mulai" id="modalJamMulai" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem;" required>
+                    </div>
+                    <div class="form-group">
+                        <label style="display: block; font-weight: 600; margin-bottom: 8px; color: #475569; font-size: 0.9rem;">Jam Selesai</label>
+                        <input type="time" name="jam_selesai" id="modalJamSelesai" class="form-control" style="width: 100%; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.95rem;" required>
+                    </div>
+                </div>
+
+                <button type="submit" style="width: 100%; padding: 12px; background: var(--primary); color: white; border: none; border-radius: 8px; font-weight: 600; font-size: 0.95rem; cursor: pointer; transition: all 0.2s;">Simpan Perubahan</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openStatusModal(id, tanggal, jamMulai, jamSelesai) {
+        const modal = document.getElementById('statusModal');
+        const form = document.getElementById('statusForm');
+        
+        // Reset and set action
+        let baseUrl = "{{ route('admin.jadwal') }}";
+        form.action = baseUrl + "/" + id + "/status";
+        
+        document.getElementById('modalTanggal').value = tanggal;
+        document.getElementById('modalJamMulai').value = jamMulai;
+        document.getElementById('modalJamSelesai').value = jamSelesai;
+        
+        modal.classList.add('show');
+    }
+
+    function closeStatusModal() {
+        document.getElementById('statusModal').classList.remove('show');
+    }
+    
+    // Close modal when clicking outside
+    document.getElementById('statusModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeStatusModal();
+        }
+    });
+</script>
 @endsection

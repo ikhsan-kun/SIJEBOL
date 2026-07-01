@@ -256,7 +256,7 @@ Route::get('/run-school-migration', function() {
 
 
 Route::get('/debug-sekolah', function() {
-    $users   = \App\Models\User::whereIn('role', ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])->select('id','name','kecamatan')->get();
+    $users   = \App\Models\Admin::where('role', 'cabang')->select('id','name','kecamatan')->get();
     $schools = \Illuminate\Support\Facades\DB::table('schools')->get();
     $cols    = \Illuminate\Support\Facades\Schema::getColumnListing('schools');
     
@@ -597,70 +597,18 @@ Route::get('/reset-admin', function () {
     return "Admin tidak ditemukan";
 });
 
-// Unified Login Route (Admin, Cabang/Petugas, and Warga/Masyarakat)
-Route::get('/login', function () {
-    if (Auth::guard('admin')->check()) {
-        $role = trim(strtolower(Auth::guard('admin')->user()->role ?? ''));
-        if (in_array($role, ['admin', 'admin pusat'])) {
-            return redirect()->route('admin.dashboard');
-        } elseif (in_array($role, ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])) {
-            return redirect()->route('cabang.dashboard');
-        }
-    }
-    if (Auth::guard('masyarakat')->check()) {
-        return redirect()->route('masyarakat.dashboard');
-    }
-    return view('auth.login');
-})->name('login');
-
-Route::post('/login', function (Request $request) {
-    $credentials = $request->validate([
-        'nik' => 'required',
-        'password' => 'required',
-    ]);
-
-    // 1. Check in User table (admin & cabang/petugas)
-    $adminUser = \App\Models\User::where('nik', $credentials['nik'])->first();
-    if ($adminUser && Hash::check($credentials['password'], $adminUser->password)) {
-        Auth::guard('admin')->login($adminUser);
-        $request->session()->regenerate();
-        $request->session()->save();
-
-        $role = trim(strtolower($adminUser->role ?? ''));
-        if (in_array($role, ['admin', 'admin pusat'])) {
-            return redirect()->route('admin.dashboard');
-        } elseif (in_array($role, ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])) {
-            return redirect()->route('cabang.dashboard');
-        }
-    }
-
-    // 2. Check in Masyarakat table (warga / sekolah)
-    if (Auth::guard('masyarakat')->attempt(['nik' => $credentials['nik'], 'password' => $credentials['password']])) {
-        $request->session()->regenerate();
-        $request->session()->save();
-        return redirect()->route('masyarakat.dashboard');
-    }
-
-    return back()->withErrors(['nik' => 'NIK atau password salah.'])->withInput($request->only('nik'));
-})->name('login.post');
-
-// Backwards compatibility / alias redirects for old login pages
-Route::get('/jebolkotategal', function () {
-    return redirect()->route('login');
-})->name('admin.login');
-
-Route::get('/jebolcabang', function () {
-    return redirect()->route('login');
-})->name('cabang.login');
-
 // Logout Global
-Route::post('/logout', function () {
+Route::post('/logout', function (\Illuminate\Http\Request $request) {
     if (Auth::guard('admin')->check()) {
         Auth::guard('admin')->logout();
-    } else {
+    } elseif (Auth::guard('masyarakat')->check()) {
         Auth::guard('masyarakat')->logout();
     }
-    return redirect()->route('login');
+    
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    
+    return redirect('/register/login');
 })->name('logout');
 
 
@@ -696,7 +644,7 @@ Route::get('/debug-db', function() {
 
 Route::get('/', function () { 
     $services = \Illuminate\Support\Facades\DB::table('master_jenis_layanan')->where('status', 'Aktif')->get();
-    $recentReviews = \App\Models\KepuasanWarga::with('masyarakat')->whereNotNull('kritik_saran')->where('nilai_kepuasan', '>=', 4)->orderBy('tanggal_input', 'desc')->take(3)->get();
+    $recentReviews = \App\Models\KepuasanWarga::with('masyarakat')->whereNotNull('kritik_saran')->where('nilai_kepuasan', '>=', 4)->orderBy('tanggal_input', 'desc')->take(4)->get();
     
     $totalServices = $services->count();
     $dokumenTerbit = \Illuminate\Support\Facades\DB::table('pengajuan_layanan')->where('status', 'selesai')->count();
@@ -787,7 +735,7 @@ Route::post('/register', function (Request $request) {
         'name'                  => 'required|string|max:255',
         'nik'                   => 'required|digits:16|starts_with:3376|unique:masyarakat,nik',
         'email'                 => 'required|email|unique:masyarakat,email|ends_with:@gmail.com',
-        'phone'                 => 'required|starts_with:08',
+        'phone'                 => 'required|starts_with:08|digits_between:10,13',
         'password'              => 'required|min:4|confirmed',
         'terms'                 => 'accepted',
         'tipe_pendaftar'        => 'required|in:kecamatan,sekolah',
@@ -801,6 +749,7 @@ Route::post('/register', function (Request $request) {
         'email.ends_with'       => 'Email harus menggunakan @gmail.com',
         'email.unique'          => 'Email sudah terdaftar. Silakan login.',
         'phone.starts_with'     => 'Nomor HP harus diawali dengan 08',
+        'phone.digits_between'  => 'Nomor HP harus terdiri dari 10 hingga 13 digit angka',
         'password.confirmed'    => 'Konfirmasi password tidak cocok',
         'terms.accepted'        => 'Anda harus menyetujui Syarat & Ketentuan untuk mendaftar',
         'kecamatan.required_if' => 'Pilihan kecamatan wajib diisi jika mendaftar sebagai warga kecamatan',
@@ -825,10 +774,43 @@ Route::post('/register', function (Request $request) {
 });
 
 Route::get('/register/login', function () {
-    return redirect()->route('login');
-});
-Route::post('/register/login', function () {
-    return redirect()->route('login');
+    if (Auth::guard('admin')->check()) {
+        $role = trim(strtolower(Auth::guard('admin')->user()->role ?? ''));
+        if (in_array($role, ['admin', 'admin pusat'])) return redirect()->route('admin.dashboard');
+        if (in_array($role, ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])) return redirect()->route('cabang.dashboard');
+    } elseif (Auth::guard('masyarakat')->check()) {
+        return redirect()->route('masyarakat.dashboard');
+    }
+    return view('auth.login');
+})->name('login')->middleware('guest');
+
+Route::post('/register/login', function (Request $request) {
+    $credentials = $request->validate([
+        'nik' => 'required',
+        'password' => 'required'
+    ]);
+
+    // 1. Coba login sebagai Admin/Petugas (Tabel users)
+    $user = \App\Models\User::where('nik', $credentials['nik'])->first();
+    if ($user && \Illuminate\Support\Facades\Hash::check($credentials['password'], $user->password)) {
+        Auth::guard('admin')->login($user);
+        $request->session()->regenerate();
+        
+        $role = trim(strtolower($user->role ?? ''));
+        if (in_array($role, ['admin', 'admin pusat'])) {
+            return redirect()->route('admin.dashboard');
+        } else {
+            return redirect()->route('cabang.dashboard');
+        }
+    }
+
+    // 2. Coba login sebagai Masyarakat
+    if (Auth::guard('masyarakat')->attempt(['nik' => $credentials['nik'], 'password' => $credentials['password']])) {
+        $request->session()->regenerate();
+        return redirect()->route('masyarakat.dashboard');
+    }
+
+    return back()->withErrors(['nik' => 'NIK atau password yang Anda masukkan salah.'])->withInput($request->only('nik'));
 });
 
 // Lupa Password (Verifikasi via NIK & Email)
@@ -1086,6 +1068,10 @@ Route::middleware(['auth:admin', 'admin'])->prefix('cabang')->group(function () 
     Route::get('/laporan', [\App\Http\Controllers\CabangController::class, 'laporan'])->name('cabang.laporan');
     Route::get('/laporan/cetak', [\App\Http\Controllers\CabangController::class, 'cetakPdf'])->name('cabang.cetakPdf');
     Route::get('/profil', [\App\Http\Controllers\CabangController::class, 'profil'])->name('cabang.profil');
+    Route::get('/profil/edit', [\App\Http\Controllers\CabangController::class, 'profilEdit'])->name('cabang.profil.edit');
+    Route::post('/profil/update', [\App\Http\Controllers\CabangController::class, 'profilUpdate'])->name('cabang.profil.update');
+    Route::get('/profil/password', [\App\Http\Controllers\CabangController::class, 'profilPassword'])->name('cabang.profil.password');
+    Route::post('/profil/password/update', [\App\Http\Controllers\CabangController::class, 'profilPasswordUpdate'])->name('cabang.profil.password.update');
 });
 
 // Cabang Dinas (role: cabang_dinas) routes - REDIRECT TO NEW ROUTES
@@ -1354,7 +1340,7 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
                   ->orWhere('npsn', 'LIKE', "%$search%")
                   ->orWhere('kecamatan', 'LIKE', "%$search%");
         }
-        $schools = $query->orderBy('kecamatan')->get();
+        $schools = $query->orderBy('kecamatan')->paginate(15)->withQueryString();
         return view('admin.sekolah', compact('schools'));
     })->name('admin.sekolah');
 
@@ -1377,7 +1363,7 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
         $validated['status_jempol'] = 'Belum';
         
         // Auto-assign to correct Cabang based on kecamatan
-        $petugas = \App\Models\User::whereIn('role', ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])->where('kecamatan', $request->kecamatan)->first();
+        $petugas = \App\Models\Admin::where('role', 'cabang')->where('kecamatan', $request->kecamatan)->first();
         $validated['cabang_id'] = $petugas ? $petugas->id : 1; 
 
         \App\Models\School::create($validated);
@@ -1401,8 +1387,8 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
         $users = $userQuery->orderBy('created_at', 'desc')->paginate(10);
         
         $totalCount = \App\Models\User::count();
-        $adminCount = \App\Models\User::whereIn('role', ['admin', 'admin pusat'])->count();
-        $petugasCount = \App\Models\User::whereIn('role', ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])->count();
+        $adminCount = \App\Models\Admin::where('role', 'admin')->count();
+        $petugasCount = \App\Models\Admin::where('role', 'cabang')->count();
         $citizenCount = \App\Models\Masyarakat::query()->count();
 
         return view('admin.users', compact(
@@ -1475,6 +1461,10 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
     Route::get('/jadwal', [App\Http\Controllers\JadwalController::class, 'index'])->name('admin.jadwal');
     Route::get('/jadwal/baru', [App\Http\Controllers\JadwalController::class, 'create'])->name('admin.jadwal.create');
     Route::post('/jadwal/baru', [App\Http\Controllers\JadwalController::class, 'store'])->name('admin.jadwal.store');
+    Route::patch('/jadwal', function() {
+        return redirect()->route('admin.jadwal')->with('error', 'Silakan pilih ulang jadwal yang ingin diubah.');
+    });
+    Route::patch('/jadwal/{id}/status', [App\Http\Controllers\JadwalController::class, 'updateStatus'])->name('admin.jadwal.update_status');
 
     Route::get('/laporan', [App\Http\Controllers\LaporanController::class, 'index'])->name('admin.laporan');
     Route::get('/laporan/download', [App\Http\Controllers\LaporanController::class, 'download'])->name('admin.laporan.download');
@@ -1669,22 +1659,6 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
         return view('admin.settings-security', compact('histories'));
     })->name('admin.settings.security');
 
-    // Halaman Pengaturan Pengguna
-    Route::get('/settings/users', function () {
-        $users = \App\Models\User::whereIn('role', ['admin', 'admin pusat', 'cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan'])
-            ->orderByRaw("CASE WHEN LOWER(role) LIKE '%admin%' THEN 1 ELSE 2 END")
-            ->orderBy('id', 'asc')
-            ->get();
-        return view('admin.settings-users', compact('users'));
-    })->name('admin.settings.users');
-
-
-
-    // Redirect Halaman Tentang Aplikasi dan Notifikasi ke Pengguna
-    Route::get('/settings/about', function () {
-        return redirect()->route('admin.settings.users');
-    })->name('admin.settings.about');
-
     Route::post('/settings/about', function (Illuminate\Http\Request $request) {
         $request->validate([
             'app_name' => 'required|string|max:255',
@@ -1721,7 +1695,7 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
             'foto_profil' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
         
-        $user = Auth::guard('admin')->user() ?? Auth::guard('masyarakat')->user();
+        $user = auth()->user();
         $user->name = $request->name;
         $user->email = $request->email;
         $user->phone = $request->phone;
@@ -1747,7 +1721,7 @@ Route::middleware(['auth:admin', 'admin'])->prefix('admin')->group(function () {
 
 
         ]);
-        $user = Auth::guard('admin')->user() ?? Auth::guard('masyarakat')->user();
+        $user = auth()->user();
         if (!Hash::check($request->current_password, $user->password)) {
             return back()->withErrors(['current_password' => 'Password lama tidak cocok']);
         }

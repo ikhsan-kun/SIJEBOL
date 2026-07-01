@@ -572,7 +572,7 @@
         }
 
         /* Custom Pagination Styles */
-        .jbl-pagination-container { display: flex; align-items: center; justify-content: center; gap: 0.5rem; margin-top: 1.5rem; }
+        .jbl-pagination-container { display: flex; align-items: center; justify-content: flex-start; gap: 0.5rem; margin-top: 1.5rem; }
         .jbl-page-item { display: inline-flex; align-items: center; justify-content: center; width: 2.25rem; height: 2.25rem; border-radius: 0.5rem; background-color: #ffffff; border: 1px solid #e2e8f0; color: #475569; font-size: 0.875rem; font-weight: 500; text-decoration: none; transition: all 0.2s; cursor: pointer; }
         .jbl-page-item:hover:not(.disabled):not(.active) { background-color: #f8fafc; border-color: #cbd5e1; color: #1e293b; }
         .jbl-page-item.active { background-color: #003178; border-color: #003178; color: #ffffff; cursor: default; }
@@ -752,12 +752,7 @@
         
         <div style="flex-grow: 1;"></div>
         
-        @if($authUser && in_array(trim(strtolower($authUser->role ?? '')), ['admin', 'admin pusat']))
-            <div class="nav-label">Pengaturan</div>
-            <a href="{{ route('admin.settings.users') ?? '#' }}" class="nav-link {{ request()->routeIs('admin.settings', 'admin.settings.*') ? 'active' : '' }}">
-                <i data-lucide="settings"></i> PENGATURAN
-            </a>
-        @endif
+
 
         <!-- Bottom Buttons like the image -->
         <div class="sidebar-bottom">
@@ -911,9 +906,7 @@
                                 <a href="{{ route('admin.profil') }}" class="dropdown-item">
                                     <i data-lucide="user"></i> Profil Saya
                                 </a>
-                                <a href="{{ route('admin.settings.about') }}" class="dropdown-item">
-                                    <i data-lucide="settings"></i> Pengaturan
-                                </a>
+
                             @else
                                 <a href="{{ route('cabang.profil') }}" class="dropdown-item">
                                     <i data-lucide="user"></i> Profil Saya
@@ -940,11 +933,10 @@
         </div>
 
         <!-- Global Footer -->
-        <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
+        <div style="margin-top: auto; margin-left: 0; margin-right: 0; width: 100%; padding: 16px 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; position: sticky; bottom: 0; z-index: 40; box-sizing: border-box;">
             <div>&copy; {{ date('Y') }} Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
             <div style="display:flex; gap:16px;">
-                <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
+                <span style="color:#64748b;">Crafted with ❤️ by Siti Nurhalizah</span>
             </div>
         </div>
     </div>

@@ -1,33 +1,28 @@
 @extends('layouts.panel')
 
-@section('title', 'Profil - SI JEBOL')
+@section('title', 'Profil Cabang - SI JEBOL')
 
 @section('content')
 <style>
-    :root {
-        --primary: #003178;
-        --accent: #f59e0b;
-    }
-
-    .profil-header {
+    .page-header {
         background: linear-gradient(135deg, var(--primary) 0%, #0044a8 100%);
         border-radius: 0;
         color: white;
-        padding: 36px 48px;
+        padding: 40px;
         position: relative;
         overflow: hidden;
-        margin: -2rem -2rem 32px -2rem;
+        margin: -2rem -2rem 24px -2rem;
+        box-shadow: 0 10px 30px rgba(0, 49, 120, 0.15);
         display: flex;
         justify-content: space-between;
         align-items: center;
-        box-shadow: 0 10px 30px rgba(0, 49, 120, 0.15);
-        border-bottom: 6px solid var(--accent);
+        border-bottom: 6px solid var(--accent, #f59e0b);
     }
 
-    .profil-header::after {
+    .page-header::after {
         content: '';
         position: absolute;
-        inset: 0;
+        top: 0; left: 0; right: 0; bottom: 0;
         background-image: url('{{ asset("images/batik-tegal-premium.jpg") }}');
         background-size: cover;
         background-position: center;
@@ -36,206 +31,287 @@
         pointer-events: none;
     }
 
-    .profil-title-wrap {
-        position: relative;
-        z-index: 10;
-        display: flex;
-        gap: 20px;
-        align-items: center;
-    }
-
-    .profil-avatar-container {
-        width: 64px;
-        height: 64px;
+    .header-content { position: relative; z-index: 10; display: flex; align-items: center; gap: 24px; }
+    
+    .profile-avatar-large {
+        width: 100px;
+        height: 100px;
         border-radius: 50%;
-        overflow: hidden;
-        border: 2px solid white;
-        background-color: white;
-        display: flex;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        object-fit: cover;
+        background: white;
+    }
+    
+    .header-title { font-size: 2rem; font-weight: 800; margin: 0 0 4px 0; letter-spacing: -0.5px; color: white; }
+    .header-subtitle { font-size: 1rem; color: rgba(255,255,255,0.8); margin: 0; font-weight: 500; display: flex; align-items: center; gap: 8px; }
+
+    .header-actions { position: relative; z-index: 10; display: flex; gap: 12px; }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        display: inline-flex;
         align-items: center;
         justify-content: center;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        gap: 8px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        text-decoration: none;
     }
 
-    .profil-avatar-img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
+    .btn-light-outline { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; backdrop-filter: blur(5px); }
+    .btn-light-outline:hover { background: rgba(255,255,255,0.2); }
+    
+    .btn-warning { background: #f59e0b; color: #78350f; }
+    .btn-warning:hover { background: #d97706; color: white; transform: translateY(-2px); }
 
-    .profil-title {
-        font-size: 1.8rem;
-        font-weight: 800;
-        margin: 0 0 4px 0;
-        line-height: 1.2;
-    }
-
-    .profil-subtitle {
-        font-size: 0.95rem;
-        color: rgba(255,255,255,0.85);
-        margin: 0;
-    }
-
-    .profile-grid {
+    .main-grid {
         display: grid;
-        grid-template-columns: 1fr 2fr;
+        grid-template-columns: 2fr 1fr;
         gap: 24px;
     }
-
+    
+    @media (max-width: 1024px) { 
+        .main-grid { grid-template-columns: 1fr; } 
+        .page-header { margin: -1.5rem -1rem 24px -1rem; }
+    }
     @media (max-width: 768px) {
-        .profile-grid {
-            grid-template-columns: 1fr;
+        .page-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 20px;
+            padding: 30px 20px;
+        }
+        .header-content {
+            flex-direction: column;
+            gap: 16px;
+        }
+        .header-actions {
+            flex-wrap: wrap;
+            justify-content: center;
         }
     }
 
-    .card-panel {
+    .panel-box {
         background: white;
-        border-radius: 12px;
-        padding: 24px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
         border: 1px solid #f1f5f9;
+        margin-bottom: 24px;
     }
 
-    .field-group {
-        margin-bottom: 20px;
-    }
-
-    .field-label {
-        display: block;
-        font-size: 0.8rem;
+    .section-title {
+        font-size: 1.1rem;
         font-weight: 700;
-        color: #64748b;
-        text-transform: uppercase;
-        margin-bottom: 6px;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 0 0 24px 0;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #e2e8f0;
     }
 
-    .field-input, .field-textarea {
-        width: 100%;
-        padding: 10px 12px;
-        border: 1px solid #cbd5e1;
-        border-radius: 8px;
-        font-size: 0.9rem;
-        font-weight: 600;
-        color: #334155;
-        background-color: #f8fafc;
-        outline: none;
+    .info-list { display: flex; flex-direction: column; gap: 20px; }
+    
+    .info-item { display: flex; align-items: flex-start; gap: 16px; }
+    
+    .info-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 14px;
+        background: #f8fafc;
+        color: #1e293b;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+        border: 1px solid #e2e8f0;
     }
+    
+    .info-content { flex: 1; }
+    .info-label { font-size: 0.75rem; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .info-value { font-size: 1.05rem; font-weight: 600; color: #1e293b; }
 
-    .field-input[readonly], .field-textarea[readonly] {
-        background-color: #f1f5f9;
-        color: #64748b;
-        cursor: not-allowed;
+    .stat-card {
+        background: #f8fafc;
+        border-radius: 16px;
+        padding: 20px;
+        border: 1px solid #e2e8f0;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+        transition: all 0.2s;
     }
+    .stat-card:hover { border-color: var(--primary); background: white; box-shadow: 0 4px 12px rgba(0, 49, 120, 0.05); }
+    .stat-card:last-child { margin-bottom: 0; }
+    
+    .stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        flex-shrink: 0;
+    }
+    
+    .icon-success { background: #d1fae5; color: #047857; }
+    .icon-primary { background: #dbeafe; color: #1d4ed8; }
+    .icon-warning { background: #fef3c7; color: #d97706; }
+    
+    .stat-text { flex: 1; }
+    .stat-title { font-size: 0.85rem; font-weight: 700; color: var(--text-muted); margin-bottom: 4px; }
+    .stat-val { font-size: 1.1rem; font-weight: 800; color: var(--text-main); }
+    .stat-desc { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
+
+    .alert-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; font-weight: 500; }
 </style>
 
-<!-- Header -->
-<div class="profil-header">
-    <div class="profil-title-wrap">
-        <div class="profil-avatar-container">
-            @if($user->foto_profil)
-                <img src="{{ asset('storage/' . $user->foto_profil) }}" alt="Avatar" class="profil-avatar-img">
-            @else
-                <i data-lucide="user" style="width: 32px; height: 32px; color: var(--primary);"></i>
-            @endif
-        </div>
+<div class="page-header">
+    <div class="header-content">
+        @if(auth()->user()->foto_profil)
+            <img src="{{ asset('storage/' . auth()->user()->foto_profil) }}" alt="Avatar" class="profile-avatar-large">
+        @else
+            <img src="https://ui-avatars.com/api/?name={{ urlencode(auth()->user()->name ?? 'Cabang') }}&background=f59e0b&color=ffffff&bold=true&size=200" alt="Avatar" class="profile-avatar-large">
+        @endif
         <div>
-            <h1 class="profil-title">Profil Pengguna</h1>
-            <p class="profil-subtitle">Informasi profil akun Anda (Read-Only)</p>
+            <h1 class="header-title">{{ auth()->user()->name ?? 'Petugas Cabang' }}</h1>
+            <p class="header-subtitle">
+                <i data-lucide="shield" style="width: 16px;"></i> {{ auth()->user()->jabatan ?? 'Petugas Cabang Dinas' }}
+            </p>
         </div>
+    </div>
+    <div class="header-actions">
+        <a href="{{ route('cabang.profil.edit') }}" class="btn btn-warning">
+            <i data-lucide="edit-3" style="width: 18px;"></i> Ubah Profil
+        </a>
+        <a href="{{ route('cabang.profil.password') }}" class="btn btn-light-outline">
+            <i data-lucide="lock" style="width: 18px;"></i> Keamanan
+        </a>
     </div>
 </div>
 
-<div class="profile-grid">
-    <!-- Left Column: Summary Card -->
-    <div class="card-panel" style="display: flex; flex-direction: column; align-items: center; text-align: center;">
-        <div style="width: 120px; height: 120px; border-radius: 50%; overflow: hidden; margin-bottom: 16px; border: 4px solid var(--primary-light, #e0eaff); display: flex; align-items: center; justify-content: center; background: #f8fafc;">
-            @if($user->foto_profil)
-                <img src="{{ asset('storage/' . $user->foto_profil) }}" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
-            @else
-                <img src="https://ui-avatars.com/api/?name={{ urlencode($user->name ?? 'Cabang') }}&background=003178&color=ffffff&bold=true" alt="Avatar" style="width:100%; height:100%; object-fit:cover;">
-            @endif
-        </div>
-        
-        <h3 style="font-size: 1.25rem; font-weight: 800; color: #1e293b; margin: 0 0 4px 0;">{{ $user->name ?? 'Cabang Dinas User' }}</h3>
-        <p style="font-size: 0.85rem; color: #64748b; margin: 0 0 16px 0;">Petugas Cabang Dinas Pendidikan</p>
-        
-        <span style="background-color: #dcfce7; color: #15803d; padding: 6px 16px; border-radius: 9999px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;">Aktif</span>
+@if(session('success'))
+<div class="alert-success">
+    <i data-lucide="check-circle" style="width: 20px;"></i>
+    <span>{{ session('success') }}</span>
+</div>
+@endif
 
-        <div style="width: 100%; border-top: 1px solid #e2e8f0; margin-top: 24px; padding-top: 24px; text-align: left;">
-            <div style="margin-bottom: 16px;">
-                <span style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Email</span>
-                <div style="font-size: 0.9rem; font-weight: 600; color: #334155;">{{ $user->email ?? 'petugas.cabang@dindik.tegalkota.go.id' }}</div>
-            </div>
-            <div>
-                <span style="font-size: 0.75rem; font-weight: 700; color: #94a3b8; text-transform: uppercase;">Bergabung Sejak</span>
-                <div style="font-size: 0.9rem; font-weight: 600; color: #334155;">{{ $user->created_at ? $user->created_at->translatedFormat('d F Y') : '20 Mei 2025' }}</div>
+<div class="main-grid">
+    <!-- Kolom Kiri: Informasi Detail -->
+    <div>
+        <div class="panel-box">
+            <h3 class="section-title"><i data-lucide="user" style="color: var(--primary);"></i> Informasi Detail Profil</h3>
+            
+            <div class="info-list">
+                <div class="info-item">
+                    <div class="info-icon"><i data-lucide="user"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Nama Lengkap</div>
+                        <div class="info-value">{{ auth()->user()->name ?? '-' }}</div>
+                    </div>
+                </div>
+                
+                <div class="info-item">
+                    <div class="info-icon"><i data-lucide="mail"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Email Address</div>
+                        <div class="info-value">{{ auth()->user()->email ?? '-' }}</div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon"><i data-lucide="phone"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Nomor Handphone</div>
+                        <div class="info-value">{{ auth()->user()->phone ?? '-' }}</div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon"><i data-lucide="briefcase"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Jabatan / Role</div>
+                        <div class="info-value">{{ auth()->user()->jabatan ?? 'Petugas Cabang Dinas' }}</div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon"><i data-lucide="map-pin"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Kecamatan Tugas</div>
+                        <div class="info-value">{{ auth()->user()->kecamatan ?? 'Kec. Tegal Bar' }}</div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon"><i data-lucide="building"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Alamat Kantor</div>
+                        <div class="info-value">{{ auth()->user()->alamat ?? 'Jl. Bawal No.5, Tegalsari, Kec. Tegal Bar., Kota Tegal, Jawa Tengah 52111, Indonesia.' }}</div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon"><i data-lucide="calendar"></i></div>
+                    <div class="info-content">
+                        <div class="info-label">Tanggal Bergabung</div>
+                        <div class="info-value">{{ auth()->user()->created_at ? auth()->user()->created_at->translatedFormat('d F Y') : '-' }}</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Right Column: Detail Fields -->
-    <div class="card-panel">
-        <h3 style="font-size: 1.1rem; font-weight: 800; color: #1e293b; margin: 0 0 24px 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 12px; display: flex; align-items: center; gap: 8px;">
-            <i data-lucide="shield-check" style="color: var(--primary); width: 22px; height: 22px;"></i> Informasi Detail Akun
-        </h3>
-        
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-            <div class="field-group">
-                <span class="field-label">Nama Lengkap</span>
-                <div style="position: relative; display: flex; align-items: center;">
-                    <i data-lucide="user" style="position: absolute; left: 14px; color: #94a3b8; width: 18px; height: 18px;"></i>
-                    <input type="text" value="{{ $user->name }}" class="field-input" style="padding-left: 42px;" readonly>
+    <!-- Kolom Kanan: Status & Info Akun -->
+    <div>
+        <div class="panel-box">
+            <h3 class="section-title"><i data-lucide="info" style="color: var(--primary);"></i> Status Akun</h3>
+            
+            <!-- Status Aktif -->
+            <div class="stat-card">
+                <div class="stat-icon icon-success"><i data-lucide="check-circle"></i></div>
+                <div class="stat-text">
+                    <div class="stat-title">Status Akun</div>
+                    <div class="stat-val" style="color: #047857;">Aktif</div>
+                    <div class="stat-desc">Akun Anda dalam kondisi aktif</div>
+                </div>
+            </div>
+
+            <!-- Role -->
+            <div class="stat-card">
+                <div class="stat-icon icon-primary"><i data-lucide="shield"></i></div>
+                <div class="stat-text">
+                    <div class="stat-title">Hak Akses</div>
+                    <div class="stat-val">{{ auth()->user()->role ?? 'Cabang' }}</div>
+                    <div class="stat-desc">Akses sebagai petugas cabang</div>
+                </div>
+            </div>
+
+            <!-- Last Login -->
+            @php
+                $loginTime = auth()->user()->updated_at ? \Carbon\Carbon::parse(auth()->user()->updated_at)->translatedFormat('d M Y, H:i') . ' WIB' : 'Baru saja';
+                $loginDevice = 'Akses via Web SI JEBOL';
+            @endphp
+            <div class="stat-card">
+                <div class="stat-icon icon-warning"><i data-lucide="clock"></i></div>
+                <div class="stat-text">
+                    <div class="stat-title">Terakhir Login</div>
+                    <div class="stat-val" style="font-size: 0.95rem;">{{ $loginTime }}</div>
+                    <div class="stat-desc">Melalui {{ $loginDevice }}</div>
                 </div>
             </div>
             
-            <div class="field-group">
-                <span class="field-label">Username</span>
-                <div style="position: relative; display: flex; align-items: center;">
-                    <i data-lucide="user-check" style="position: absolute; left: 14px; color: #94a3b8; width: 18px; height: 18px;"></i>
-                    <input type="text" value="{{ $user->username ?? 'petugas.cabang' }}" class="field-input" style="padding-left: 42px;" readonly>
-                </div>
-            </div>
-            
-            <div class="field-group">
-                <span class="field-label">Email</span>
-                <div style="position: relative; display: flex; align-items: center;">
-                    <i data-lucide="mail" style="position: absolute; left: 14px; color: #94a3b8; width: 18px; height: 18px;"></i>
-                    <input type="email" value="{{ $user->email ?? 'petugas.cabang@dindik.tegalkota.go.id' }}" class="field-input" style="padding-left: 42px;" readonly>
-                </div>
-            </div>
-            
-            <div class="field-group">
-                <span class="field-label">Nomor Handphone</span>
-                <div style="position: relative; display: flex; align-items: center;">
-                    <i data-lucide="phone" style="position: absolute; left: 14px; color: #94a3b8; width: 18px; height: 18px;"></i>
-                    <input type="text" value="{{ $user->phone ?? '0812-3456-7890' }}" class="field-input" style="padding-left: 42px;" readonly>
-                </div>
-            </div>
-            
-            <div class="field-group">
-                <span class="field-label">Wilayah / Kecamatan</span>
-                <div style="position: relative; display: flex; align-items: center;">
-                    <i data-lucide="map-pin" style="position: absolute; left: 14px; color: #94a3b8; width: 18px; height: 18px;"></i>
-                    <input type="text" value="{{ $user->kecamatan ?? 'Kecamatan Tegal Timur' }}" class="field-input" style="padding-left: 42px;" readonly>
-                </div>
-            </div>
-            
-            <div class="field-group">
-                <span class="field-label">Peran (Role)</span>
-                <div style="position: relative; display: flex; align-items: center;">
-                    <i data-lucide="lock" style="position: absolute; left: 14px; color: #94a3b8; width: 18px; height: 18px;"></i>
-                    <input type="text" value="{{ $user->role === 'cabang_dinas' ? 'Petugas Cabang' : 'Petugas' }}" class="field-input" style="padding-left: 42px;" readonly>
-                </div>
-            </div>
-            
-            <div class="field-group" style="grid-column: span 2; margin-bottom: 0;">
-                <span class="field-label">Alamat Kantor</span>
-                <div style="position: relative; display: flex; align-items: flex-start;">
-                    <i data-lucide="building" style="position: absolute; left: 14px; top: 12px; color: #94a3b8; width: 18px; height: 18px;"></i>
-                    <textarea class="field-textarea" rows="3" style="padding-left: 42px;" readonly>{{ $user->alamat ?? 'Jl. Ki Gede Sebayu No.12, Kota Tegal, Jawa Tengah 52121' }}</textarea>
-                </div>
-            </div>
         </div>
+        
+
     </div>
 </div>
+
 @endsection

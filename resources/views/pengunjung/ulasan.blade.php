@@ -421,29 +421,13 @@
                             @endif
                         @endfor
                     </div>
-                    <div style="margin-top: 12px; font-size: 0.85rem; color: #475569; background: white; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; display: grid; gap: 4px;">
-                        <div><strong>Layanan:</strong> {{ $review->status_layanan ?? '-' }}</div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>Kecepatan:</span> 
-                            <strong>{{ $review->rating_kecepatan ?? '-' }} <i data-lucide="star" width="12" height="12" style="display:inline; color:#fbbf24;" fill="currentColor"></i></strong>
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>Kemudahan:</span> 
-                            <strong>{{ $review->rating_kemudahan ?? '-' }} <i data-lucide="star" width="12" height="12" style="display:inline; color:#fbbf24;" fill="currentColor"></i></strong>
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>Keramahan:</span> 
-                            <strong>{{ $review->rating_keramahan ?? '-' }} <i data-lucide="star" width="12" height="12" style="display:inline; color:#fbbf24;" fill="currentColor"></i></strong>
-                        </div>
-                        <div style="display: flex; justify-content: space-between;">
-                            <span>Kejelasan:</span> 
-                            <strong>{{ $review->rating_kejelasan ?? '-' }} <i data-lucide="star" width="12" height="12" style="display:inline; color:#fbbf24;" fill="currentColor"></i></strong>
-                        </div>
-                    </div>
+
                     <p class="history-feedback jbl-1360">"{{ $review->kritik_saran ?? 'Tidak ada komentar.' }}"</p>
                     @if($review->foto_path)
                         <div style="margin-top: 12px;">
-                            <img src="{{ Storage::url($review->foto_path) }}" alt="Foto" style="max-width: 100%; max-height: 250px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1);" />
+                            <a href="javascript:void(0)" onclick="openImageModal('{{ Storage::url($review->foto_path) }}')" title="Klik untuk memperbesar">
+                                <img src="{{ Storage::url($review->foto_path) }}" alt="Foto" style="max-width: 100%; max-height: 250px; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.2s;" onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'" />
+                            </a>
                         </div>
                     @endif
                     @if($review->status === 'followed_up' && $review->admin_response)
@@ -483,8 +467,33 @@
 
     @include('partials.footer')
 
+    <!-- Image Modal -->
+    <div id="imageModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 9999; justify-content: center; align-items: center; backdrop-filter: blur(5px);">
+        <button onclick="closeImageModal()" style="position: absolute; top: 20px; right: 30px; background: none; border: none; color: white; font-size: 40px; cursor: pointer; transition: transform 0.3s;" onmouseover="this.style.transform='scale(1.2)'" onmouseout="this.style.transform='scale(1)'">&times;</button>
+        <img id="modalImg" src="" style="max-width: 90%; max-height: 85vh; border-radius: 8px; box-shadow: 0 20px 50px rgba(0,0,0,0.5);" />
+    </div>
+
     <script>
         lucide.createIcons();
+        
+        function openImageModal(url) {
+            document.getElementById('modalImg').src = url;
+            document.getElementById('imageModal').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeImageModal() {
+            document.getElementById('imageModal').style.display = 'none';
+            document.getElementById('modalImg').src = '';
+            document.body.style.overflow = 'auto';
+        }
+        
+        // Tutup jika klik di luar gambar
+        document.getElementById('imageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeImageModal();
+            }
+        });
     </script>
 </body>
 </html>

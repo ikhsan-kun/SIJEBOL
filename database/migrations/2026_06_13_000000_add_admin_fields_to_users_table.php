@@ -9,11 +9,21 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->string('username')->nullable()->unique()->after('name');
-            $table->string('jabatan')->nullable()->after('phone');
-            $table->text('alamat')->nullable()->after('jabatan');
-            $table->string('foto_profil')->nullable()->after('alamat');
-            $table->json('preferences')->nullable()->after('foto_profil');
+            if (!Schema::hasColumn('users', 'username')) {
+                $table->string('username')->nullable()->unique()->after('name');
+            }
+            if (!Schema::hasColumn('users', 'jabatan')) {
+                $table->string('jabatan')->nullable()->after('phone');
+            }
+            if (!Schema::hasColumn('users', 'alamat')) {
+                $table->text('alamat')->nullable()->after('jabatan');
+            }
+            if (!Schema::hasColumn('users', 'foto_profil')) {
+                $table->string('foto_profil')->nullable()->after('alamat');
+            }
+            if (!Schema::hasColumn('users', 'preferences')) {
+                $table->json('preferences')->nullable()->after('foto_profil');
+            }
         });
     }
 

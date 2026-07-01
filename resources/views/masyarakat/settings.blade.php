@@ -1,578 +1,292 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengaturan Akun - SI JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#003178',
-                        primaryHover: '#00255a',
-                        accent: '#f59e0b',
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengaturan Akun - SI JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#003178',
-                        primaryHover: '#00255a',
-                        accent: '#f59e0b',
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        body {
-            background-color: #f8fafc;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #0f172a;
+@extends('layouts.masyarakat')
+
+@push('styles')
+<style>
+@media (max-width: 1024px) {
+            
         }
 
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 0 0 0;
-            min-height: 100vh;
-            transition: all 0.3s ease;
-            min-width: 0;
-            display: flex; 
-            flex-direction: column;
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #0044a8 100%);
+            border-radius: 0;
+            color: white;
+            padding: 32px 40px;
+            position: relative;
+            overflow: hidden;
+            margin: -24px -24px 24px -24px;
+            box-shadow: 0 10px 30px rgba(0, 49, 120, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 6px solid var(--accent, #f59e0b);
         }
 
         @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-            }
-            .page-title-section {
-                padding: 32px 24px !important;
+            .page-header {
+                flex-direction: column; text-align: center; gap: 20px;
+                margin: -16px -16px 24px -16px;
+                padding: 32px 20px;
             }
         }
 
-        .page-title-section {
-            background-color: #003178;
-            background-image: linear-gradient(rgba(0, 49, 120, 0.9), rgba(0, 49, 120, 0.9)), url('{{ asset('images/batik-tegal-premium.jpg') }}');
+        .page-header::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('{{ asset("images/batik-tegal-premium.jpg") }}');
             background-size: cover;
-            padding: 48px 96px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            border-bottom: 4px solid #f59e0b;
+            background-position: center;
+            opacity: 0.15;
+            mix-blend-mode: overlay;
+            pointer-events: none;
         }
 
-        .page-title-section h1 { font-size: 2.25rem; font-weight: 900; color: white; margin-bottom: 8px; }
-        .page-title-section p { color: rgba(255, 255, 255, 0.85); font-size: 1rem; max-width: 600px; font-weight: 500; }
+        .header-content { position: relative; z-index: 10; }
+        .header-title { font-size: 1.8rem; font-weight: 800; margin: 0 0 8px 0; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; color: white; }
+        @media (max-width: 1024px) { .header-title { justify-content: center; } }
+        .header-subtitle { font-size: 0.95rem; color: rgba(255,255,255,0.9); margin: 0; font-weight: 500; }
 
-        .settings-container {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 32px;
-            padding: 40px 48px;
-            max-width: 100%;
-            margin: 0 auto;
-            width: 100%;
+        .header-actions { position: relative; z-index: 10; display: flex; gap: 12px; }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-light-outline { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; backdrop-filter: blur(5px); }
+        .btn-light-outline:hover { background: rgba(255,255,255,0.2); }
+        
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
+
+        .btn-outline { background: white; border: 1px solid #cbd5e1; color: var(--text-main); }
+        .btn-outline:hover { background: #f8fafc; }
+
+        .panel-box {
+            background: white;
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            border: 1px solid #f1f5f9;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) { .panel-box { padding: 24px; } }
+
+        .form-section { margin-bottom: 32px; }
+        .form-section:last-child { margin-bottom: 0; }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 0 0 24px 0;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        @media (max-width: 768px) { .form-grid { grid-template-columns: 1fr; } }
+
+        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;}
+        .form-group:last-child { margin-bottom: 0; }
+        
+        .form-label { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
+        .form-control { 
+            width: 100%; 
+            padding: 12px 16px; 
+            border-radius: 12px; 
+            border: 1px solid #cbd5e1; 
+            background: white; 
+            font-family: inherit; 
+            font-size: 0.95rem; 
+            outline: none; 
+            transition: all 0.2s; 
             box-sizing: border-box;
         }
+        .form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0, 49, 120, 0.1); }
+        .form-control:disabled { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
+        
+        .form-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
 
-        .settings-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .settings-menu-list {
-            background: white;
-            border-radius: 24px;
-            padding: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .settings-menu-item {
+        .avatar-upload-container {
             display: flex;
             align-items: center;
-            gap: 16px;
-            padding: 14px 20px;
-            border-radius: 16px;
-            text-decoration: none;
-            color: #475569;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            border-right: 4px solid transparent;
-        }
-        .settings-menu-item:hover {
+            gap: 24px;
+            padding: 24px;
             background: #f8fafc;
-            color: #003178;
+            border-radius: 16px;
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
         }
-        .settings-menu-item.active {
-            background: #eff6ff;
-            color: #003178;
-            border-right-color: #003178;
-        }
+        
+        @media (max-width: 768px) { .avatar-upload-container { flex-direction: column; text-align: center; } }
 
-        .settings-menu-icon {
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-        }
-        .settings-menu-item:hover .settings-menu-icon {
-            background: #003178;
-            color: white;
-        }
-        .settings-menu-item.active .settings-menu-icon {
-            background: #003178;
-            color: white;
-        }
-
-        .settings-main {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .glass-card {
+        .avatar-preview {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid white;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
             background: white;
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; font-weight: 800; color: var(--primary);
+            flex-shrink: 0;
         }
 
-        .settings-card-header {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 32px;
-            padding-bottom: 16px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .settings-card-header h2 {
-            font-size: 1.35rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin: 0;
-        }
-
-        .settings-avatar-section {
-            display: flex;
-            align-items: center;
-            gap: 32px;
-            margin-bottom: 40px;
-            padding-bottom: 32px;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .settings-avatar-info {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .avatar-wrapper { position: relative; width: 120px; height: 120px; }
-        .avatar-glow { position: absolute; inset: -4px; border-radius: 50%; background: linear-gradient(135deg, #003178, #f59e0b); opacity: 0.2; filter: blur(10px); }
-        .avatar-container-circle { width: 100%; height: 100%; border-radius: 50%; background: #eff6ff; border: 4px solid white; box-shadow: 0 10px 25px rgba(15, 23, 42, 0.1); display: flex; align-items: center; justify-content: center; overflow: hidden; position: relative; font-size: 2.5rem; font-weight: 900; color: #003178; z-index: 2; }
-        .avatar-img { width: 100%; height: 100%; object-fit: cover; }
-        .avatar-overlay-upload { position: absolute; inset: 0; background: rgba(0, 49, 120, 0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; opacity: 0; transition: all 0.3s ease; cursor: pointer; z-index: 3; font-size: 0.75rem; font-weight: 700; border-radius: 50%; }
-        .avatar-wrapper:hover .avatar-overlay-upload { opacity: 1; }
-
-        .settings-form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-        }
-
-        .input-group-wrapper label {
-            display: block; font-size: 0.75rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
-        }
-        .input-icon-box { position: relative; }
-        .input-icon-box input {
-            width: 100%; padding: 12px 16px 12px 44px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 0.95rem; font-weight: 600; color: #0f172a; transition: all 0.2s; box-sizing: border-box;
-        }
-        .input-icon-box input:focus { background: white; border-color: #003178; box-shadow: 0 0 0 4px rgba(0, 49, 120, 0.1); outline: none; }
-        .input-icon-box i, .input-icon-box svg { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
-        .input-icon-box input:disabled { background: #e2e8f0; color: #64748b; border-color: #cbd5e1; cursor: not-allowed; }
-
-        .settings-form-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 32px;
-        }
-
-        .btn-primary-custom {
-            background: #003178;
-            color: white;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-weight: 700;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-primary-custom:hover {
-            background: #002252;
-            transform: translateY(-2px);
-        }
-
-        .btn-secondary-custom {
-            background: #f1f5f9;
-            color: #475569;
-            padding: 10px 16px;
-            border-radius: 10px;
+        input[type="file"]::file-selector-button {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            background: white;
             font-weight: 600;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
+            font-size: 0.85rem;
+            color: var(--text-main);
             cursor: pointer;
+            margin-right: 12px;
             transition: all 0.2s;
-            text-decoration: none;
+            font-family: inherit;
         }
-        .btn-secondary-custom:hover {
-            background: #e2e8f0;
-        }
+        input[type="file"]::file-selector-button:hover { background: #f8fafc; }
 
-        .btn-danger-custom {
-            background: #fee2e2;
-            color: #dc2626;
-            padding: 10px 16px;
-            border-radius: 10px;
-            font-weight: 600;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-danger-custom:hover {
-            background: #fecaca;
-        }
+        .form-actions { display: flex; justify-content: flex-end; gap: 16px; margin-top: 32px; padding-top: 24px; border-top: 1px solid #e2e8f0; }
+        
+        .alert-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; font-weight: 500; }
+</style>
+@endpush
 
-        @media (max-width: 1024px) {
-            .settings-container {
-                grid-template-columns: 1fr;
-                padding: 32px 24px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .settings-avatar-section {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-                gap: 20px;
-            }
-            .settings-form-grid {
-                grid-template-columns: 1fr;
-            }
-            .glass-card {
-                padding: 24px;
-            }
-            .settings-avatar-info {
-                align-items: center;
-            }
-        }
-    </style>
-</head>
-<body x-data="{ sidebarOpen: false }">
-
-    <div class="dashboard-layout">
-        @include('partials.sidebar-masyarakat')
-
-        <main class="main-content">
-            <!-- Header section -->
-            <div class="page-title-section">
-                <div>
-                    <h1>Pengaturan <span style="color: var(--accent);">Akun</span></h1>
-                    <p>Kelola informasi profil, keamanan kata sandi, dan preferensi notifikasi.</p>
+@section('content')
+<div class="page-header">
+                <div class="header-content">
+                    <h1 class="header-title">
+                        <i data-lucide="user-cog" style="width: 32px; height: 32px; color: #fbbf24;"></i>
+                        Edit Profil
+                    </h1>
+                    <p class="header-subtitle">Perbarui informasi akun Anda</p>
+                </div>
+                <div class="header-actions">
+                    <a href="{{ route('masyarakat.profile') }}" class="btn btn-light-outline">
+                        <i data-lucide="arrow-left" style="width: 18px;"></i> Kembali ke Profil
+                    </a>
                 </div>
             </div>
 
-            <div class="settings-container">
+            <div class="panel-box">
+                @if(session('success'))
+                <div class="alert-success">
+                    <i data-lucide="check-circle" style="width: 20px; flex-shrink: 0;"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+                @endif
 
-                <!-- Left Sidebar Menu -->
-                <div class="settings-sidebar">
-                    <div class="settings-menu-list">
+                <form action="{{ route('masyarakat.settings.update') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    
+                    <div class="form-section">
+                        <h3 class="section-title"><i data-lucide="camera" style="color: var(--primary);"></i> Foto Profil</h3>
+                        <div class="avatar-upload-container">
+                            @if(auth()->user()->foto_profil ?? auth()->user()->profile_photo_path)
+                                <img src="{{ asset('storage/' . (auth()->user()->foto_profil ?? auth()->user()->profile_photo_path)) }}" alt="Avatar" class="avatar-preview" id="avatar_preview">
+                            @else
+                                <div class="avatar-preview" id="avatar_preview_container">
+                                    {{ strtoupper(substr(auth()->user()->nama ?? auth()->user()->name ?? 'U', 0, 2)) }}
+                                </div>
+                                <img src="" alt="Avatar" class="avatar-preview" id="avatar_preview" style="display: none;">
+                            @endif
+                            <div>
+                                <input type="file" name="profile_photo" id="profile_photo" accept="image/*" class="form-control" style="border: none; padding: 0; background: transparent;">
+                                <div class="form-hint" style="margin-top: 8px;">Format: JPG, PNG. Maksimal ukuran file 1MB.</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h3 class="section-title"><i data-lucide="user" style="color: var(--primary);"></i> Informasi Pribadi</h3>
                         
-                        <a href="{{ route('masyarakat.settings') }}" class="settings-menu-item {{ request()->routeIs('masyarakat.settings') ? 'active' : '' }}">
-                            <div class="settings-menu-icon {{ request()->routeIs('masyarakat.settings') ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600' }}">
-                                <i data-lucide="user" width="20"></i>
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Nama Lengkap *</label>
+                                <input type="text" name="name" value="{{ old('name', auth()->user()->nama ?? auth()->user()->name) }}" class="form-control" readonly style="background: #f8fafc; color: #94a3b8; cursor: not-allowed;" title="Nama tidak dapat diubah">
                             </div>
-                            <div>
-                                <h3 style="margin:0; font-size: 0.95rem; font-weight: 700;">Informasi Akun</h3>
-                                <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #64748b;">Data diri dan kontak</p>
-                            </div>
-                        </a>
 
-                        <a href="{{ route('masyarakat.settings.security') }}" class="settings-menu-item {{ request()->routeIs('masyarakat.settings.security') ? 'active' : '' }}">
-                            <div class="settings-menu-icon {{ request()->routeIs('masyarakat.settings.security') ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600' }}">
-                                <i data-lucide="shield" width="20"></i>
+                            <div class="form-group">
+                                <label class="form-label">NIK / Username</label>
+                                <input type="text" value="{{ auth()->user()->nik ?? auth()->user()->username }}" class="form-control" disabled title="NIK tidak dapat diubah">
                             </div>
-                            <div>
-                                <h3 style="margin:0; font-size: 0.95rem; font-weight: 700;">Keamanan & Sesi</h3>
-                                <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #64748b;">Status akun dan sesi aktif</p>
-                            </div>
-                        </a>
 
-                        <a href="{{ route('masyarakat.settings.password') }}" class="settings-menu-item {{ request()->routeIs('masyarakat.settings.password') ? 'active' : '' }}">
-                            <div class="settings-menu-icon {{ request()->routeIs('masyarakat.settings.password') ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600' }}">
-                                <i data-lucide="key" width="20"></i>
+                            <div class="form-group">
+                                <label class="form-label">Email *</label>
+                                <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}" class="form-control" required>
                             </div>
-                            <div>
-                                <h3 style="margin:0; font-size: 0.95rem; font-weight: 700;">Ubah Password</h3>
-                                <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #64748b;">Perbarui kata sandi Anda</p>
+
+                            <div class="form-group">
+                                <label class="form-label">Nomor Handphone</label>
+                                <input type="text" name="phone" value="{{ old('phone', auth()->user()->telepon ?? auth()->user()->no_hp) }}" class="form-control">
                             </div>
-                        </a>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Right Content Area -->
-                <div class="settings-main">
-                    @if(session('success'))
-                        <div style="background: #ecfdf5; border-left: 4px solid #10b981; padding: 16px; border-radius: 12px; display: flex; align-items: center; gap: 12px; color: #065f46; font-weight: 600;">
-                            <i data-lucide="check-circle" width="20"></i>
-                            {{ session('success') }}
+                    <div class="form-section">
+                        <h3 class="section-title"><i data-lucide="map-pin" style="color: var(--primary);"></i> Alamat (Data Dukcapil)</h3>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Kecamatan Domisili</label>
+                            <select name="kecamatan" class="form-control">
+                                <option value="" disabled {{ empty(auth()->user()->kecamatan) ? 'selected' : '' }}>Pilih Kecamatan Domisili</option>
+                                <option value="Kecamatan Tegal Barat" {{ auth()->user()->kecamatan == 'Kecamatan Tegal Barat' ? 'selected' : '' }}>Kecamatan Tegal Barat</option>
+                                <option value="Kecamatan Tegal Timur" {{ auth()->user()->kecamatan == 'Kecamatan Tegal Timur' ? 'selected' : '' }}>Kecamatan Tegal Timur</option>
+                                <option value="Kecamatan Tegal Selatan" {{ auth()->user()->kecamatan == 'Kecamatan Tegal Selatan' ? 'selected' : '' }}>Kecamatan Tegal Selatan</option>
+                                <option value="Kecamatan Margadana" {{ auth()->user()->kecamatan == 'Kecamatan Margadana' ? 'selected' : '' }}>Kecamatan Margadana</option>
+                            </select>
                         </div>
-                    @endif
-
-                    @if($errors->any() && !($errors->has('current_password') || $errors->has('password')))
-                        <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 16px; border-radius: 12px; color: #991b1b;">
-                            <div style="display: flex; align-items: center; gap: 12px; font-weight: 700; margin-bottom: 8px;">
-                                <i data-lucide="alert-circle" width="20"></i>
-                                <span>Gagal memperbarui data:</span>
-                            </div>
-                            <ul style="margin: 0 0 0 20px; padding: 0; font-size: 0.9rem;">
-                                @foreach($errors->all() as $error)
-                                    <li>{{ $error }}</li>
-                                @endforeach
-                            </ul>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Alamat Lengkap</label>
+                            <textarea name="alamat" class="form-control" rows="3">{{ auth()->user()->alamat ?? '' }}</textarea>
+                            <div class="form-hint">Pastikan alamat sesuai dengan KTP/KK Anda.</div>
                         </div>
-                    @endif
-
-                    <div class="glass-card">
-                        <div class="settings-card-header">
-                            <i data-lucide="user" width="22" style="color: #003178;"></i>
-                            <h2>Informasi Akun</h2>
-                        </div>
-
-                        <!-- Profile Hero / Avatar Section -->
-                        <div class="settings-avatar-section">
-                            <div class="avatar-wrapper">
-                                <div class="avatar-glow"></div>
-                                <div class="avatar-container-circle" id="avatarPreview">
-                                    @if(auth()->user()->foto_profil ?? auth()->user()->profile_photo_path)
-                                        <img src="{{ asset('storage/' . (auth()->user()->foto_profil ?? auth()->user()->profile_photo_path)) }}" alt="Profile Photo" class="avatar-img">
-                                    @else
-                                        {{ strtoupper(substr(auth()->user()->nama ?? auth()->user()->name, 0, 2)) }}
-                                    @endif
-                                </div>
-                                <div class="avatar-overlay-upload" onclick="document.getElementById('photoInput').click()">
-                                    <i data-lucide="camera" width="24" style="color: white; margin-bottom: 4px;"></i>
-                                    <span>Ubah Foto</span>
-                                </div>
-                            </div>
-                            
-                            <div class="settings-avatar-info">
-                                <div style="display: flex; gap: 12px; align-items: center;">
-                                    <button onclick="document.getElementById('photoInput').click()" type="button" class="btn-secondary-custom">
-                                        <i data-lucide="image" width="14"></i>
-                                        Pilih Foto Baru
-                                    </button>
-
-                                    @if(auth()->user()->foto_profil ?? auth()->user()->profile_photo_path)
-                                        <form action="{{ route('masyarakat.settings.photo.delete') }}" method="POST" style="margin:0;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn-danger-custom">
-                                                <i data-lucide="trash-2" width="14"></i>
-                                                Hapus
-                                            </button>
-                                        </form>
-                                    @endif
-                                </div>
-                                <p style="font-size: 0.8rem; color: #64748b; margin: 4px 0 0 0;">Maks. 1MB. Format: JPG, JPEG, atau PNG.</p>
-                            </div>
-                        </div>
-
-                        <!-- Profile Form -->
-                        <form action="{{ route('masyarakat.settings.update') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <input type="file" name="profile_photo" id="photoInput" style="display: none;" onchange="previewImage(this)">
-
-                            <div class="settings-form-grid">
-                                <!-- Nama -->
-                                <div class="input-group-wrapper">
-                                    <label>Nama Lengkap</label>
-                                    <div class="input-icon-box">
-                                        <input type="text" name="name" value="{{ old('name', auth()->user()->nama ?? auth()->user()->name) }}" required>
-                                        <i data-lucide="user" width="18"></i>
-                                    </div>
-                                    @error('name')
-                                        <span style="color: #ef4444; font-size: 0.8rem; margin-top: 4px; display:block;">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <!-- NIK (Disabled as Username substitute) -->
-                                <div class="input-group-wrapper">
-                                    <label>NIK / Username</label>
-                                    <div class="input-icon-box">
-                                        <input type="text" value="{{ auth()->user()->nik }}" disabled>
-                                        <i data-lucide="credit-card" width="18"></i>
-                                    </div>
-                                </div>
-
-                                <!-- Email -->
-                                <div class="input-group-wrapper">
-                                    <label>Email</label>
-                                    <div class="input-icon-box">
-                                        <input type="email" name="email" value="{{ old('email', auth()->user()->email) }}" required>
-                                        <i data-lucide="mail" width="18"></i>
-                                    </div>
-                                    @error('email')
-                                        <span style="color: #ef4444; font-size: 0.8rem; margin-top: 4px; display:block;">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <!-- Phone / WhatsApp -->
-                                <div class="input-group-wrapper">
-                                    <label>No. HP / WhatsApp</label>
-                                    <div class="input-icon-box">
-                                        <input type="tel" name="phone" value="{{ old('phone', auth()->user()->phone) }}" placeholder="Contoh: 08123456789">
-                                        <i data-lucide="phone" width="18"></i>
-                                    </div>
-                                    @error('phone')
-                                        <span style="color: #ef4444; font-size: 0.8rem; margin-top: 4px; display:block;">{{ $message }}</span>
-                                    @enderror
-                                </div>
-                                
-                                <!-- Alamat -->
-                                <div class="input-group-wrapper" style="grid-column: span 2;">
-                                    <label>Alamat Domisili / Kecamatan</label>
-                                    <div class="input-icon-box">
-                                        <input type="text" value="{{ auth()->user()->kecamatan ?? '-' }}" disabled>
-                                        <i data-lucide="map-pin" width="18"></i>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="settings-form-actions">
-                                <button type="submit" class="btn-primary-custom">
-                                    <i data-lucide="save" width="16"></i>
-                                    Simpan Perubahan
-                                </button>
-                            </div>
-                        </form>
                     </div>
-                </div>
 
+                    <!-- Actions -->
+                    <div class="form-actions">
+                        <a href="{{ route('masyarakat.profile') }}" class="btn btn-outline" style="border: 1px solid #cbd5e1; color: var(--text-main); background: white;">Batal</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i data-lucide="save" style="width: 18px;"></i> Simpan Perubahan
+                        </button>
+                    </div>
+                </form>
             </div>
-            <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
 
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Toast Container -->
-    <div class="jbl-524 jbl-510 jbl-378 jbl-929 jbl-1293 jbl-1541 jbl-985" id="toastContainer"></div>
-
-    <script>
-        lucide.createIcons();
-
-        // Premium Toast Notification
-        function showToast(message, iconName = 'bell', type = 'success') {
-            const container = document.getElementById('toastContainer');
-            if (!container) return;
-            
-            const toast = document.createElement('div');
-            toast.className = `p-4 rounded-xl shadow-lg flex items-center gap-3 transform transition-all duration-300 translate-y-[-20px] opacity-0 ${type === 'success' ? 'bg-white border-l-4 border-emerald-500' : 'bg-white border-l-4 border-amber-500'}`;
-            
-            toast.innerHTML = `
-                <div class="jbl-1374 jbl-1224 jbl-538 ${type === 'success' ? 'bg-emerald-50 text-emerald-500' : 'bg-amber-50 text-amber-500'} flex items-center justify-center shrink-0">
-                    <i data-lucide="${iconName}" width="16"></i>
-                </div>
-                <span class="jbl-386 jbl-959 jbl-166">${message}</span>
-            `;
-            
-            container.appendChild(toast);
-            lucide.createIcons();
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-[-20px]', 'opacity-0');
-            }, 50);
-            
-            setTimeout(() => {
-                toast.classList.add('translate-y-[-20px]', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
-        }
-
-        // Live state preservation
-        document.addEventListener('DOMContentLoaded', () => {
-            ['toggle-email', 'toggle-whatsapp', 'toggle-jadwal'].forEach(id => {
-                const toggle = document.getElementById(id);
-                if (toggle) {
-                    toggle.addEventListener('change', (e) => {
-                        if (e.target.checked) {
-                            showToast('Pengaturan notifikasi diaktifkan!', 'check-circle', 'success');
-                        } else {
-                            showToast('Pengaturan notifikasi dinonaktifkan.', 'alert-circle', 'warning');
-                        }
-                    });
+<script>
+    const photoInput = document.getElementById('profile_photo');
+    if (photoInput) {
+        photoInput.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0]) {
+                let reader = new FileReader();
+                reader.onload = function(event) {
+                    let preview = document.getElementById('avatar_preview');
+                    let container = document.getElementById('avatar_preview_container');
+                    preview.src = event.target.result;
+                    preview.style.display = 'block';
+                    if (container) container.style.display = 'none';
                 }
-            });
-        });
-
-        function previewImage(input) {
-            if (input.files && input.files[0]) {
-                const avatarPreview = document.getElementById('avatarPreview');
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    avatarPreview.innerHTML = `<img src="${e.target.result}" alt="Preview" class="avatar-img">`;
-                }
-                reader.readAsDataURL(input.files[0]);
+                reader.readAsDataURL(e.target.files[0]);
             }
-        }
-    </script>
-</body>
-</html>
-
+        });
+    }
+</script>
+@endsection

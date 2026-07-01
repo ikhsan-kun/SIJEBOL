@@ -75,7 +75,27 @@
         gap: 24px;
     }
     
-    @media (max-width: 1024px) { .main-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 1024px) { 
+        .main-grid { grid-template-columns: 1fr; }
+        .page-header { margin: -1.5rem -1rem 24px -1rem; }
+    }
+    
+    @media (max-width: 768px) {
+        .page-header {
+            flex-direction: column;
+            text-align: center;
+            gap: 20px;
+            padding: 30px 20px;
+        }
+        .header-content {
+            flex-direction: column;
+            gap: 16px;
+        }
+        .header-actions {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    }
 
     .panel-box {
         background: white;
@@ -270,13 +290,8 @@
 
             <!-- Last Login -->
             @php
-                $lastLogin = \Illuminate\Support\Facades\DB::table('login_histories')
-                    ->where('user_id', auth()->id())
-                    ->orderBy('login_at', 'desc')
-                    ->first();
-                
-                $loginTime = $lastLogin ? \Carbon\Carbon::parse($lastLogin->login_at)->translatedFormat('d M Y, H:i') . ' WIB' : 'Belum ada riwayat';
-                $loginDevice = $lastLogin ? \Illuminate\Support\Str::limit($lastLogin->user_agent, 30) : 'Tidak diketahui';
+                $loginTime = auth()->user()->updated_at ? \Carbon\Carbon::parse(auth()->user()->updated_at)->translatedFormat('d M Y, H:i') . ' WIB' : 'Baru saja';
+                $loginDevice = 'Akses via Web SI JEBOL';
             @endphp
             <div class="stat-card">
                 <div class="stat-icon icon-warning"><i data-lucide="clock"></i></div>

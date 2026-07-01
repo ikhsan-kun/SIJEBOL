@@ -25,10 +25,7 @@
         mix-blend-mode: luminosity;
     }
     .settings-container {
-        display: grid;
-        grid-template-columns: 280px 1fr;
-        gap: 30px;
-        align-items: start;
+        display: block;
     }
     .settings-sidebar {
         background: white;
@@ -104,17 +101,7 @@
     .form-input:focus { border-color: #3b82f6; outline: none; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1); background: white; }
 </style>
 
-<div class="settings-header">
-    <div style="position: relative; z-index: 10; display: flex; align-items: center; gap: 24px;">
-        <div style="width: 64px; height: 64px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 20px; display: grid; place-items: center;">
-            <i data-lucide="users" style="width: 32px; height: 32px;"></i>
-        </div>
-        <div>
-            <h1 style="margin: 0 0 8px; font-size: 2rem; font-weight: 800;">Pengaturan Pengguna</h1>
-            <p style="margin: 0; font-size: 1.1rem; opacity: 0.9;">Kelola akun petugas dan hak akses sistem.</p>
-        </div>
-    </div>
-</div>
+
 
 <div class="settings-container" x-data="{ 
     showAddModal: false, 
@@ -150,25 +137,7 @@
         }
     }
 }">
-    <!-- Sidebar Menu -->
-    <div class="settings-sidebar">
 
-        <a href="{{ route('admin.settings.users') }}" class="settings-item active">
-            <div class="settings-icon"><i data-lucide="users"></i></div>
-            <div class="settings-text">
-                <h3>Pengguna</h3><p>Kelola akses admin</p>
-            </div>
-        </a>
-
-        <a href="{{ route('admin.settings.security') ?? '#' }}" class="settings-item">
-            <div class="settings-icon"><i data-lucide="shield"></i></div>
-            <div class="settings-text">
-                <h3>Keamanan</h3><p>Aktivitas perangkat</p>
-            </div>
-        </a>
-    </div>
-
-    <!-- Main Content -->
     <div class="settings-content-card">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
             <div>
@@ -279,8 +248,8 @@
                             <label class="form-label">Peran (Role)</label>
                             <select name="role" class="form-input" required>
                                 <option value="">-- Pilih Peran --</option>
-                                <option value="Admin Pusat">Admin Pusat</option>
-                                <option value="Petugas Cabang">Petugas Cabang</option>
+                                <option value="petugas capil">Petugas Capil</option>
+                                <option value="cabang dinas">Cabang Dinas</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -366,8 +335,8 @@
                         <div class="form-group">
                             <label class="form-label">Peran (Role)</label>
                             <select name="role" class="form-input" required>
-                                <option value="Admin Pusat" :selected="editData?.role === 'Admin Pusat'">Admin Pusat</option>
-                                <option value="Petugas Cabang" :selected="editData?.role === 'Petugas Cabang'">Petugas Cabang</option>
+                                <option value="petugas capil" :selected="editData?.role === 'petugas capil'">Petugas Capil</option>
+                                <option value="cabang dinas" :selected="editData?.role === 'cabang dinas'">Cabang Dinas</option>
                             </select>
                         </div>
                         <div class="form-group">

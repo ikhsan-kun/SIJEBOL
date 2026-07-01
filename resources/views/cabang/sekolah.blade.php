@@ -550,7 +550,7 @@
             <tbody>
                 @forelse($schools as $i => $school)
                 <tr>
-                    <td style="font-weight: 700; color: var(--text-muted);">{{ $i + 1 }}</td>
+                    <td style="font-weight: 700; color: var(--text-muted);">{{ $schools->firstItem() + $i }}</td>
                     <td>
                         <div style="font-weight: 700; color: var(--primary); margin-bottom: 4px;">{{ $school->nama_sekolah }}</div>
                         <div style="display: flex; gap: 6px;">
@@ -618,6 +618,10 @@
                 @endforelse
             </tbody>
         </table>
+        
+        <div style="padding: 16px 24px; border-top: 1px solid #e2e8f0; display: flex; justify-content: flex-end;">
+            {{ $schools->links('vendor.pagination.tailwind') }}
+        </div>
     </div>
 </div>
 

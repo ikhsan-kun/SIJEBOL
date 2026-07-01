@@ -142,13 +142,21 @@ class SchoolSeeder extends Seeder
             ['nama' => 'SLB Karya Bhakti Tegal', 'tingkat' => 'SLB'],
         ];
 
+        $faker = \Faker\Factory::create('id_ID');
+
         foreach ($schools as $school) {
             \App\Models\School::create([
+                'npsn' => $faker->unique()->numerify('########'),
                 'nama_sekolah' => $school['nama'],
-                'tingkat' => $school['tingkat'],
+                'alamat' => $faker->streetAddress(),
                 'kecamatan' => $cabang->kecamatan ?? 'Tegal Timur',
+                'kelurahan' => $faker->randomElement(['Pekauman', 'Kraton', 'Mangkukusuman', 'Mintaragen', 'Panggung']),
+                'tingkat' => $school['tingkat'],
+                'jumlah_siswa' => $faker->numberBetween(100, 800),
+                'status' => 'Aktif',
+                'status_jempol' => 'Belum',
                 'cabang_id' => $cabang->id,
-                'status_jempol' => 'Belum'
+                'fokus_layanan' => 'KTP-el'
             ]);
         }
     }

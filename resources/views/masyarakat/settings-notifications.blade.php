@@ -1,51 +1,9 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengaturan Akun - SI JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#003178',
-                        primaryHover: '#00255a',
-                        accent: '#f59e0b',
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        body {
-            background-color: #f8fafc;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #0f172a;
-        }
+﻿@extends('layouts.masyarakat')
 
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 0 0 0;
-            min-height: 100vh;
-            transition: all 0.3s ease;
-            min-width: 0;
-            display: flex; 
-            flex-direction: column;
-        }
-
-        @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-            }
+@push('styles')
+<style>
+@media (max-width: 1024px) {
+            
             .page-title-section {
                 padding: 32px 24px !important;
             }
@@ -241,15 +199,11 @@
                 align-self: flex-end;
             }
         }
-    </style>
-</head>
-<body x-data="{ sidebarOpen: false }">
+</style>
+@endpush
 
-    <div class="dashboard-layout">
-        @include('partials.sidebar-masyarakat')
-
-        <main class="main-content">
-            <!-- Header section -->
+@section('content')
+<!-- Header section -->
             <div class="page-title-section">
                 <div>
                     <h1>Pengaturan <span style="color: var(--accent);">Akun</span></h1>
@@ -342,66 +296,4 @@
                 </div>
 
             </div>
-            <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Toast Container -->
-    <div id="toastContainer" style="position: fixed; top: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px;"></div>
-
-    <script>
-        lucide.createIcons();
-
-        // Premium Toast Notification
-        function showToast(message, iconName = 'bell', type = 'success') {
-            const container = document.getElementById('toastContainer');
-            if (!container) return;
-            
-            const toast = document.createElement('div');
-            toast.className = `p-4 rounded-xl shadow-lg flex items-center gap-3 transform transition-all duration-300 translate-y-[-20px] opacity-0 ${type === 'success' ? 'bg-white border-l-4 border-emerald-500' : 'bg-white border-l-4 border-amber-500'}`;
-            
-            toast.innerHTML = `
-                <div class="${type === 'success' ? 'bg-emerald-50 text-emerald-500' : 'bg-amber-50 text-amber-500'} flex items-center justify-center shrink-0" style="width: 32px; height: 32px; border-radius: 8px;">
-                    <i data-lucide="${iconName}" width="16"></i>
-                </div>
-                <span style="font-size: 0.9rem; font-weight: 600; color: #0f172a;">${message}</span>
-            `;
-            
-            container.appendChild(toast);
-            lucide.createIcons();
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-[-20px]', 'opacity-0');
-            }, 50);
-            
-            setTimeout(() => {
-                toast.classList.add('translate-y-[-20px]', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
-        }
-
-        // Live state preservation
-        document.addEventListener('DOMContentLoaded', () => {
-            ['toggle-email', 'toggle-jadwal'].forEach(id => {
-                const toggle = document.getElementById(id);
-                if (toggle) {
-                    toggle.addEventListener('change', (e) => {
-                        if (e.target.checked) {
-                            showToast('Pengaturan notifikasi diaktifkan!', 'check-circle', 'success');
-                        } else {
-                            showToast('Pengaturan notifikasi dinonaktifkan.', 'alert-circle', 'warning');
-                        }
-                    });
-                }
-            });
-        });
-    </script>
-</body>
-</html>
+@endsection

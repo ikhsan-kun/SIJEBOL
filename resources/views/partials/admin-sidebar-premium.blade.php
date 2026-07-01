@@ -71,7 +71,6 @@
             <span class="jbl-843 jbl-959 jbl-1462 jbl-422">Penilaian Layanan</span>
         </a>
 
-
         @elseif(in_array($roleType, ['cabang', 'cabang_dinas', 'petugas', 'petugas cabang', 'petugas kecamatan']))
         <!-- Menu Cabang & Petugas -->
 

@@ -263,9 +263,13 @@
         .main-grid { grid-template-columns: 1fr; }
     }
     
+    @media (max-width: 1024px) {
+        .custom-hero { margin: -1.5rem -1rem 32px -1rem; }
+    }
+    
     @media (max-width: 768px) {
         .dashboard-grid { grid-template-columns: 1fr; }
-        .custom-hero { flex-direction: column; text-align: center; padding: 32px 24px; }
+        .custom-hero { flex-direction: column; text-align: center; padding: 32px 24px; gap: 24px; }
         .hero-icon-large { display: none; }
     }
 </style>
@@ -282,27 +286,29 @@
         <h1 class="hero-title">Selamat {{ $greeting }}, <span>{{ explode(' ', Auth::guard('admin')->user()->name ?? 'Admin')[0] }}!</span> 👋</h1>
         <p class="hero-subtitle">Berikut adalah ringkasan performa layanan SI JEBOL Kota Tegal. Pantau terus statistik harian untuk memberikan pelayanan terbaik bagi masyarakat.</p>
         
-        <form method="GET" action="{{ route('admin.dashboard') }}" style="margin-top: 20px; display: flex; gap: 12px; align-items: center; background: rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 12px; backdrop-filter: blur(5px); width: max-content; border: 1px solid rgba(255,255,255,0.2);">
+        <form method="GET" action="{{ route('admin.dashboard') }}" style="margin-top: 24px; display: inline-flex; flex-wrap: wrap; gap: 12px; align-items: center; background: rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 12px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2);">
             <div style="display: flex; align-items: center; gap: 8px;">
                 <i data-lucide="filter" style="width: 16px; height: 16px; color: white;"></i>
                 <span style="font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Filter Data:</span>
             </div>
-            <select name="month" onchange="this.form.submit()" style="background: rgba(255,255,255,0.9); border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem; color: #334155; font-weight: 600; cursor: pointer; outline: none;">
-                <option value="">Semua Bulan</option>
-                @foreach(range(1, 12) as $m)
-                    <option value="{{ $m }}" {{ request('month', $bulan) == $m ? 'selected' : '' }}>
-                        {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
-                    </option>
-                @endforeach
-            </select>
-            <select name="year" onchange="this.form.submit()" style="background: rgba(255,255,255,0.9); border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem; color: #334155; font-weight: 600; cursor: pointer; outline: none;">
-                @foreach(range(date('Y') - 2, date('Y')) as $y)
-                    <option value="{{ $y }}" {{ request('year', $tahun) == $y ? 'selected' : '' }}>{{ $y }}</option>
-                @endforeach
-            </select>
+            <div style="display: flex; gap: 8px;">
+                <select name="month" onchange="this.form.submit()" style="background: rgba(255,255,255,0.9); border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem; color: #334155; font-weight: 600; cursor: pointer; outline: none;">
+                    <option value="">Semua Bulan</option>
+                    @foreach(range(1, 12) as $m)
+                        <option value="{{ $m }}" {{ request('month', $bulan) == $m ? 'selected' : '' }}>
+                            {{ \Carbon\Carbon::create()->month($m)->translatedFormat('F') }}
+                        </option>
+                    @endforeach
+                </select>
+                <select name="year" onchange="this.form.submit()" style="background: rgba(255,255,255,0.9); border: none; padding: 6px 12px; border-radius: 6px; font-size: 0.9rem; color: #334155; font-weight: 600; cursor: pointer; outline: none;">
+                    @foreach(range(date('Y') - 2, date('Y')) as $y)
+                        <option value="{{ $y }}" {{ request('year', $tahun) == $y ? 'selected' : '' }}>{{ $y }}</option>
+                    @endforeach
+                </select>
+            </div>
         </form>
     </div>
-    <div class="hero-schedule-card" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); padding: 24px; border-radius: 20px; color: white; width: 320px; z-index: 10; flex-shrink: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+    <div class="hero-schedule-card" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); padding: 24px; border-radius: 20px; color: white; width: 100%; max-width: 320px; margin: 0; z-index: 10; flex-shrink: 0; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
         @php $nextSchedule = $upcomingSchedules->first(); @endphp
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <span style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #fbbf24;">Jadwal Terdekat</span>

@@ -1,31 +1,10 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Penilaian Layanan - SI JEBOL Kota Tegal</title>
-    <link rel="stylesheet" href="{{ asset('css/custom-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#003178",
-                        "background": "#f8faff",
-                    },
-                    fontFamily: { sans: ['Inter', 'sans-serif'] }
-                }
-            }
-        }
-    </script>
-    <style>
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; line-height: 1; vertical-align: middle; }
-        body { font-family: 'Inter', sans-serif; }
+@extends('layouts.masyarakat')
+
+@push('styles')
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; line-height: 1; vertical-align: middle; }
+        
+        
 
         /* Star Rating */
         .star-picker { display: flex; gap: 6px; flex-direction: row-reverse; justify-content: flex-end; }
@@ -86,15 +65,7 @@
             gap: 32px;
             align-items: start;
         }
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 0 0;
-            background: transparent;
-            min-width: 0;
-            transition: all 0.3s ease;
-            display: flex; flex-direction: column; min-height: 100vh;
-}
+        
         .panel-card-modern {
             padding: 24px;
             background: white;
@@ -104,36 +75,111 @@
         }
         @media (max-width: 1024px) {
             .main-grid { grid-template-columns: 1fr; }
-            .main-content { margin-left: 0; padding: 100px 20px 0 ;     display: flex; flex-direction: column; min-height: 100vh;
-}
+            .responsive-header {
+                margin: -16px -16px 32px -16px !important;
+            }
         }
+        @media (max-width: 768px) {
+            .responsive-header {
+                margin: -16px -16px 16px -16px !important;
+                border-radius: 0 !important;
+                width: calc(100% + 32px) !important;
+                display: block !important;
+                position: relative !important;
+                overflow: hidden !important;
+            }
+            .responsive-header-inner {
+                padding: 24px 16px !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                text-align: center;
+                gap: 16px !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            .responsive-header-text {
+                width: 100% !important;
+                max-width: 100% !important;
+                overflow-wrap: break-word !important;
+                word-wrap: break-word !important;
+                white-space: normal !important;
+            }
+            .responsive-header-text h1 {
+                font-size: 1.5rem !important;
+                line-height: 1.3 !important;
+            }
+            .responsive-header-text p {
+                font-size: 0.85rem !important;
+            }
+            .responsive-body {
+                padding: 0 !important;
+            }
+        }
+
+        /* Premium Form Styles */
+        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+        .form-group:last-child { margin-bottom: 0; }
+        
+        .form-label { font-size: 0.85rem; font-weight: 700; color: #1e293b; display: flex; flex-direction: column; gap: 4px; }
+        .form-label .hint { font-size: 0.75rem; font-weight: 400; color: #64748b; }
+        
+        .form-control { 
+            width: 100%; 
+            padding: 12px 16px; 
+            border-radius: 12px; 
+            border: 1px solid #cbd5e1; 
+            background: white; 
+            font-family: inherit; 
+            font-size: 0.95rem; 
+            outline: none; 
+            transition: all 0.2s; 
+            box-sizing: border-box;
+            color: #1e293b;
+        }
+        .form-control:focus { border-color: #003178; box-shadow: 0 0 0 3px rgba(0, 49, 120, 0.1); }
+        .form-control:disabled, .form-control[readonly] { background: #f8fafc; color: #94a3b8; cursor: not-allowed; }
+        
+        .btn-primary { 
+            background: #003178; 
+            color: white; 
+            padding: 14px 24px; 
+            border-radius: 12px; 
+            font-weight: 600; 
+            font-size: 1rem; 
+            border: none; 
+            cursor: pointer; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            gap: 8px; 
+            transition: all 0.2s; 
+            width: 100%; 
+        }
+        .btn-primary:hover { background: #002255; transform: translateY(-2px); }
+        .form-hint { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
     </style>
-</head>
-<body class="jbl-1134 jbl-342 jbl-461" x-data="{ sidebarOpen: false, imgModalOpen: false, imgModalSrc: '' }">
+@endpush
 
-    <div class="dashboard-layout jbl-1293">
-        @include('partials.sidebar-masyarakat')
-
-        <main class="main-content">
-
-            <!-- Premium Header -->
-            <div class="jbl-626 jbl-1004 jbl-454 jbl-496 jbl-1578 jbl-1298 jbl-287 jbl-1361 jbl-1109 jbl-35"
-                 style="background-color: #003178; background-image: linear-gradient(rgba(0,49,120,0.9), rgba(0,49,120,0.9)), url('{{ asset('images/batik-tegal-premium.jpg') }}'); background-size: cover; border-bottom: 4px solid #f59e0b; box-shadow: 0 20px 40px rgba(0,49,120,0.15); border-radius: 0; margin-bottom: 32px;">
+@section('content')
+<div x-data="{ imgModalOpen: false, imgModalSrc: '' }">
+<!-- Premium Header -->
+            <div class="jbl-626 jbl-1004 jbl-454 jbl-496 jbl-1578 jbl-1298 jbl-287 jbl-1361 jbl-1109 jbl-35 responsive-header"
+                 style="background-color: #003178; background-image: linear-gradient(rgba(0,49,120,0.9), rgba(0,49,120,0.9)), url('{{ asset('images/batik-tegal-premium.jpg') }}'); background-size: cover; border-bottom: 4px solid #f59e0b; box-shadow: 0 20px 40px rgba(0,49,120,0.15); border-radius: 0; margin: -24px -24px 32px -24px;">
                 <div class="jbl-91 jbl-1062 jbl-907" style="background-image: url('{{ asset('images/batik-tegal-premium.jpg') }}'); background-size: 400px; opacity: 0.12; mix-blend-mode: luminosity;"></div>
                 <div class="jbl-91 jbl-3 jbl-321 jbl-1365 jbl-1468 jbl-201 jbl-1106 jbl-835 jbl-44 jbl-6 jbl-1069"></div>
                 <div class="jbl-91 jbl-588 jbl-833 jbl-116 jbl-981 jbl-794 jbl-835 jbl-1518 jbl-694 jbl-780"></div>
 
-                <div class="jbl-1109 jbl-1117 jbl-1293 jbl-1541 jbl-744 jbl-133 jbl-1051" style="padding: 32px; display: flex; align-items: center; gap: 24px;">
+                <div class="jbl-1109 jbl-1117 jbl-1293 jbl-1541 jbl-744 jbl-133 jbl-1051 responsive-header-inner" style="padding: 32px; display: flex; align-items: center; gap: 24px;">
                     <div class="jbl-983 jbl-309 jbl-1112 jbl-1400 jbl-1406 jbl-1293 jbl-1426 jbl-141 jbl-333 jbl-777 jbl-1540 jbl-709" style="flex-shrink: 0;">
                         <span class="material-symbols-outlined jbl-766 jbl-407" style="color: #f59e0b;">star_rate</span>
                     </div>
-                    <div>
+                    <div class="responsive-header-text">
                         <h1 class="jbl-264 jbl-1377 jbl-586 jbl-1511 jbl-1361 jbl-1429" style="color: white !important; margin: 0;">Penilaian <span style="color: #f59e0b;">Layanan</span></h1>
                         <p class="jbl-622 jbl-772 jbl-210 jbl-363" style="color: rgba(255,255,255,0.9) !important; margin: 8px 0 0 0;">Sampaikan pengalaman Anda terhadap layanan administrasi kependudukan SI JEBOL Kota Tegal.</p>
                     </div>
                 </div>
             </div>
-            <div style="padding: 0 32px 32px;">
+            <div class="responsive-body" style="padding: 0 16px 32px;">
 
             <!-- Alerts -->
             @if(session('status'))
@@ -195,10 +241,10 @@
                         @csrf
 
                         <!-- 1. Rating Layanan -->
-                        <div>
-                            <label class="jbl-225 jbl-166 jbl-959 jbl-431 jbl-1429">
-                                Rating Layanan <span class="jbl-18">*</span>
-                                <span class="jbl-418 jbl-13 jbl-843 jbl-1327">— Berikan penilaian 1 sampai 5 bintang</span>
+                        <div class="form-group">
+                            <label class="form-label">
+                                Rating Layanan <span style="color: #ef4444;">*</span>
+                                <span class="hint">— Berikan penilaian 1 sampai 5 bintang</span>
                             </label>
                             <div class="star-picker" x-data="{ rating: 0 }">
                                 @for($s = 5; $s >= 1; $s--)
@@ -206,16 +252,16 @@
                                     <label for="star{{ $s }}" :style="rating >= {{ $s }} ? 'color:#f59e0b' : ''">★</label>
                                 @endfor
                             </div>
-                            <p class="jbl-843 jbl-1397 jbl-13 jbl-1305" id="starDesc">Klik bintang untuk memberi nilai</p>
+                            <p class="form-hint" id="starDesc">Klik bintang untuk memberi nilai</p>
                         </div>
 
                         <!-- 2. Nama Layanan -->
-                        <div>
-                            <label class="jbl-225 jbl-166 jbl-959 jbl-431 jbl-1429">
-                                Nama Layanan <span class="jbl-18">*</span>
-                                <span class="jbl-418 jbl-13 jbl-843 jbl-1327">— Pilih layanan yang sudah selesai</span>
+                        <div class="form-group">
+                            <label class="form-label">
+                                Nama Layanan <span style="color: #ef4444;">*</span>
+                                <span class="hint">— Pilih layanan yang sudah selesai</span>
                             </label>
-                            <select class="jbl-1539 jbl-181 jbl-1569 jbl-1134 jbl-333 jbl-121 jbl-1320 jbl-85 jbl-1472 jbl-1029 jbl-1288 jbl-166 jbl-772" name="status_layanan" required>
+                            <select class="form-control" name="status_layanan" required>
                                 <option value="" disabled {{ !old('status_layanan') && !request('layanan') ? 'selected' : '' }}>Pilih layanan yang sudah selesai...</option>
                                 @if($pengajuanSelesai->isEmpty())
                                     <option value="" disabled>— Belum ada layanan yang selesai —</option>
@@ -231,59 +277,59 @@
                                 @endif
                             </select>
                             @if($pengajuanSelesai->isEmpty())
-                                <p class="jbl-1305 jbl-843 jbl-1397 jbl-302">
+                                <p class="form-hint" style="color: #ef4444;">
                                     ⚠️ Belum ada layanan yang selesai. Penilaian hanya bisa diberikan untuk layanan yang sudah selesai.
                                 </p>
                             @endif
                         </div>
 
                         <!-- 3. Nama Pemohon -->
-                        <div>
-                            <label class="jbl-225 jbl-166 jbl-959 jbl-431 jbl-1429">
+                        <div class="form-group">
+                            <label class="form-label">
                                 Nama Pemohon
-                                <span class="jbl-418 jbl-13 jbl-843 jbl-1327">— Diisi otomatis dari akun Anda</span>
+                                <span class="hint">— Diisi otomatis dari akun Anda</span>
                             </label>
-                            <input type="text" class="jbl-1539 jbl-181 jbl-1569 jbl-995 jbl-333 jbl-121 jbl-1320 jbl-147 jbl-166 jbl-274" readonly
+                            <input type="text" class="form-control" readonly
                                    value="{{ auth()->user()->name ?? auth()->user()->nama ?? '-' }}">
                             <input type="hidden" name="nik" value="{{ auth()->user()->nik }}">
                         </div>
 
                         <!-- 4. Komentar / Saran -->
-                        <div>
-                            <label class="jbl-225 jbl-166 jbl-959 jbl-431 jbl-1429">
+                        <div class="form-group">
+                            <label class="form-label">
                                 Komentar / Saran
-                                <span class="jbl-418 jbl-13 jbl-843 jbl-1327">— Pendapat Anda terhadap pelayanan</span>
+                                <span class="hint">— Pendapat Anda terhadap pelayanan</span>
                             </label>
-                            <textarea class="jbl-1539 jbl-181 jbl-1569 jbl-1134 jbl-333 jbl-121 jbl-1320 jbl-85 jbl-1472 jbl-1029 jbl-1288 jbl-166 jbl-587" rows="4"
+                            <textarea class="form-control" rows="4"
                                       name="kritik_saran" placeholder="Tuliskan pengalaman atau saran Anda untuk perbaikan layanan...">{{ old('kritik_saran') }}</textarea>
                         </div>
 
                         <!-- 5. Tanggal Penilaian -->
-                        <div>
-                            <label class="jbl-225 jbl-166 jbl-959 jbl-431 jbl-1429">
+                        <div class="form-group">
+                            <label class="form-label">
                                 Tanggal Penilaian
-                                <span class="jbl-418 jbl-13 jbl-843 jbl-1327">— Diisi otomatis</span>
+                                <span class="hint">— Diisi otomatis</span>
                             </label>
-                            <input type="text" class="jbl-1539 jbl-181 jbl-1569 jbl-995 jbl-333 jbl-121 jbl-1320 jbl-147 jbl-166 jbl-274" readonly
+                            <input type="text" class="form-control" readonly
                                    value="{{ now()->translatedFormat('d F Y, H:i') }} WIB">
                         </div>
 
                         <!-- 6. Upload Foto -->
-                        <div>
-                            <label class="jbl-225 jbl-166 jbl-959 jbl-431 jbl-1429">
+                        <div class="form-group">
+                            <label class="form-label">
                                 Upload Foto
-                                <span class="jbl-418 jbl-13 jbl-843 jbl-1327">— Opsional, lampiran bukti atau dokumentasi</span>
+                                <span class="hint">— Opsional, lampiran bukti atau dokumentasi</span>
                             </label>
-                            <label for="foto" class="upload-zone jbl-225" id="fotoLabel">
-                                <span class="material-symbols-outlined jbl-13 jbl-264 jbl-1429 jbl-225" id="fotoIcon">add_photo_alternate</span>
-                                <p class="jbl-166 jbl-1397 jbl-147" id="fotoText">Klik untuk memilih foto</p>
-                                <p class="jbl-843 jbl-13 jbl-1237">JPG, PNG, WEBP — maks. 5 MB</p>
-                                <input type="file" id="foto" name="foto" accept="image/*" class="jbl-565" onchange="previewFoto(this)">
+                            <label for="foto" class="upload-zone" id="fotoLabel">
+                                <span class="material-symbols-outlined" style="font-size: 2rem; color: #94a3b8; margin-bottom: 8px;" id="fotoIcon">add_photo_alternate</span>
+                                <p style="font-weight: 700; color: #003178; margin: 0 0 4px 0;" id="fotoText">Klik untuk memilih foto</p>
+                                <p style="font-size: 0.8rem; color: #64748b; margin: 0;">JPG, PNG, WEBP — maks. 5 MB</p>
+                                <input type="file" id="foto" name="foto" accept="image/*" style="display: none;" onchange="previewFoto(this)">
                             </label>
-                            <div id="fotoPreview" class="jbl-565 jbl-1360 jbl-1109">
-                                <img id="fotoImg" src="" alt="Preview" class="jbl-1539 jbl-155 jbl-724 jbl-1320 jbl-333 jbl-121">
+                            <div id="fotoPreview" style="display: none; position: relative; width: 120px; height: 120px; border-radius: 12px; overflow: hidden; border: 2px solid #e2e8f0;">
+                                <img id="fotoImg" src="" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;">
                                 <button type="button" onclick="clearFoto()"
-                                        class="jbl-91 jbl-268 jbl-347 jbl-286 jbl-1361 jbl-835 jbl-909 jbl-707 jbl-1293 jbl-1426 jbl-141 jbl-166 jbl-1235">✕</button>
+                                        style="position: absolute; top: 4px; right: 4px; background: rgba(0,0,0,0.5); color: white; border: none; border-radius: 50%; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem;">✕</button>
                             </div>
                         </div>
 
@@ -293,8 +339,7 @@
                         <input type="hidden" name="rating_keramahan" value="0">
                         <input type="hidden" name="rating_kejelasan" value="0">
 
-                        <button type="submit"
-                                class="jbl-1539 jbl-1293 jbl-1426 jbl-141 jbl-745 jbl-560 jbl-1361 jbl-657 jbl-725 jbl-674 jbl-1320 jbl-1082 jbl-1101 jbl-991 jbl-1288 jbl-945">
+                        <button type="submit" class="btn-primary" style="margin-top: 16px;">
                             <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">send</span>
                             Kirim Penilaian
                         </button>
@@ -385,7 +430,7 @@
                             </table>
                         </div>
                     
-                    <div class="jbl-652 jbl-1293 jbl-141">
+                    <div style="display: flex; margin-top: 24px; justify-content: flex-end;">
                         {{ $riwayat->links() }}
                     </div>
                     @endif
@@ -394,63 +439,13 @@
                 </div>
             </div>
             </div> <!-- Close the padding container -->
-
-                    <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
+            
+            <!-- Image Modal -->
+            <div x-show="imgModalOpen" style="display: none; position: fixed; inset: 0; z-index: 9999; background: rgba(15, 23, 42, 0.9); display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); padding: 40px;" x-transition>
+                <div @click.away="imgModalOpen = false" style="position: relative; max-width: 100%; max-height: 100%; display: flex; justify-content: center; align-items: center;">
+                    <button @click="imgModalOpen = false" style="position: absolute; top: -16px; right: -16px; background: #0f172a; color: white; border: 2px solid white; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 10000; font-weight: bold; font-size: 1.2rem; transition: all 0.2s;" onmouseover="this.style.background='#ef4444'; this.style.transform='scale(1.1)';" onmouseout="this.style.background='#0f172a'; this.style.transform='scale(1)';">✕</button>
+                    <img :src="imgModalSrc" style="max-width: 100%; max-height: 85vh; border-radius: 12px; object-fit: contain; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);">
                 </div>
             </div>
-        </main>
-    </div>
-
-    <script>
-        lucide.createIcons();
-
-        const starDescs = { 1:'Sangat Buruk 😡', 2:'Kurang Puas 😕', 3:'Cukup Puas 😐', 4:'Puas 😊', 5:'Sangat Puas 😍' };
-        document.querySelectorAll('.star-picker input').forEach(input => {
-            input.addEventListener('change', () => {
-                document.getElementById('starDesc').textContent = starDescs[input.value] || '';
-            });
-        });
-
-        function previewFoto(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = e => {
-                    document.getElementById('fotoImg').src = e.target.result;
-                    document.getElementById('fotoPreview').classList.remove('hidden');
-                    document.getElementById('fotoIcon').textContent = 'check_circle';
-                    document.getElementById('fotoIcon').style.color = '#059669';
-                    document.getElementById('fotoText').textContent = input.files[0].name;
-                    document.getElementById('fotoLabel').classList.add('active');
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function clearFoto() {
-            document.getElementById('foto').value = '';
-            document.getElementById('fotoPreview').classList.add('hidden');
-            document.getElementById('fotoImg').src = '';
-            document.getElementById('fotoIcon').textContent = 'add_photo_alternate';
-            document.getElementById('fotoIcon').style.color = '';
-            document.getElementById('fotoText').textContent = 'Klik untuk memilih foto';
-            document.getElementById('fotoLabel').classList.remove('active');
-        }
-    </script>
-
-    <!-- Image Modal -->
-    <div x-cloak x-show="imgModalOpen" class="jbl-524 jbl-1062 jbl-377 jbl-1293 jbl-1426 jbl-141 jbl-294 jbl-637 jbl-156" @keydown.escape.window="imgModalOpen = false">
-        <div class="jbl-1109 jbl-151 jbl-1539 jbl-1293 jbl-141" @click.away="imgModalOpen = false">
-            <button type="button" @click="imgModalOpen = false" class="jbl-91 jbl-1435 jbl-321 jbl-666 jbl-1361 jbl-1437 jbl-632">
-                <span class="material-symbols-outlined jbl-264">close</span>
-            </button>
-            <img :src="imgModalSrc" class="jbl-135 jbl-241 jbl-481 jbl-920 jbl-1320 jbl-641 jbl-57" alt="Lampiran">
-        </div>
-    </div>
-</body>
-</html>
-
+</div>
+@endsection

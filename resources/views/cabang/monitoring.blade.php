@@ -418,14 +418,7 @@
             <p class="monitoring-subtitle">Pantau seluruh pengajuan layanan Jemput Bola dari sekolah di wilayah Anda.</p>
         </div>
     </div>
-    <div style="position: relative; z-index: 10; display: flex; align-items: center; gap: 12px;">
-        <span style="background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 99px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 8px;">
-            <div style="width: 8px; height: 8px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 10px #4ade80;"></div> Live Update
-        </span>
-        <button onclick="window.location.reload()" style="background: white; color: var(--primary); border: none; padding: 8px 16px; border-radius: 99px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;">
-            <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i> Refresh
-        </button>
-    </div>
+
 </div>
 
 <div class="stats-container">

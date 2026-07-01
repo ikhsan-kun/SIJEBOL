@@ -1,44 +1,9 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Riwayat Pengajuan - JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>
-        :root {
-            --primary: #003178;
-            --primary-light: #e0f2fe;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-            --bg-body: #f8faff;
-        }
+﻿@extends('layouts.masyarakat')
 
-        body {
-            background-color: var(--bg-body);
-            font-family: 'Inter', sans-serif;
-            color: var(--text-main);
-        }
-
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 48px 0 ;
-            min-width: 0;
-            transition: all 0.3s ease;
-            display: flex; flex-direction: column; min-height: 100vh;
-}
-
-        @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-                padding: 80px 20px 0 ;
-                display: flex; flex-direction: column; min-height: 100vh;
-}
+@push('styles')
+<style>
+@media (max-width: 1024px) {
+            
         }
 
         .page-title-section {
@@ -552,12 +517,7 @@
             .stats-grid {
                 display: none !important;
             }
-            .main-content {
-                margin-left: 0 !important;
-                padding: 0 !important;
-                width: 100% !important;
-                display: flex; flex-direction: column; min-height: 100vh;
-}
+            
             .table-box-premium {
                 box-shadow: none !important;
                 border: none !important;
@@ -574,9 +534,7 @@
             .premium-table-v2 thead {
                 display: table-header-group !important;
             }
-            .premium-table-v2 tbody {
-                display: table-row-group !important;
-            }
+            .premium-table-v2 t
             .premium-table-v2 tr {
                 display: table-row !important;
                 page-break-inside: avoid !important;
@@ -613,11 +571,7 @@
                 border-radius: 9999px !important;
             }
             
-            body { 
-                background: white !important; 
-                -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
-            }
+            
         }
 
         /* Custom Toast Notification styling */
@@ -656,15 +610,11 @@
             transform: translateY(0);
             opacity: 1;
         }
-    </style>
-</head>
-<body>
+</style>
+@endpush
 
-    <div class="dashboard-layout jbl-1293" x-data="{ sidebarOpen: false }">
-        @include('partials.sidebar-masyarakat')
-
-        <main class="main-content">
-            <div class="page-title-section">
+@section('content')
+<div class="page-title-section">
                 <div>
                     <h1>Riwayat Pengajuan</h1>
                     <p style="color: #64748b; margin-top: 8px; line-height: 1.6; max-width: 900px;">Menu Riwayat Pengajuan digunakan oleh masyarakat untuk melihat arsip seluruh pengajuan layanan yang pernah dilakukan. Informasi yang ditampilkan meliputi nomor pengajuan, jenis layanan, tanggal pengajuan, identitas pemohon, detail dokumen pengajuan, catatan petugas, serta bukti pengajuan yang dapat dilihat atau diunduh kembali. Menu ini juga menyediakan fitur pencarian dan filter untuk mempermudah pengguna menemukan data pengajuan tertentu.</p>
@@ -911,64 +861,4 @@
                     </a>
                 </div>
             </div>
-                    <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Toast Container for live interactive feedback -->
-    <div class="toast-container" id="toastContainer"></div>
-
-    <script>
-        lucide.createIcons();
-
-        // Premium Toast Notification Helper
-        function showToast(message, iconName = 'bell', type = 'success') {
-            const container = document.getElementById('toastContainer');
-            if (!container) return;
-            
-            const toast = document.createElement('div');
-            toast.className = 'premium-toast';
-            toast.style.borderLeft = type === 'success' ? '4px solid #22c55e' : '4px solid #3b82f6';
-            
-            toast.innerHTML = `
-                <div class="jbl-1374 jbl-1224 jbl-538 ${type === 'success' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-blue-500/20 text-blue-400'} flex items-center justify-center flex-shrink-0">
-                    <i data-lucide="${iconName}" width="16" height="16"></i>
-                </div>
-                <span class="jbl-720 jbl-787 jbl-1397 jbl-843">${message}</span>
-            `;
-            
-            container.appendChild(toast);
-            lucide.createIcons();
-            
-            setTimeout(() => {
-                toast.classList.add('show');
-            }, 50);
-            
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    toast.remove();
-                }, 400);
-            }, 4000);
-        }
-
-        // Connect click event to the Export Data button
-        document.addEventListener('DOMContentLoaded', () => {
-            const btnExport = document.getElementById('btnExportCSV');
-            if (btnExport) {
-                btnExport.addEventListener('click', () => {
-                    showToast('Ekspor dimulai! Menyiapkan berkas CSV riwayat pengajuan Anda...', 'download', 'info');
-                });
-            }
-        });
-    </script>
-</body>
-</html>
-
+@endsection

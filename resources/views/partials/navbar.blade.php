@@ -18,10 +18,9 @@
             box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
         }
         .nav-container {
-            width: 100%;
-            max-width: 1280px;
+            max-width: 100%;
             margin: 0 auto;
-            padding: 0 24px;
+            padding: 0 40px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -238,27 +237,15 @@
 
         <!-- Actions -->
         <div class="nav-actions">
-            @if(auth()->guard('masyarakat')->check())
+            @auth
                 <a href="{{ route('masyarakat.dashboard') }}" class="btn-dashboard">
                     <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
                     Dashboard
                 </a>
-            @elseif(auth()->guard('admin')->check())
-                @if(in_array(auth()->guard('admin')->user()->role, ['cabang_dinas', 'cabang', 'petugas']))
-                    <a href="{{ route('cabang.dashboard') }}" class="btn-dashboard">
-                        <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
-                        Dashboard
-                    </a>
-                @else
-                    <a href="{{ route('admin.dashboard') }}" class="btn-dashboard">
-                        <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
-                        Dashboard
-                    </a>
-                @endif
             @else
                 <a href="{{ route('login') }}" class="btn-login">Login</a>
                 <a href="/register" class="btn-register">Registrasi</a>
-            @endif
+            @endauth
 
             <!-- Mobile Menu Button -->
             <button @click="mobileMenuOpen = !mobileMenuOpen" class="mobile-menu-btn">
@@ -307,27 +294,15 @@
         </div>
         
         <div class="mobile-actions">
-            @if(auth()->guard('masyarakat')->check())
+            @auth
                 <a href="{{ route('masyarakat.dashboard') }}" class="mobile-btn-register" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
                     <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
                     Dashboard
                 </a>
-            @elseif(auth()->guard('admin')->check())
-                @if(in_array(auth()->guard('admin')->user()->role, ['cabang_dinas', 'cabang', 'petugas']))
-                    <a href="{{ route('cabang.dashboard') }}" class="mobile-btn-register" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
-                        Dashboard
-                    </a>
-                @else
-                    <a href="{{ route('admin.dashboard') }}" class="mobile-btn-register" style="display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        <span class="material-symbols-outlined" style="font-size: 20px;">dashboard</span>
-                        Dashboard
-                    </a>
-                @endif
             @else
                 <a href="{{ route('login') }}" class="mobile-btn-login">Login</a>
                 <a href="/register" class="mobile-btn-register">Registrasi</a>
-            @endif
+            @endauth
         </div>
     </div>
 </header>

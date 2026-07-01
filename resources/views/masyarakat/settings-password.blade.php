@@ -1,209 +1,128 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengaturan Akun - SI JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#003178',
-                        primaryHover: '#00255a',
-                        accent: '#f59e0b',
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pengaturan Akun - SI JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#003178',
-                        primaryHover: '#00255a',
-                        accent: '#f59e0b',
-                    }
-                }
-            }
-        }
-    </script>
-    
-    <style>
-        body {
-            background-color: #f8fafc;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            color: #0f172a;
+﻿@extends('layouts.masyarakat')
+
+@push('styles')
+<style>
+@media (max-width: 1024px) {
+            
         }
 
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 0 0 0;
-            min-height: 100vh;
-            transition: all 0.3s ease;
-            min-width: 0;
-            display: flex; 
-            flex-direction: column;
+        .page-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #0044a8 100%);
+            border-radius: 0;
+            color: white;
+            padding: 32px 40px;
+            position: relative;
+            overflow: hidden;
+            margin: -24px -24px 24px -24px;
+            box-shadow: 0 10px 30px rgba(0, 49, 120, 0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 6px solid var(--accent, #f59e0b);
         }
 
         @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-            }
-            .page-title-section {
-                padding: 32px 24px !important;
+            .page-header {
+                flex-direction: column; text-align: center; gap: 20px;
+                margin: -16px -16px 24px -16px;
+                padding: 32px 20px;
             }
         }
 
-        .page-title-section {
-            background-color: #003178;
-            background-image: linear-gradient(rgba(0, 49, 120, 0.9), rgba(0, 49, 120, 0.9)), url('{{ asset('images/batik-tegal-premium.jpg') }}');
+        .page-header::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url('{{ asset("images/batik-tegal-premium.jpg") }}');
             background-size: cover;
-            padding: 48px 96px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            border-bottom: 4px solid #f59e0b;
+            background-position: center;
+            opacity: 0.15;
+            mix-blend-mode: overlay;
+            pointer-events: none;
         }
 
-        .page-title-section h1 { font-size: 2.25rem; font-weight: 900; color: white; margin-bottom: 8px; }
-        .page-title-section p { color: rgba(255, 255, 255, 0.85); font-size: 1rem; max-width: 600px; font-weight: 500; }
+        .header-content { position: relative; z-index: 10; }
+        .header-title { font-size: 1.8rem; font-weight: 800; margin: 0 0 8px 0; letter-spacing: -0.5px; display: flex; align-items: center; gap: 12px; color: white; }
+        @media (max-width: 1024px) { .header-title { justify-content: center; } }
+        .header-subtitle { font-size: 0.95rem; color: rgba(255,255,255,0.9); margin: 0; font-weight: 500; }
 
-        .settings-container {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 32px;
-            padding: 40px 48px;
-            max-width: 100%;
-            margin: 0 auto;
-            width: 100%;
-            box-sizing: border-box;
-        }
+        .header-actions { position: relative; z-index: 10; display: flex; gap: 12px; }
 
-        .settings-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .settings-menu-list {
-            background: white;
-            border-radius: 24px;
-            padding: 16px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .settings-menu-item {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 14px 20px;
-            border-radius: 16px;
-            text-decoration: none;
-            color: #475569;
-            font-weight: 600;
-            transition: all 0.2s ease;
-            border-right: 4px solid transparent;
-        }
-        .settings-menu-item:hover {
-            background: #f8fafc;
-            color: #003178;
-        }
-        .settings-menu-item.active {
-            background: #eff6ff;
-            color: #003178;
-            border-right-color: #003178;
-        }
-
-        .settings-menu-icon {
-            width: 36px;
-            height: 36px;
+        .btn {
+            padding: 10px 20px;
             border-radius: 10px;
-            display: flex;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.2s ease;
-        }
-        .settings-menu-item:hover .settings-menu-icon {
-            background: #003178;
-            color: white;
-        }
-        .settings-menu-item.active .settings-menu-icon {
-            background: #003178;
-            color: white;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            text-decoration: none;
         }
 
-        .settings-main {
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
+        .btn-light-outline { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; backdrop-filter: blur(5px); }
+        .btn-light-outline:hover { background: rgba(255,255,255,0.2); }
+        
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); }
 
-        .glass-card {
+        .btn-outline { background: white; border: 2px solid #e2e8f0; color: var(--text-main); padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+        .btn-outline:hover { background: #f8fafc; border-color: #cbd5e1; }
+
+        .panel-box {
             background: white;
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 20px;
+            padding: 32px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            border: 1px solid #f1f5f9;
+            margin-bottom: 24px;
         }
 
-        .settings-card-header {
+        @media (max-width: 768px) { .panel-box { padding: 24px; } }
+
+        .form-section { margin-bottom: 32px; }
+        .form-section:last-child { margin-bottom: 0; }
+        
+        .section-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
             display: flex;
             align-items: center;
-            gap: 16px;
-            margin-bottom: 32px;
-            padding-bottom: 16px;
+            gap: 10px;
+            margin: 0 0 24px 0;
+            padding-bottom: 12px;
             border-bottom: 1px solid #e2e8f0;
         }
 
-        .settings-card-header h2 {
-            font-size: 1.35rem;
-            font-weight: 800;
-            color: #0f172a;
-            margin: 0;
-        }
+        .form-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
 
-        .settings-form-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 24px;
+        .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px;}
+        .form-group:last-child { margin-bottom: 0; }
+        
+        .form-label { font-size: 0.85rem; font-weight: 700; color: var(--text-main); }
+        .form-control-wrapper { position: relative; display: flex; align-items: center; }
+        .form-control { 
+            width: 100%; 
+            padding: 12px 16px 12px 44px; 
+            border-radius: 12px; 
+            border: 2px solid #e2e8f0; 
+            background: #f8fafc; 
+            font-family: inherit; 
+            font-size: 0.95rem; 
+            outline: none; 
+            transition: all 0.2s; 
+            box-sizing: border-box;
         }
-
-        .input-group-wrapper label {
-            display: block; font-size: 0.75rem; font-weight: 800; color: #475569; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
-        }
-        .input-icon-box { position: relative; display: flex; align-items: center; }
-        .input-icon-box input {
-            width: 100%; padding: 12px 16px 12px 44px; background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 12px; font-size: 0.95rem; font-weight: 600; color: #0f172a; transition: all 0.2s; box-sizing: border-box;
-        }
-        .input-icon-box input:focus { background: white; border-color: #003178; box-shadow: 0 0 0 4px rgba(0, 49, 120, 0.1); outline: none; }
-        .input-icon-box .left-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #94a3b8; pointer-events: none; }
+        .form-control:focus { border-color: var(--primary); background: white; box-shadow: 0 0 0 4px rgba(0, 49, 120, 0.1); }
+        .form-control-wrapper .left-icon { position: absolute; left: 14px; color: #94a3b8; pointer-events: none; }
+        
         .password-toggle-btn {
             position: absolute;
             right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
             background: none;
             border: none;
             padding: 0;
@@ -215,261 +134,122 @@
             z-index: 10;
             transition: color 0.2s;
         }
-        .password-toggle-btn:hover {
-            color: #475569;
-        }
-        .password-toggle-btn svg, .password-toggle-btn i {
-            pointer-events: auto;
-            position: static;
-            transform: none;
-            color: inherit;
-        }
+        .password-toggle-btn:hover { color: #475569; }
+        
+        .form-hint { font-size: 0.8rem; color: var(--text-muted); margin-top: 4px; }
 
-        .settings-form-actions {
-            display: flex;
-            justify-content: flex-end;
-            margin-top: 32px;
-        }
+        .form-actions { display: flex; justify-content: flex-start; gap: 16px; margin-top: 32px; padding-top: 24px; border-top: 1px solid #e2e8f0; }
+        
+        .alert-success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px; font-weight: 500; }
+        .alert-error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 12px; font-weight: 500; }
 
-        .btn-primary-custom {
-            background: #003178;
-            color: white;
-            padding: 14px 28px;
-            border-radius: 12px;
-            font-weight: 700;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .btn-primary-custom:hover {
-            background: #002252;
-            transform: translateY(-2px);
-        }
+        .info-box-custom { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 12px; display: flex; gap: 16px; color: #1e3a8a; margin-top: 24px; }
+</style>
+@endpush
 
-        .info-box-custom {
-            background: #eff6ff;
-            border-left: 4px solid #3b82f6;
-            padding: 16px;
-            border-radius: 12px;
-            display: flex;
-            gap: 16px;
-            color: #1e3a8a;
-            margin-top: 24px;
-        }
-
-        @media (max-width: 1024px) {
-            .settings-container {
-                grid-template-columns: 1fr;
-                padding: 32px 24px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .glass-card {
-                padding: 24px;
-            }
-        }
-    </style>
-</head>
-<body x-data="{ sidebarOpen: false }">
-
-    <div class="dashboard-layout">
-        @include('partials.sidebar-masyarakat')
-
-        <main class="main-content">
-            <!-- Header section -->
-            <div class="page-title-section">
-                <div>
-                    <h1>Pengaturan <span style="color: var(--accent);">Akun</span></h1>
-                    <p>Kelola pengaturan kata sandi Anda.</p>
+@section('content')
+<div class="page-header">
+                <div class="header-content">
+                    <h1 class="header-title">
+                        <i data-lucide="shield-check" style="width: 32px; height: 32px; color: #fbbf24;"></i>
+                        Ubah Password
+                    </h1>
+                    <p class="header-subtitle">Kelola keamanan dan kata sandi akun Anda</p>
+                </div>
+                <div class="header-actions">
+                    <a href="{{ route('masyarakat.profile') }}" class="btn btn-light-outline">
+                        <i data-lucide="arrow-left" style="width: 18px;"></i> Kembali ke Profil
+                    </a>
                 </div>
             </div>
 
-            <div class="settings-container">
+            <div class="panel-box">
+                @if(session('success'))
+                <div class="alert-success">
+                    <i data-lucide="check-circle" style="width: 20px; flex-shrink: 0;"></i>
+                    <span>{{ session('success') }}</span>
+                </div>
+                @endif
 
-                <!-- Left Sidebar Menu -->
-                <div class="settings-sidebar">
-                    <div class="settings-menu-list">
+                @if($errors->any() && ($errors->has('current_password') || $errors->has('password')))
+                    <div class="alert-error">
+                        <i data-lucide="alert-circle" style="width: 20px; flex-shrink: 0; margin-top: 2px;"></i>
+                        <div>
+                            <div style="font-weight: 700; margin-bottom: 8px;">Gagal memperbarui password:</div>
+                            <ul style="margin: 0 0 0 20px; padding: 0; font-size: 0.9rem;">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    </div>
+                @endif
+
+                <form action="{{ route('masyarakat.settings.password.update') }}" method="POST">
+                    @csrf
+                    
+                    <div class="form-section">
+                        <h3 class="section-title"><i data-lucide="key" style="color: var(--primary);"></i> Form Ubah Password</h3>
                         
-                        <a href="{{ route('masyarakat.settings') }}" class="settings-menu-item {{ request()->routeIs('masyarakat.settings') ? 'active' : '' }}">
-                            <div class="settings-menu-icon {{ request()->routeIs('masyarakat.settings') ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600' }}">
-                                <i data-lucide="user" width="20"></i>
+                        <div class="form-grid">
+                            <!-- Password Saat Ini -->
+                            <div class="form-group">
+                                <label class="form-label">Password Saat Ini *</label>
+                                <div class="form-control-wrapper">
+                                    <input type="password" name="current_password" id="current_password" placeholder="Masukkan password lama" class="form-control" required style="padding-right: 44px;">
+                                    <i data-lucide="key-round" class="left-icon" width="18"></i>
+                                    <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('current_password', this)">
+                                        <i data-lucide="eye" class="eye-open-icon" width="18"></i>
+                                        <i data-lucide="eye-off" class="eye-closed-icon" width="18" style="display: none;"></i>
+                                    </button>
+                                </div>
+                                @error('current_password')<div class="form-hint" style="color: #ef4444;">{{ $message }}</div>@enderror
                             </div>
-                            <div>
-                                <h3 style="margin:0; font-size: 0.95rem; font-weight: 700;">Informasi Akun</h3>
-                                <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #64748b;">Data diri dan kontak</p>
-                            </div>
-                        </a>
 
-                        <a href="{{ route('masyarakat.settings.security') }}" class="settings-menu-item {{ request()->routeIs('masyarakat.settings.security') ? 'active' : '' }}">
-                            <div class="settings-menu-icon {{ request()->routeIs('masyarakat.settings.security') ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600' }}">
-                                <i data-lucide="shield" width="20"></i>
+                            <!-- Password Baru -->
+                            <div class="form-group">
+                                <label class="form-label">Password Baru *</label>
+                                <div class="form-control-wrapper">
+                                    <input type="password" name="password" id="password" placeholder="Masukkan password baru" class="form-control" required style="padding-right: 44px;">
+                                    <i data-lucide="lock" class="left-icon" width="18"></i>
+                                    <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('password', this)">
+                                        <i data-lucide="eye" class="eye-open-icon" width="18"></i>
+                                        <i data-lucide="eye-off" class="eye-closed-icon" width="18" style="display: none;"></i>
+                                    </button>
+                                </div>
+                                @error('password')<div class="form-hint" style="color: #ef4444;">{{ $message }}</div>@enderror
                             </div>
-                            <div>
-                                <h3 style="margin:0; font-size: 0.95rem; font-weight: 700;">Keamanan & Sesi</h3>
-                                <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #64748b;">Status akun dan sesi aktif</p>
-                            </div>
-                        </a>
 
-                        <a href="{{ route('masyarakat.settings.password') }}" class="settings-menu-item {{ request()->routeIs('masyarakat.settings.password') ? 'active' : '' }}">
-                            <div class="settings-menu-icon {{ request()->routeIs('masyarakat.settings.password') ? 'bg-blue-600 text-white' : 'bg-blue-50 text-blue-600' }}">
-                                <i data-lucide="key" width="20"></i>
+                            <!-- Konfirmasi Password Baru -->
+                            <div class="form-group">
+                                <label class="form-label">Konfirmasi Password Baru *</label>
+                                <div class="form-control-wrapper">
+                                    <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Konfirmasi password baru" class="form-control" required style="padding-right: 44px;">
+                                    <i data-lucide="check-circle" class="left-icon" width="18"></i>
+                                    <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('password_confirmation', this)">
+                                        <i data-lucide="eye" class="eye-open-icon" width="18"></i>
+                                        <i data-lucide="eye-off" class="eye-closed-icon" width="18" style="display: none;"></i>
+                                    </button>
+                                </div>
                             </div>
-                            <div>
-                                <h3 style="margin:0; font-size: 0.95rem; font-weight: 700;">Ubah Password</h3>
-                                <p style="margin: 2px 0 0 0; font-size: 0.75rem; color: #64748b;">Perbarui kata sandi Anda</p>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Right Content Area -->
-                <div class="settings-main">
-                    @if(session('success'))
-                        <div style="background: #ecfdf5; border-left: 4px solid #10b981; padding: 16px; border-radius: 12px; display: flex; align-items: center; gap: 12px; color: #065f46; font-weight: 600;">
-                            <i data-lucide="check-circle" width="20"></i>
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    <!-- Keamanan Akun / Ubah Password -->
-                    <div class="glass-card">
-                        <div class="settings-card-header">
-                            <i data-lucide="shield-check" width="22" style="color: #003178;"></i>
-                            <h2>Ubah Password</h2>
                         </div>
 
-                        <form action="{{ route('masyarakat.settings.password.update') }}" method="POST">
-                            @csrf
-                            <div class="settings-form-grid">
-                                <!-- Password Saat Ini -->
-                                <div class="input-group-wrapper">
-                                    <label>Password Lama</label>
-                                    <div class="input-icon-box">
-                                        <input type="password" name="current_password" id="current_password" placeholder="Masukkan password lama" required style="padding-right: 44px;">
-                                        <i data-lucide="key-round" class="left-icon" width="18"></i>
-                                        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('current_password', this)">
-                                            <i data-lucide="eye" class="eye-open-icon" width="18"></i>
-                                            <i data-lucide="eye-off" class="eye-closed-icon" width="18" style="display: none;"></i>
-                                        </button>
-                                    </div>
-                                    @error('current_password')
-                                        <span style="color: #ef4444; font-size: 0.8rem; margin-top: 4px; display:block;">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <!-- Password Baru -->
-                                <div class="input-group-wrapper">
-                                    <label>Password Baru</label>
-                                    <div class="input-icon-box">
-                                        <input type="password" name="password" id="password" placeholder="Masukkan password baru" required style="padding-right: 44px;">
-                                        <i data-lucide="lock" class="left-icon" width="18"></i>
-                                        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('password', this)">
-                                            <i data-lucide="eye" class="eye-open-icon" width="18"></i>
-                                            <i data-lucide="eye-off" class="eye-closed-icon" width="18" style="display: none;"></i>
-                                        </button>
-                                    </div>
-                                    @error('password')
-                                        <span style="color: #ef4444; font-size: 0.8rem; margin-top: 4px; display:block;">{{ $message }}</span>
-                                    @enderror
-                                </div>
-
-                                <!-- Konfirmasi Password Baru -->
-                                <div class="input-group-wrapper">
-                                    <label>Konfirmasi Password Baru</label>
-                                    <div class="input-icon-box">
-                                        <input type="password" name="password_confirmation" id="password_confirmation" placeholder="Konfirmasi password baru" required style="padding-right: 44px;">
-                                        <i data-lucide="check-circle" class="left-icon" width="18"></i>
-                                        <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('password_confirmation', this)">
-                                            <i data-lucide="eye" class="eye-open-icon" width="18"></i>
-                                            <i data-lucide="eye-off" class="eye-closed-icon" width="18" style="display: none;"></i>
-                                        </button>
-                                    </div>
-                                </div>
+                        <div class="info-box-custom">
+                            <i data-lucide="info" width="20" style="flex-shrink:0;"></i>
+                            <div>
+                                <p style="margin:0; font-weight:700; font-size: 0.95rem;">Tips Password Aman</p>
+                                <p style="margin:4px 0 0 0; font-size: 0.85rem; color: #475569; line-height: 1.5;">Gunakan minimal 8 karakter dengan kombinasi huruf besar, huruf kecil, angka, dan simbol untuk keamanan maksimal.</p>
                             </div>
-
-                            <div class="info-box-custom">
-                                <i data-lucide="info" width="18" style="flex-shrink:0;"></i>
-                                <div>
-                                    <p style="margin:0; font-weight:700; font-size: 0.9rem;">Tips Password Aman</p>
-                                    <p style="margin:4px 0 0 0; font-size: 0.8rem; color: #475569; line-height: 1.4;">Gunakan minimal 8 karakter dengan kombinasi huruf besar, huruf kecil, angka, dan simbol.</p>
-                                </div>
-                            </div>
-
-                            <div class="settings-form-actions">
-                                <button type="submit" class="btn-primary-custom">
-                                    <i data-lucide="key" width="16"></i>
-                                    Simpan Password Baru
-                                </button>
-                            </div>
-                        </form>
+                        </div>
                     </div>
-                </div>
 
+                    <!-- Actions -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">
+                            <i data-lucide="save" style="width: 18px;"></i> Simpan Password Baru
+                        </button>
+                        <a href="{{ route('masyarakat.profile') }}" class="btn-outline">Batal</a>
+                    </div>
+                </form>
             </div>
-            <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Toast Container -->
-    <div id="toastContainer" style="position: fixed; top: 24px; right: 24px; z-index: 9999; display: flex; flex-direction: column; gap: 12px;"></div>
-
-    <script>
-        lucide.createIcons();
-
-        // Premium Toast Notification
-        function showToast(message, iconName = 'bell', type = 'success') {
-            const container = document.getElementById('toastContainer');
-            if (!container) return;
-            
-            const toast = document.createElement('div');
-            toast.className = `p-4 rounded-xl shadow-lg flex items-center gap-3 transform transition-all duration-300 translate-y-[-20px] opacity-0 ${type === 'success' ? 'bg-white border-l-4 border-emerald-500' : 'bg-white border-l-4 border-amber-500'}`;
-            
-            toast.innerHTML = `
-                <div class="${type === 'success' ? 'bg-emerald-50 text-emerald-500' : 'bg-amber-50 text-amber-500'} flex items-center justify-center shrink-0" style="width: 32px; height: 32px; border-radius: 8px;">
-                    <i data-lucide="${iconName}" width="16"></i>
-                </div>
-                <span style="font-size: 0.9rem; font-weight: 600; color: #0f172a;">${message}</span>
-            `;
-            
-            container.appendChild(toast);
-            lucide.createIcons();
-            
-            setTimeout(() => {
-                toast.classList.remove('translate-y-[-20px]', 'opacity-0');
-            }, 50);
-            
-            setTimeout(() => {
-                toast.classList.add('translate-y-[-20px]', 'opacity-0');
-                setTimeout(() => toast.remove(), 300);
-            }, 3500);
-        }
-
-        function togglePasswordVisibility(inputId, btn) {
-            const input = document.getElementById(inputId);
-            const eyeOpen = btn.querySelector('.eye-open-icon');
-            const eyeClosed = btn.querySelector('.eye-closed-icon');
-            
-            if (input.type === 'password') {
-                input.type = 'text';
-                eyeOpen.style.display = 'none';
-                eyeClosed.style.display = 'block';
-            } else {
-                input.type = 'password';
-                eyeOpen.style.display = 'block';
-                eyeClosed.style.display = 'none';
-            }
-        }
-    </script>
-</body>
-</html>
+@endsection

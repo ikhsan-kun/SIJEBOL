@@ -18,8 +18,6 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         $this->call([
             \Database\Seeders\CabangDinasUserSeeder::class,
-            \Database\Seeders\KecamatanUserSeeder::class,
-            \Database\Seeders\SchoolSeeder::class,
         ]);
 
         User::updateOrCreate([
@@ -30,5 +28,7 @@ class DatabaseSeeder extends Seeder
             'password' => \Illuminate\Support\Facades\Hash::make('admin123'),
             'role' => 'admin',
         ]);
+
+// Test user placeholder removed – no default user needed
     }
 }

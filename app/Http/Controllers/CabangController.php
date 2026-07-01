@@ -191,7 +191,7 @@ class CabangController extends Controller
                   ->orWhere('npsn', 'like', "%{$search}%")
                   ->orWhere('kecamatan', 'like', "%{$search}%");
         }
-        $schools = $query->get();
+        $schools = $query->paginate(15)->withQueryString();
 
         foreach($schools as $s) {
             $s->total_pengajuan = PengajuanLayanan::where(function($q) use($s) {
@@ -809,10 +809,19 @@ class CabangController extends Controller
             'jam_mulai' => 'required',
             'jam_selesai' => 'required',
             'jenis_layanan' => 'required|array',
-            'deskripsi' => 'nullable|string'
+            'deskripsi' => 'nullable|string',
+            'foto' => 'nullable|image|mimes:jpg,jpeg,png|max:2048'
         ]);
 
-        $data = $request->except('jenis_layanan');
+        $data = $request->except(['jenis_layanan', 'foto']);
+        
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('uploads/jadwal'), $filename);
+            $data['foto'] = 'uploads/jadwal/' . $filename;
+        }
+
         $data['jenis_layanan'] = implode(', ', $request->jenis_layanan);
         $data['petugas'] = 'Belum Ditentukan';
         $data['kuota'] = 100;
@@ -825,7 +834,73 @@ class CabangController extends Controller
 
     public function profil()
     {
-        $user = auth('admin')->user() ?? auth()->user();
+        $user = auth()->user();
         return view('cabang.profil', compact('user'));
+    }
+
+    public function profilEdit()
+    {
+        $user = auth()->user();
+        return view('cabang.profil-edit', compact('user'));
+    }
+
+    public function profilUpdate(Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'name'     => 'required|string|max:255',
+            'email'    => 'required|email|ends_with:@gmail.com|max:255',
+            'phone'    => 'nullable|string|max:20',
+            'jabatan'  => 'nullable|string|max:100',
+            'alamat'   => 'nullable|string|max:500',
+            'foto_profil' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        ], [
+            'email.ends_with' => 'Email harus menggunakan @gmail.com',
+        ]);
+
+        $data = $request->only(['name', 'email', 'phone', 'jabatan', 'alamat', 'username']);
+
+        if ($request->hasFile('foto_profil')) {
+            // Hapus foto lama jika ada
+            if ($user->foto_profil && \Illuminate\Support\Facades\Storage::disk('public')->exists($user->foto_profil)) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($user->foto_profil);
+            }
+            $data['foto_profil'] = $request->file('foto_profil')->store('profil', 'public');
+        }
+
+        $user->update($data);
+
+        return redirect()->route('cabang.profil')->with('success', 'Profil berhasil diperbarui!');
+    }
+
+    public function profilPassword()
+    {
+        $user = auth()->user();
+        return view('cabang.profil-password', compact('user'));
+    }
+
+    public function profilPasswordUpdate(\Illuminate\Http\Request $request)
+    {
+        $user = auth()->user();
+
+        $request->validate([
+            'current_password' => 'required',
+            'new_password' => 'required|min:6|confirmed',
+        ], [
+            'current_password.required' => 'Password lama wajib diisi',
+            'new_password.required' => 'Password baru wajib diisi',
+            'new_password.min' => 'Password minimal 6 karakter',
+            'new_password.confirmed' => 'Konfirmasi password tidak cocok',
+        ]);
+
+        if (!\Illuminate\Support\Facades\Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'Password lama tidak cocok']);
+        }
+
+        $user->password = \Illuminate\Support\Facades\Hash::make($request->new_password);
+        $user->save();
+
+        return redirect()->route('cabang.profil')->with('success', 'Password berhasil diubah!');
     }
 }

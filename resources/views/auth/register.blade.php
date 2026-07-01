@@ -1,9 +1,5 @@
 @php
-    try {
-        $schools = \App\Models\School::orderBy('nama_sekolah')->pluck('nama_sekolah');
-    } catch (\Exception $e) {
-        $schools = collect([]);
-    }
+    $schools = \App\Models\School::orderBy('nama_sekolah')->pluck('nama_sekolah');
 @endphp
 <!DOCTYPE html>
 <html lang="id">
@@ -48,8 +44,8 @@
             margin-bottom: 20px;
         }
         .brand-logo-circle {
-            width: 68px;
-            height: 68px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             border: 2px solid #c3d3f0;
             background: white;
@@ -60,7 +56,7 @@
             margin-bottom: 10px;
             box-shadow: 0 4px 16px rgba(0,49,120,0.12);
         }
-        .brand-logo-circle img { width: 50px; height: 50px; object-fit: contain; }
+        .brand-logo-circle img { width: 70px; height: 70px; object-fit: contain; }
         .brand-name { font-size: 1.2rem; font-weight: 800; color: #0f172a; }
         .brand-sub {
             font-size: 0.68rem;
@@ -270,15 +266,6 @@
             margin-bottom: 20px;
             line-height: 1.5;
         }
-        @media (max-width: 480px) {
-            .field-row {
-                grid-template-columns: 1fr !important;
-                gap: 12px !important;
-            }
-            .page-wrap {
-                padding: 24px 16px !important;
-            }
-        }
     </style>
 </head>
 <body>
@@ -302,7 +289,7 @@
         <div class="alert-err">{{ $errors->first() }}</div>
     @endif
 
-    <form action="{{ route('register') }}" method="POST" id="regForm">
+    <form action="{{ route('register') }}" method="POST" id="regForm" autocomplete="off">
         @csrf
 
         {{-- ===== STEP 1 ===== --}}
@@ -323,7 +310,7 @@
                 <label class="field-label">Nomor Induk Kependudukan (NIK)</label>
                 <div class="input-wrap">
                     <span class="input-icon-box"><i data-lucide="credit-card"></i></span>
-                    <input class="field-input" type="text" name="nik" value="{{ old('nik') }}" placeholder="16 digit angka NIK" maxlength="16" required oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                    <input class="field-input" type="text" name="nik" value="{{ old('nik') }}" placeholder="16 digit angka NIK" minlength="16" maxlength="16" required oninput="this.value=this.value.replace(/[^0-9]/g,'')">
                 </div>
                 @error('nik')<div class="ferr">{{ $message }}</div>@enderror
             </div>
@@ -334,7 +321,7 @@
                     <label class="field-label">Email Address</label>
                     <div class="input-wrap">
                         <span class="input-icon-box"><i data-lucide="mail"></i></span>
-                        <input class="field-input" type="email" name="email" value="{{ old('email') }}" placeholder="contoh@gmail.com" required>
+                        <input class="field-input" type="email" name="email" value="{{ old('email') }}" placeholder="contoh@gmail.com" required autocomplete="off">
                     </div>
                     @error('email')<div class="ferr" style="font-size:0.7rem;">{{ $message }}</div>@enderror
                 </div>
@@ -342,7 +329,7 @@
                     <label class="field-label">Phone Number</label>
                     <div class="input-wrap">
                         <span class="input-icon-box"><i data-lucide="smartphone"></i></span>
-                        <input class="field-input" type="tel" name="phone" value="{{ old('phone') }}" placeholder="08xxxxxxxxxx" required oninput="this.value=this.value.replace(/[^0-9]/g,'')">
+                        <input class="field-input" type="tel" name="phone" value="{{ old('phone') }}" placeholder="08xxxxxxxxxx" required oninput="this.value=this.value.replace(/[^0-9]/g,'')" minlength="10" maxlength="13">
                     </div>
                     @error('phone')<div class="ferr" style="font-size:0.7rem;">{{ $message }}</div>@enderror
                 </div>
@@ -393,7 +380,7 @@
                     <label class="field-label">Password</label>
                     <div class="input-wrap">
                         <span class="input-icon-box"><i data-lucide="lock"></i></span>
-                        <input class="field-input" type="password" name="password" id="pw1" placeholder="Password" required minlength="4">
+                        <input class="field-input" type="password" name="password" id="pw1" placeholder="Password" required minlength="4" autocomplete="new-password">
                         <button type="button" class="toggle-btn" onclick="togglePw('pw1',this)"><i data-lucide="eye"></i></button>
                     </div>
                     @error('password')<div class="ferr" style="font-size:0.7rem;">{{ $message }}</div>@enderror
@@ -402,7 +389,7 @@
                     <label class="field-label">Konfirmasi</label>
                     <div class="input-wrap">
                         <span class="input-icon-box"><i data-lucide="shield-check"></i></span>
-                        <input class="field-input" type="password" name="password_confirmation" id="pw2" placeholder="Ulangi" required minlength="4">
+                        <input class="field-input" type="password" name="password_confirmation" id="pw2" placeholder="Ulangi" required minlength="4" autocomplete="new-password">
                         <button type="button" class="toggle-btn" onclick="togglePw('pw2',this)"><i data-lucide="eye"></i></button>
                     </div>
                 </div>
@@ -423,13 +410,6 @@
 
         <div class="login-link">
             Sudah memiliki akun? <a href="{{ route('login') }}">Masuk di sini</a>
-        </div>
-        
-        <div style="text-align: center; margin-top: 20px; border-top: 1px solid #f1f5f9; padding-top: 16px;">
-            <a href="{{ route('home') }}" style="color: #64748b; font-size: 0.85rem; font-weight: 600; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.2s;" onmouseover="this.style.color='#003178'" onmouseout="this.style.color='#64748b'">
-                <i data-lucide="arrow-left" style="width: 16px; height: 16px;"></i>
-                Kembali ke Beranda
-            </a>
         </div>
     </form>
 </div>

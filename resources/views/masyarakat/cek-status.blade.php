@@ -1,22 +1,9 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cek Status - JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <style>
-        :root {
-            --primary: #003178;
-            --primary-dark: #001e50;
-            --accent: #f59e0b;
-        }
+@extends('layouts.masyarakat')
 
-        @media print {
-            body { background: white !important; padding: 0 !important; margin: 0 !important; }
+@push('styles')
+<style>
+@media print {
+            
             .sidebar-desktop, .sidebar-mobile, .hero-section, .pagination-premium-v2, .history-card, button, a:not(.btn-search) { display: none !important; }
             .tracking-container { margin-left: 0 !important; padding: 20px !important; background: none !important; }
             .tracking-container::before { display: none !important; }
@@ -25,17 +12,9 @@
             * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
         }
 
-        body {
-            background-color: #f1f5f9;
-            font-family: 'Inter', sans-serif;
-            color: #1e293b;
-            min-height: 100vh;
-        }
+        
 
-        .dashboard-layout {
-            display: flex;
-            min-height: 100vh;
-        }
+        
 
         .tracking-container {
             flex-grow: 1;
@@ -173,9 +152,9 @@
         .timeline-box::before {
             content: '';
             position: absolute;
-            top: 24px;
-            left: 50px;
-            right: 50px;
+            top: 26px;
+            left: 70px;
+            right: 70px;
             height: 2px;
             background: #f1f5f9;
             z-index: 1;
@@ -370,10 +349,22 @@
                 gap: 0; 
                 align-items: flex-start; 
                 margin: 40px 0; 
-                padding-left: 20px;
-                border-left: 2px dashed #e2e8f0;
+                padding-left: 0;
+                position: relative;
             }
-            .timeline-box::before { display: none; }
+            .timeline-box::before { 
+                display: block; 
+                content: '';
+                position: absolute;
+                top: 20px;
+                bottom: 50px;
+                left: 20px;
+                width: 2px;
+                height: auto;
+                background: #f1f5f9;
+                right: auto;
+                z-index: 1;
+            }
             .t-step { 
                 width: 100%; 
                 display: flex; 
@@ -561,15 +552,11 @@
                 padding-top: 24px;
             }
         }
-    </style>
-</head>
-<body x-data="{ sidebarOpen: false }">
+</style>
+@endpush
 
-    <div class="dashboard-layout">
-        @include('partials.sidebar-masyarakat')
-
-        <div class="tracking-container">
-            @if($search)
+@section('content')
+@if($search)
                 <a href="{{ route('masyarakat.cek-status') }}" style="display: inline-flex; align-items: center; gap: 8px; color: #64748b; font-weight: 700; font-size: 0.85rem; margin-bottom: 24px; text-decoration: none;">
                     <i data-lucide="arrow-left" width="16" height="16"></i> Kembali ke Riwayat
                 </a>
@@ -927,152 +914,4 @@
                     </div>
                 </div>
             @endif
-            <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b; position: relative; z-index: 10;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal Guide -->
-    <div id="guideModal" class="modal-overlay" onclick="if(event.target === this) toggleModal(false)">
-        <div class="modal-content">
-            <h3 style="font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-bottom: 16px;">Panduan Pengambilan</h3>
-            <div style="display: flex; flex-direction: column; gap: 20px;">
-                <div style="display: flex; gap: 16px;">
-                    <div style="width: 24px; height: 24px; background: var(--accent); color: var(--primary-dark); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem;">1</div>
-                    <p style="font-size: 0.9rem; color: #1e293b; font-weight: 500;">Pastikan status sudah <strong>SELESAI</strong> atau Siap Ambil.</p>
-                </div>
-                <div style="display: flex; gap: 16px;">
-                    <div style="width: 24px; height: 24px; background: var(--accent); color: var(--primary-dark); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem;">2</div>
-                    <p style="font-size: 0.9rem; color: #1e293b; font-weight: 500;">Bawa Bukti PDF atau tunjukkan Nomor Tiket ke petugas di lokasi.</p>
-                </div>
-                <div style="display: flex; gap: 16px;">
-                    <div style="width: 24px; height: 24px; background: var(--accent); color: var(--primary-dark); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.8rem;">3</div>
-                    <p style="font-size: 0.9rem; color: #1e293b; font-weight: 500;">Serahkan dokumen persyaratan (jika ada) kepada petugas verifikasi.</p>
-                </div>
-            </div>
-            <button onclick="toggleModal(false)" style="width: 100%; margin-top: 32px; padding: 14px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 800; cursor: pointer;">Saya Mengerti</button>
-        </div>
-    </div>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script>
-        lucide.createIcons();
-
-        function toggleModal(show) {
-            document.getElementById('guideModal').classList.toggle('active', show);
-        }
-
-        function unduhBuktiPDF() {
-            const btn = document.getElementById('btn-unduh-pdf');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = '<i data-lucide="loader" width="18" height="18" class="spin"></i> Mengunduh...';
-            btn.disabled = true;
-            lucide.createIcons();
-
-            // 1. Tampilkan overlay loading (tanpa menutupi elemen yang akan di-capture)
-            const overlay = document.createElement('div');
-            overlay.style.position = 'fixed';
-            overlay.style.inset = '0';
-            overlay.style.backgroundColor = 'rgba(255,255,255,0.8)';
-            overlay.style.zIndex = '10000';
-            overlay.style.display = 'flex';
-            overlay.style.flexDirection = 'column';
-            overlay.style.alignItems = 'center';
-            overlay.style.justifyContent = 'center';
-            overlay.innerHTML = `
-                <style>@keyframes spin-fast { to { transform: rotate(360deg); } }</style>
-                <div style="width: 48px; height: 48px; border: 4px solid #e2e8f0; border-top-color: var(--primary); border-radius: 50%; animation: spin-fast 0.8s linear infinite;"></div>
-                <h2 style="margin-top: 20px; color: var(--primary); font-weight: 800; font-size: 1.1rem;">Mempersiapkan PDF…</h2>
-            `;
-            document.body.appendChild(overlay);
-
-            // 2. Persiapan elemen asli
-            const element = document.getElementById('detail-pengajuan');
-            const container = document.querySelector('.tracking-container');
-            const actions = element.querySelector('div[style*="margin-top: 48px;"]');
-            const originalActionsDisplay = actions ? actions.style.display : '';
-            if (actions) actions.style.display = 'none';
-
-            // Simpan state asli
-            const originalWidth = element.style.width;
-            const originalMaxWidth = element.style.maxWidth;
-            const originalMargin = element.style.margin;
-            const originalContainerMargin = container ? container.style.marginLeft : '';
-            const originalContainerTransition = container ? container.style.transition : '';
-
-            // Hilangkan margin sidebar (crop fix) & lebar agar tidak wrap
-            if (container) { container.style.transition = 'none'; container.style.marginLeft = '0'; }
-            element.style.width = '1000px';
-            element.style.maxWidth = '1000px';
-            element.style.margin = '0 auto';
-
-            // Simpan posisi scroll dan scroll ke atas
-            const scrollPos = window.scrollY;
-            window.scrollTo(0, 0);
-
-            // 3. Hapus overlay sebelum capture supaya tidak menutupi elemen
-            setTimeout(() => {
-                document.body.removeChild(overlay);
-
-                const opt = {
-                    margin: 0,
-                    filename: 'Bukti_Jebol_{{ $permohonan->nomor_tiket ?? "000" }}.pdf',
-                    image: { type: 'jpeg', quality: 1 },
-                    html2canvas: { scale: 2, useCORS: true, logging: true },
-                    jsPDF: { unit: 'in', format: 'a4', orientation: 'landscape' }
-                };
-
-                html2pdf().set(opt).from(element).save().then(() => {
-                    // 4. Kembalikan semua ke semula
-                    if (container) { container.style.marginLeft = originalContainerMargin; container.style.transition = originalContainerTransition; }
-                    element.style.width = originalWidth;
-                    element.style.maxWidth = originalMaxWidth;
-                    element.style.margin = originalMargin;
-                    if (actions) actions.style.display = originalActionsDisplay;
-                    window.scrollTo(0, scrollPos);
-
-                    btn.innerHTML = originalText;
-                    btn.disabled = false;
-                    lucide.createIcons();
-                });
-            }, 300);
-        }
-    </script>
-
-    @if($permohonan && $permohonan->status == 'selesai')
-    <!-- Auto Popup Penilaian Layanan -->
-    <div id="kepuasanModal" class="modal-overlay" style="z-index: 2100;" onclick="if(event.target === this) document.getElementById('kepuasanModal').classList.remove('active')">
-        <div class="modal-content" style="text-align: center; padding: 48px;">
-            <div style="width: 80px; height: 80px; background: #fffbeb; color: #f59e0b; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px;">
-                <i data-lucide="star" width="40" height="40" fill="currentColor"></i>
-            </div>
-            <h3 style="font-size: 1.8rem; font-weight: 900; color: #003178; margin-bottom: 16px;">Layanan Telah Selesai!</h3>
-            <p style="color: #64748b; font-size: 1.05rem; line-height: 1.6; margin-bottom: 32px;">Dokumen Anda telah selesai diproses. Bantu kami meningkatkan kualitas layanan dengan mengisi form Penilaian Layanan.</p>
-            <div style="display: flex; gap: 16px; justify-content: center;">
-                <button onclick="document.getElementById('kepuasanModal').classList.remove('active')" style="padding: 14px 28px; border-radius: 16px; border: 2px solid #e2e8f0; background: white; color: #64748b; font-weight: 800; cursor: pointer; transition: all 0.3s;">Nanti Saja</button>
-                <a href="{{ route('masyarakat.kepuasan') }}?layanan={{ urlencode($permohonan->jenis_layanan) }}" style="padding: 14px 28px; border-radius: 16px; background: #f59e0b; color: white; border: none; font-weight: 800; text-decoration: none; cursor: pointer; box-shadow: 0 10px 20px rgba(245, 158, 11, 0.3); transition: all 0.3s;">Isi Penilaian Sekarang</a>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Check if already prompted to avoid annoyance every single time they refresh
-            if (!sessionStorage.getItem('kepuasan_prompted_{{ $permohonan->nomor_tiket }}')) {
-                setTimeout(() => {
-                    document.getElementById('kepuasanModal').classList.add('active');
-                    sessionStorage.setItem('kepuasan_prompted_{{ $permohonan->nomor_tiket }}', 'true');
-                }, 1000);
-            }
-        });
-    </script>
-    @endif
-</body>
-</html>
-
+@endsection

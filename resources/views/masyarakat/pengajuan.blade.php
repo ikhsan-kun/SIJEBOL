@@ -1,57 +1,21 @@
-<!DOCTYPE html>
-<html class="light" lang="id">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Form Pengajuan JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/custom-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#003178",
-                        "primary-light": "#e0eaff",
-                        "background": "#f8faff",
-                        "success": "#10b981",
-                        "outline": "#94a3b8",
-                        "outline-variant": "#e2e8f0"
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; line-height: 1; }
-        body { font-family: 'Inter', sans-serif; background: #001f5b; }
+@extends('layouts.masyarakat')
+
+@push('styles')
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; display: inline-block; line-height: 1; }
+        
         .transition-soft { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
         .form-card { box-shadow: 0 4px 20px -2px rgba(0,0,0,0.05); }
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 0 0 0;
-            background: #001f5b;
-            min-width: 0;
-            transition: all 0.3s ease;
-            display: flex; flex-direction: column; min-height: 100vh;
-        }
+        
 
         /* Form Modern Styles */
         .form-card-modern {
             background: white;
-            border-radius: 0;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
             border-top: 4px solid #003178;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 40px;
-            margin: 0;
+            padding: 32px;
+            margin-bottom: 24px;
         }
 
         .form-section-header {
@@ -154,18 +118,30 @@
         .radio-label input[type="radio"]:checked + span {
             color: #003178;
         }
-    </style>
-</head>
-<body class="bg-background jbl-386 jbl-342 jbl-461 jbl-1293 jbl-1541 jbl-680 jbl-1424 jbl-415"
-      x-data="jebolForm()">
 
-    <div class="dashboard-layout jbl-1293">
-        @include('partials.sidebar-masyarakat')
+        .success-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(15,23,42,0.7);
+            z-index: 9999;
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-left: 260px;
+        }
+        @media (max-width: 1024px) {
+            .success-modal-overlay {
+                padding-left: 0;
+            }
+        }
+</style>
+@endpush
 
-        <main class="main-content">
-
-            <!-- Header Dinamis -->
-            <div class="transition-soft" style="position: relative; padding: 32px 40px; background-color: #003178; border-bottom: 4px solid #f59e0b; overflow: hidden; color: white;">
+@section('content')
+<div x-data="formJebol()">
+<!-- Header Dinamis -->
+            <div class="transition-soft" style="position: relative; margin: -24px -24px 24px -24px; padding: 32px 40px; background-color: #003178; border-bottom: 4px solid #f59e0b; overflow: hidden; color: white;">
                 <!-- Background Overlay -->
                 <div style="position: absolute; inset: 0; background-image: url('{{ asset('images/batik-tegal-premium.jpg') }}'); background-size: 400px; opacity: 0.08; z-index: 0;"></div>
                 
@@ -184,7 +160,7 @@
             </div>
 
             <!-- Form Start -->
-            <form id="form-jebol" style="display: block; width: 100%;" @submit.prevent="submitForm" enctype="multipart/form-data">
+            <form id="form-jebol" action="{{ route('pengajuan.store') }}" method="POST" style="display: block; width: 100%;" @submit.prevent="submitForm" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="jenis_layanan" :value="formData.jenis_layanan">
 
@@ -207,7 +183,7 @@
                             </div>
                             <div>
                                 <label class="form-label">NIK Petugas <span>*</span></label>
-                                <input type="number" name="nik" value="{{ auth()->user()->nik }}" required class="form-input" placeholder="Masukkan 16 digit NIK petugas">
+                                <input type="text" name="nik" value="{{ auth()->user()->nik }}" required class="form-input" placeholder="Masukkan 16 digit NIK petugas" minlength="16" maxlength="16" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
                             </div>
                             <div>
                                 <label class="form-label">Nomor WhatsApp Petugas (PIC) <span>*</span></label>
@@ -235,7 +211,7 @@
                             </div>
                             <div>
                                 <label class="form-label">NIK <span>*</span></label>
-                                <input type="number" name="nik" x-model="formData.nik" :required="formData.jenis_layanan !== 'KIA'" class="form-input" placeholder="Masukkan 16 digit NIK">
+                                <input type="text" name="nik" x-model="formData.nik" :required="formData.jenis_layanan !== 'KIA'" class="form-input" placeholder="Masukkan 16 digit NIK" minlength="16" maxlength="16" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
                             </div>
                             <div x-show="formData.jenis_layanan === 'KTP-el'">
                                 <label class="form-label">Nomor KK <span>*</span></label>
@@ -275,7 +251,7 @@
                             </div>
                             <div>
                                 <label class="form-label">NIK Anak (jika ada)</label>
-                                <input type="number" name="nik_anak" x-model="formData.nik_anak" class="form-input" placeholder="Masukkan NIK anak (jika ada)">
+                                <input type="text" name="nik_anak" x-model="formData.nik_anak" class="form-input" placeholder="Masukkan NIK anak (jika ada)" minlength="16" maxlength="16" oninput="this.value=this.value.replace(/[^0-9]/g,'')">
                             </div>
                             <div>
                                 <label class="form-label">Tempat Lahir <span>*</span></label>
@@ -341,10 +317,10 @@
                 @endif
 
                 <!-- ROW: 2 & 3 side by side -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 0;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px;">
 
                     <!-- 2. DATA WILAYAH -->
-                    <div class="form-card-modern transition-soft" style="margin-bottom: 0;">
+                    <div class="form-card-modern transition-soft">
                         <div class="form-section-header">
                             <span class="form-section-badge" x-text="formData.jenis_layanan === 'KIA' ? '3' : '2'"></span>
                             <h3 class="form-section-title">Data Wilayah</h3>
@@ -387,7 +363,7 @@
                     @if(auth()->user() && auth()->user()->tipe_pendaftar === 'sekolah')
                         <input type="hidden" name="jenis_pengajuan" value="Sekolah">
                     @else
-                        <div class="form-card-modern transition-soft" style="margin-bottom: 0;">
+                        <div class="form-card-modern transition-soft">
                             <div class="form-section-header">
                                 <span class="form-section-badge" x-text="formData.jenis_layanan === 'KIA' ? '4' : '3'"></span>
                                 <h3 class="form-section-title" x-text="'Jenis Pengajuan ' + formData.jenis_layanan"></h3>
@@ -407,10 +383,10 @@
                 </div>
 
                 <!-- ROW: 4 & 5 side by side -->
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 0;">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 24px;">
 
                     <!-- 4. LAMPIRAN DOKUMEN -->
-                    <div class="form-card-modern transition-soft" style="margin-bottom: 0;">
+                    <div class="form-card-modern transition-soft">
                         <div class="form-section-header">
                             <span class="form-section-badge" x-text="formData.jenis_layanan === 'KIA' ? '5' : '4'"></span>
                             <h3 class="form-section-title">Lampiran Dokumen</h3>
@@ -456,7 +432,7 @@
                     </div>
 
                     <!-- 5. KETERANGAN TAMBAHAN -->
-                    <div class="form-card-modern transition-soft" style="margin-bottom: 0;">
+                    <div class="form-card-modern transition-soft">
                         <div class="form-section-header">
                             <span class="form-section-badge" x-text="formData.jenis_layanan === 'KIA' ? '6' : '5'"></span>
                             <h3 class="form-section-title">Keterangan Tambahan</h3>
@@ -484,174 +460,156 @@
 
             </form>
 
-            <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat &amp; Ketentuan</a>
+            <!-- Success Ticket Modal -->
+            <div x-show="showSuccessModal" style="display: none;" class="success-modal-overlay" x-transition.opacity>
+                <div class="transition-soft" style="background: white; border-radius: 20px; padding: 40px; text-align: center; max-width: 450px; width: 90%; box-shadow: 0 20px 40px rgba(0,0,0,0.2);" @click.stop>
+                    <div style="width: 80px; height: 80px; background: #10b981; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px auto; box-shadow: 0 8px 16px rgba(16,185,129,0.3);">
+                        <span class="material-symbols-outlined" style="color: white; font-size: 40px; font-weight: bold;">check</span>
+                    </div>
+                    <h3 style="font-size: 1.5rem; font-weight: 800; color: #0f172a; margin-bottom: 8px;">Pengajuan Terkirim!</h3>
+                    <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 24px; line-height: 1.5;">Pengajuan layanan <strong style="color: #003178;" x-text="formData.jenis_layanan"></strong> Anda telah berhasil dikirim ke sistem SI JEBOL.</p>
+                    
+                    <div style="background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 12px; padding: 20px; margin-bottom: 32px; position: relative; overflow: hidden;">
+                        <div style="position: absolute; left: -10px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; background: white; border-radius: 50%; border-right: 2px dashed #cbd5e1;"></div>
+                        <div style="position: absolute; right: -10px; top: 50%; transform: translateY(-50%); width: 20px; height: 20px; background: white; border-radius: 50%; border-left: 2px dashed #cbd5e1;"></div>
+                        <span style="display: block; font-size: 0.85rem; color: #64748b; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">Nomor Tiket Anda</span>
+                        <h4 style="font-size: 1.6rem; font-weight: 900; color: #003178; margin: 0; letter-spacing: 1px;" x-text="nomorTiket"></h4>
+                    </div>
+
+                    <a :href="'/masyarakat/cek-status?search=' + nomorTiket" style="display: block; width: 100%; padding: 14px; background: #003178; color: white; border-radius: 10px; font-weight: 700; text-decoration: none; font-size: 1rem; transition: all 0.2s ease; box-shadow: 0 4px 12px rgba(0,49,120,0.3);" onmouseover="this.style.background='#00235a'" onmouseout="this.style.background='#003178'">
+                        Lihat Detail Tiket
+                    </a>
                 </div>
             </div>
-        </main>
-    </div>
 
-    <script>
-        lucide.createIcons();
+</div>
+@endsection
 
-        function jebolForm() {
-            return {
-                isSubmitting: false,
-                formData: {
-                    jenis_layanan: '{{ request("layanan") ?? "KTP-el" }}',
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('formJebol', () => ({
+            isSubmitting: false,
+            showSuccessModal: false,
+            nomorTiket: '',
+            masterKelurahan: @json($masterKelurahan ?? []),
+            formData: {
+                jenis_layanan: new URLSearchParams(window.location.search).get('layanan') || 'KTP-el',
+                nama: '',
+                nik: '',
+                nomor_kk: '',
+                tempat_lahir: '',
+                tanggal_lahir: '',
+                jenis_kelamin: '',
+                phone: '',
+                email: '',
+                nama_anak: '',
+                nik_anak: '',
+                tempat_lahir_anak: '',
+                tanggal_lahir_anak: '',
+                jenis_kelamin_anak: '',
+                kategori_pemohon: 'Umum',
+                nama_ayah: '',
+                nama_ibu: '',
+                phone_ortu: '',
+                hubungan_anak: 'Ayah',
+                jumlah_anak: 1,
+                alamat: '',
+                provinsi: 'Jawa Tengah',
+                lokasi_pelayanan: '',
+                kelurahan: '',
+                jenis_pengajuan: '',
+                keterangan: '',
+                persetujuan: false
+            },
 
-                    // Common
-                    nama: '{{ auth()->user()->nama ?? auth()->user()->name ?? "" }}',
-                    nik: '{{ auth()->user()->nik ?? "" }}',
-                    nomor_kk: '',
-                    jumlah_anak: 1,
-                    tempat_lahir: '',
-                    tanggal_lahir: '',
-                    jenis_kelamin: '',
-                    phone: '{{ auth()->user()->no_hp ?? auth()->user()->phone ?? "" }}',
-                    email: '{{ auth()->user()->email ?? "" }}',
+            init() {
+                // Auto select first pengajuan option based on layanan if empty
+                const opts = this.getJenisPengajuanOptions();
+                if (opts.length > 0 && !this.formData.jenis_pengajuan) {
+                    this.formData.jenis_pengajuan = opts[0];
+                }
+                
+                this.$watch('formData.jenis_layanan', (val) => {
+                    const newOpts = this.getJenisPengajuanOptions();
+                    if(newOpts.length > 0) this.formData.jenis_pengajuan = newOpts[0];
+                });
+            },
+
+            getHeaderIcon() {
+                switch(this.formData.jenis_layanan) {
+                    case 'KTP-el': return 'badge';
+                    case 'KIA': return 'child_care';
+                    case 'IKD': return 'credit_card';
+                    default: return 'description';
+                }
+            },
+
+            getKelurahanList() {
+                if (!this.formData.lokasi_pelayanan) return [];
+                // Asumsi masterKelurahan memiliki properti kecamatan (nama kecamatan) dan nama (nama kelurahan)
+                return this.masterKelurahan
+                    .filter(k => k.kecamatan === this.formData.lokasi_pelayanan || k.kecamatan_id == this.formData.lokasi_pelayanan || k.id_kecamatan == this.formData.lokasi_pelayanan || k.kecamatan_nama == this.formData.lokasi_pelayanan || k.nama_kecamatan == this.formData.lokasi_pelayanan)
+                    .map(k => k.nama)
+                    .sort();
+            },
+
+            getJenisPengajuanOptions() {
+                switch(this.formData.jenis_layanan) {
+                    case 'KTP-el':
+                        return ['Baru', 'Perpanjangan', 'KTP-el Rusak', 'KTP-el Hilang', 'Perubahan Data KTP-el'];
+                    case 'KIA':
+                        return ['Baru', 'Perpanjangan', 'Hilang/Rusak'];
+                    case 'IKD':
+                        return ['Aktivasi Baru', 'Pindah HP'];
+                    default:
+                        return ['Baru'];
+                }
+            },
+
+            async submitForm(e) {
+                this.isSubmitting = true;
+                
+                try {
+                    let formElement = e.target;
+                    let formData = new FormData(formElement);
                     
-                    // Wilayah
-                    alamat: '{{ auth()->user()->alamat ?? "" }}',
-                    provinsi: 'Jawa Tengah',
-                    lokasi_pelayanan: '',
-                    kelurahan: '',
-                    
-                    // KTP-el
-                    kategori_pemohon: 'Umum',
-                    jenis_pengajuan: '',
-                    
-                    // KIA
-                    nama_anak: '',
-                    nik_anak: '',
-                    tempat_lahir_anak: '',
-                    tanggal_lahir_anak: '',
-                    jenis_kelamin_anak: '',
-                    nama_ayah: '',
-                    nama_ibu: '',
-                    phone_ortu: '',
-                    hubungan_anak: 'Ayah',
-
-                    keterangan: '',
-                    persetujuan: false
-                },
-
-                init() {
-                    @if(auth()->user() && auth()->user()->tipe_pendaftar === 'sekolah')
-                        this.formData.jenis_pengajuan = 'Sekolah';
-                    @else
-                        // Set default jenis pengajuan
-                        if (this.formData.jenis_layanan === 'KTP-el') this.formData.jenis_pengajuan = 'KTP-el Baru';
-                        else if (this.formData.jenis_layanan === 'IKD') this.formData.jenis_pengajuan = 'Pembuatan IKD Baru';
-                        else if (this.formData.jenis_layanan === 'KIA') this.formData.jenis_pengajuan = 'KIA Baru';
-                    @endif
-                },
-
-                get themeClass() {
-                    return {
-                        headerBg: 'bg-primary border-b-4 border-blue-900',
-                        textMain: 'text-primary',
-                        badgeBg: 'bg-primary',
-                        borderTop: 'border-t-primary',
-                        focusRing: 'focus:border-primary focus:ring-primary/20',
-                        radioColor: 'text-primary focus:ring-primary',
-                        btnBg: 'bg-primary hover:bg-blue-900',
-                        iconText: 'text-primary',
-                        decor1: 'bg-blue-800',
-                        decor2: 'bg-blue-700'
-                    };
-                },
-
-                getHeaderIcon() {
-                    if (this.formData.jenis_layanan === 'KTP-el') return 'badge';
-                    if (this.formData.jenis_layanan === 'IKD') return 'security';
-                    if (this.formData.jenis_layanan === 'KIA') return 'face';
-                    return 'description';
-                },
-
-                getKelurahanList() {
-                        @php
-                            $kelMap = [];
-                            foreach($masterKelurahan as $kel) {
-                                if ($kel->kecamatan_nama) {
-                                    $kelMap[$kel->kecamatan_nama][] = $kel->nama;
-                                }
-                            }
-                        @endphp
-                        const data = @json($kelMap);
-                    return data[this.formData.lokasi_pelayanan] || [];
-                },
-
-                getJenisPengajuanOptions() {
-                    if (this.formData.jenis_layanan === 'KTP-el') {
-                        return ['KTP-el Baru', 'KTP-el Hilang', 'KTP-el Rusak', 'Perubahan Data KTP-el'];
-                    } else if (this.formData.jenis_layanan === 'IKD') {
-                        return ['Pembuatan IKD Baru', 'Aktivasi Ulang IKD', 'Perubahan Data IKD'];
-                    } else if (this.formData.jenis_layanan === 'KIA') {
-                        return ['KIA Baru', 'KIA Hilang', 'KIA Rusak', 'Perubahan Data KIA'];
-                    }
-                    return [];
-                },
-
-                submitForm() {
-                    if (!this.formData.persetujuan) {
-                        Swal.fire({ icon: 'warning', title: 'Perhatian', text: 'Anda wajib menyetujui pernyataan.' });
-                        return;
-                    }
-
-                    this.isSubmitting = true;
-                    let formElement = document.getElementById('form-jebol');
-                    let fd = new FormData(formElement);
-
-                    fetch('{{ route("pengajuan.store") }}', {
+                    let response = await fetch(formElement.action, {
                         method: 'POST',
-                        body: fd,
-                        headers: { 
+                        body: formData,
+                        headers: {
                             'X-Requested-With': 'XMLHttpRequest',
                             'Accept': 'application/json'
                         }
-                    })
-                    .then(async res => {
-                        const data = await res.json();
-                        if (!res.ok) {
-                            if (res.status === 422) {
-                                let errorMsgs = [];
-                                for (let key in data.errors) {
-                                    errorMsgs.push(data.errors[key][0]);
-                                }
-                                throw new Error(errorMsgs.join('<br>'));
-                            }
-                            throw new Error(data.message || 'Terjadi kesalahan server.');
-                        }
-                        return data;
-                    })
-                    .then(data => {
-                        this.isSubmitting = false;
-                        if (data.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Pengajuan Berhasil!',
-                                html: `<p>Nomor Tiket Anda:</p><p class="jbl-742 jbl-586 jbl-1305">${data.nomor_tiket}</p>`,
-                                confirmButtonText: 'Selesai',
-                                confirmButtonColor: '#2563eb'
-                            }).then(() => {
-                                window.location.href = "{{ route('masyarakat.cek-status') }}";
-                            });
-                        } else {
-                            Swal.fire({ icon: 'error', title: 'Gagal', text: data.message });
-                        }
-                    })
-                    .catch(err => {
-                        this.isSubmitting = false;
-                        Swal.fire({ icon: 'error', title: 'Periksa Kembali', html: err.message });
                     });
+                    
+                    let result = await response.json();
+                    
+                    if (response.ok && result.success) {
+                        this.nomorTiket = result.nomor_tiket;
+                        this.showSuccessModal = true;
+                    } else {
+                        // Use SweetAlert2 instead of native alert
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Peringatan',
+                            text: result.message || 'Terjadi kesalahan pada server',
+                            confirmButtonColor: '#003178'
+                        });
+                        this.isSubmitting = false;
+                    }
+                } catch (error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Koneksi Gagal',
+                        text: 'Gagal mengirim data. Silakan periksa koneksi Anda.',
+                        confirmButtonColor: '#003178'
+                    });
+                    this.isSubmitting = false;
                 }
             }
-        }
-    </script>
-</body>
-</html>
+        }))
+    });
+</script>
+@endpush

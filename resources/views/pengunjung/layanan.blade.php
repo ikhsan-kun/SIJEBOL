@@ -314,9 +314,76 @@
         }
 
         @media (max-width: 768px) {
-            .hero-container h1 { font-size: 3rem; }
-            .custom-modal { border-radius: 20px 20px 0 0; position: absolute; bottom: 0; width: 100%; max-height: 90vh; overflow-y: auto; }
+            .hero-container h1 { font-size: 2.2rem; letter-spacing: -1px; }
+            .hero-container p { font-size: 1rem; }
+
+            /* Modal mobile fixes */
+            .custom-modal {
+                border-radius: 20px 20px 0 0;
+                position: absolute;
+                bottom: 0;
+                width: 100%;
+                max-height: 92vh;
+                overflow-y: auto;
+            }
             .custom-modal-overlay { align-items: flex-end; padding: 0; }
+            .custom-modal-header {
+                padding: 20px 16px 20px 16px !important;
+                gap: 12px !important;
+            }
+            .custom-modal-header .icon-bg {
+                width: 40px !important;
+                height: 40px !important;
+                border-radius: 12px !important;
+                flex-shrink: 0;
+            }
+            .custom-modal-header .icon-bg .material-symbols-outlined {
+                font-size: 20px !important;
+            }
+            .custom-modal-header h3 {
+                font-size: 1.1rem !important;
+                margin-bottom: 2px !important;
+            }
+            .custom-modal-header p {
+                font-size: 0.8rem !important;
+            }
+            .custom-modal-close {
+                top: 16px !important;
+                right: 16px !important;
+                width: 30px !important;
+                height: 30px !important;
+            }
+            .custom-modal-body {
+                padding: 16px !important;
+            }
+            .custom-modal-list {
+                gap: 10px !important;
+            }
+            .custom-modal-list li {
+                padding: 12px !important;
+                gap: 12px !important;
+                font-size: 0.82rem !important;
+                border-radius: 12px !important;
+                line-height: 1.5 !important;
+            }
+            .custom-modal-list li:hover {
+                transform: none !important;
+            }
+            .custom-modal-list .check-icon {
+                width: 20px !important;
+                height: 20px !important;
+            }
+            .custom-modal-list .check-icon .material-symbols-outlined {
+                font-size: 13px !important;
+            }
+            .custom-modal-footer {
+                padding: 0 16px 20px !important;
+            }
+            .custom-btn-close {
+                padding: 12px !important;
+                font-size: 0.9rem !important;
+                border-radius: 12px !important;
+            }
         }
 
         /* Premium Modal Styles */

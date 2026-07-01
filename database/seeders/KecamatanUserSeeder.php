@@ -13,56 +13,44 @@ class KecamatanUserSeeder extends Seeder
      */
     public function run(): void
     {
-        $kecamatans = [
-            [
-                'nik' => '1111222233334444',
-                'name' => 'Kecamatan Margadana',
-                'password' => 'margadana123',
-                'kecamatan' => 'Margadana'
-            ],
-            [
-                'nik' => '2222333344445555',
-                'name' => 'Kecamatan Tegal Barat',
-                'password' => 'tegalbarat123',
-                'kecamatan' => 'Tegal Barat'
-            ],
-            [
-                'nik' => '3333444455556666',
-                'name' => 'Kecamatan Tegal Selatan',
-                'password' => 'tegalselatan123',
-                'kecamatan' => 'Tegal Selatan'
-            ],
-            [
-                'nik' => '4444555566667777',
-                'name' => 'Kecamatan Tegal Timur',
-                'password' => 'tegaltimur123',
-                'kecamatan' => 'Tegal Timur'
-            ]
-        ];
+        // Kecamatan Margadana
+        User::updateOrCreate([
+            'nik' => '1111222233334444',
+        ], [
+            'name' => 'Kecamatan Margadana',
+            'email' => null,
+            'password' => Hash::make('margadana123'),
+            'role' => 'kecamatan',
+        ]);
 
-        foreach ($kecamatans as $k) {
-            User::updateOrCreate([
-                'nik' => $k['nik'],
-            ], [
-                'name' => $k['name'],
-                'email' => null,
-                'password' => Hash::make($k['password']),
-                'role' => 'kecamatan',
-                'location_type' => 'kecamatan',
-                'kecamatan' => $k['kecamatan']
-            ]);
+        // Kecamatan Tegal Barat
+        User::updateOrCreate([
+            'nik' => '2222333344445555',
+        ], [
+            'name' => 'Kecamatan Tegal Barat',
+            'email' => null,
+            'password' => Hash::make('tegalbarat123'),
+            'role' => 'kecamatan',
+        ]);
 
-            \App\Models\Masyarakat::updateOrCreate([
-                'nik' => $k['nik'],
-            ], [
-                'nama' => $k['name'],
-                'email' => $k['nik'] . '@jebol.com',
-                'password' => Hash::make($k['password']),
-                'role' => 'kecamatan',
-                'tipe_pendaftar' => 'kecamatan',
-                'kecamatan' => $k['kecamatan'],
-                'alamat' => 'Kantor Kecamatan ' . $k['kecamatan'],
-            ]);
-        }
+        // Kecamatan Tegal Selatan
+        User::updateOrCreate([
+            'nik' => '3333444455556666',
+        ], [
+            'name' => 'Kecamatan Tegal Selatan',
+            'email' => null,
+            'password' => Hash::make('tegalselatan123'),
+            'role' => 'kecamatan',
+        ]);
+
+        // Kecamatan Tegal Timur
+        User::updateOrCreate([
+            'nik' => '4444555566667777',
+        ], [
+            'name' => 'Kecamatan Tegal Timur',
+            'email' => null,
+            'password' => Hash::make('tegaltimur123'),
+            'role' => 'kecamatan',
+        ]);
     }
 }

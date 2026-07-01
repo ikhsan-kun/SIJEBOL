@@ -128,6 +128,7 @@
         height: 100%;
         display: flex;
         flex-direction: column;
+        min-width: 0;
     }
 
     .panel-header {
@@ -169,38 +170,7 @@
         <h1 class="hero-title">Selamat {{ $greeting }}, <span>{{ explode(' ', auth()->user()->name ?? 'Petugas')[0] }}!</span> 👋</h1>
         <p class="hero-subtitle">Pantau seluruh kegiatan pelayanan administrasi kependudukan di wilayah Anda. Segera tindaklanjuti pengajuan yang masuk.</p>
     </div>
-    <div class="hero-schedule-card" style="background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255, 255, 255, 0.2); padding: 24px; border-radius: 20px; color: white; width: 320px; z-index: 10; margin-top: 16px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <span style="font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #fbbf24;">Jadwal Terdekat</span>
-            <i data-lucide="calendar-clock" style="width: 20px; height: 20px; color: #fbbf24;"></i>
-        </div>
-        @if($nextSchedule)
-            <div style="display: flex; gap: 16px; align-items: center; margin-bottom: 20px;">
-                <div style="background: white; color: var(--primary); padding: 12px; border-radius: 14px; text-align: center; min-width: 65px;">
-                    <span style="display: block; font-size: 1.6rem; font-weight: 800; line-height: 1;">{{ \Carbon\Carbon::parse($nextSchedule->tanggal_pelayanan)->format('d') }}</span>
-                    <span style="display: block; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-top: 4px;">{{ \Carbon\Carbon::parse($nextSchedule->tanggal_pelayanan)->translatedFormat('M') }}</span>
-                </div>
-                <div>
-                    <h4 style="margin: 0 0 6px 0; font-size: 1.15rem; font-weight: 700; line-height: 1.3;">{{ $nextSchedule->lokasi }}</h4>
-                    <p style="margin: 0; font-size: 0.85rem; opacity: 0.9; display: flex; align-items: center; gap: 4px;">
-                        <i data-lucide="map-pin" style="width: 14px; height: 14px;"></i> {{ $nextSchedule->kecamatan ?? 'Kota Tegal' }}
-                    </p>
-                </div>
-            </div>
-            <div style="background: rgba(0, 0, 0, 0.2); padding: 12px 16px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; font-weight: 600;">
-                <div style="display: flex; align-items: center; gap: 6px;">
-                    <i data-lucide="clock" style="width: 14px; height: 14px; color: #93c5fd;"></i>
-                    <span style="color: #e2e8f0;">Pukul:</span>
-                </div>
-                <span>{{ \Carbon\Carbon::parse($nextSchedule->waktu_mulai)->format('H:i') }} - {{ \Carbon\Carbon::parse($nextSchedule->waktu_selesai)->format('H:i') }} WIB</span>
-            </div>
-        @else
-            <div style="text-align: center; padding: 20px 0; opacity: 0.7;">
-                <i data-lucide="calendar-x" style="width: 32px; height: 32px; margin-bottom: 8px;"></i>
-                <p style="margin: 0; font-size: 0.9rem;">Belum ada jadwal pelayanan terdekat</p>
-            </div>
-        @endif
-    </div>
+
 </div>
 
 <div class="dashboard-grid">
@@ -314,26 +284,31 @@
             <a href="{{ route('cabang.monitoring') ?? '#' }}" style="color: var(--primary); text-decoration: none; font-size: 0.9rem; font-weight: 600;">Lihat Semua</a>
         </div>
         <div style="overflow-x: auto;">
-            <table style="width: 100%; border-collapse: separate; border-spacing: 0 12px; text-align: left;">
+            <table style="width: 100%; border-collapse: separate; border-spacing: 0 12px; text-align: left; min-width: 600px;">
                 <thead>
                     <tr>
-                        <th style="padding: 0 20px 8px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #e2e8f0;">Tiket</th>
-                        <th style="padding: 0 20px 8px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #e2e8f0;">Layanan</th>
-                        <th style="padding: 0 20px 8px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #e2e8f0;">Tanggal</th>
-                        <th style="padding: 0 20px 8px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #e2e8f0;">Status</th>
+                        <th style="padding: 0 20px 8px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #e2e8f0; white-space: nowrap;">Tiket</th>
+                        <th style="padding: 0 20px 8px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #e2e8f0; white-space: nowrap;">Layanan</th>
+                        <th style="padding: 0 20px 8px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #e2e8f0; white-space: nowrap;">Tanggal</th>
+                        <th style="padding: 0 20px 8px; font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; border-bottom: 2px solid #e2e8f0; white-space: nowrap;">Status</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse($aktivitas as $akt)
                     <tr style="background: #f8fafc; border-radius: 8px;">
-                        <td style="padding: 16px 20px; font-weight: 600; color: var(--text-main); border-radius: 12px 0 0 12px;">{{ $akt->nomor_tiket }}</td>
-                        <td style="padding: 16px 20px; font-weight: 600;">{{ $akt->jenis_layanan }}</td>
-                        <td style="padding: 16px 20px; color: var(--text-muted);">{{ \Carbon\Carbon::parse($akt->tanggal_pengajuan)->format('d M Y') }}</td>
-                        <td style="padding: 16px 20px; border-radius: 0 12px 12px 0;">
-                            <span style="padding: 6px 12px; border-radius: 8px; font-size: 0.8rem; font-weight: 700;
-                                @if($akt->status == 'selesai') background: #dcfce3; color: #166534;
-                                @elseif($akt->status == 'pending' || $akt->status == 'menunggu_verifikasi') background: #fef3c7; color: #b45309;
-                                @else background: #eff6ff; color: #1d4ed8; @endif
+                        <td style="padding: 16px 20px; font-weight: 600; color: var(--text-main); border-radius: 12px 0 0 12px; white-space: nowrap;">{{ $akt->nomor_tiket }}</td>
+                        <td style="padding: 16px 20px; font-weight: 600; white-space: nowrap;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div style="width: 8px; height: 8px; border-radius: 50%; background: var(--primary);"></div>
+                                {{ $akt->jenis_layanan }}
+                            </div>
+                        </td>
+                        <td style="padding: 16px 20px; color: var(--text-muted); white-space: nowrap;">{{ \Carbon\Carbon::parse($akt->tanggal_pengajuan)->format('d M Y') }}</td>
+                        <td style="padding: 16px 20px; border-radius: 0 12px 12px 0; white-space: nowrap;">
+                            <span style="padding: 6px 14px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; border: 1px solid transparent; display: inline-flex; align-items: center; gap: 6px;
+                                @if($akt->status == 'selesai') background: #dcfce3; color: #166534; border-color: #bbf7d0;
+                                @elseif($akt->status == 'pending' || $akt->status == 'menunggu_verifikasi') background: #fef3c7; color: #b45309; border-color: #fde68a;
+                                @else background: #eff6ff; color: #1d4ed8; border-color: #bfdbfe; @endif
                             ">
                                 {{ strtoupper(str_replace('_', ' ', $akt->status)) }}
                             </span>

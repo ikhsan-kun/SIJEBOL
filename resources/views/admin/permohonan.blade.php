@@ -401,7 +401,7 @@
             flex-direction: column;
             text-align: center;
             padding: 24px !important;
-            margin: -1.5rem -1.5rem 24px -1.5rem !important;
+            margin: -1.5rem -1rem 24px -1rem !important;
         }
         .hero-icon-large {
             display: none;

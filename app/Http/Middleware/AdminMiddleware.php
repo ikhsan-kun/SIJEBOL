@@ -27,6 +27,6 @@ class AdminMiddleware
         }
 
         // Jika belum login sama sekali
-        return redirect()->route('login')->with('error', 'Silakan login terlebih dahulu.');
+        return redirect()->route('admin.login')->with('error', 'Silakan login terlebih dahulu.');
     }
 }

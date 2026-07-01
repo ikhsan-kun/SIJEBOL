@@ -12,15 +12,6 @@ class MasterDataController extends Controller
 {
     public function index()
     {
-        if (!\Illuminate\Support\Facades\Schema::hasTable('master_activities')) {
-            \Illuminate\Support\Facades\Schema::create('master_activities', function ($table) {
-                $table->id();
-                $table->string('action');
-                $table->string('item');
-                $table->string('user');
-                $table->timestamps();
-            });
-        }
 
         $kecamatan = MasterKecamatan::all();
         $kelurahan = MasterKelurahan::all();
@@ -38,25 +29,14 @@ class MasterDataController extends Controller
             : collect([]);
 
         $users = \App\Models\User::orderBy('created_at', 'desc')->get();
-        $activities = \Illuminate\Support\Facades\DB::table('master_activities')->orderBy('created_at', 'desc')->take(5)->get();
+        $activities = collect([]);
 
         return view('admin.master-data', compact('kecamatan', 'kelurahan', 'wilayahCount', 'jenisLayanan', 'statusLayanan', 'regionalTargets', 'petugasCount', 'adminCount', 'userCount', 'users', 'activities'));
     }
 
     private function logActivity($action, $item)
     {
-        if (\Illuminate\Support\Facades\Schema::hasTable('master_activities')) {
-            $user = auth('admin')->user();
-            $userName = $user ? $user->name : 'Admin Disdukcapil';
-            
-            \Illuminate\Support\Facades\DB::table('master_activities')->insert([
-                'action' => $action,
-                'item' => $item,
-                'user' => $userName,
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]);
-        }
+        // Fitur log_activity (master_activities) dihapus untuk membersihkan database
     }
 
     // --- KECAMATAN ---

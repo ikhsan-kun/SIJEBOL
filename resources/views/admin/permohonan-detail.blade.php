@@ -311,9 +311,6 @@
         <a href="{{ route('admin.permohonan') }}" class="btn btn-light-outline">
             <i data-lucide="arrow-left" style="width: 18px;"></i> Kembali
         </a>
-        <button onclick="window.print()" class="btn btn-white">
-            <i data-lucide="printer" style="width: 18px;"></i> Cetak
-        </button>
     </div>
 </div>
 
@@ -379,7 +376,7 @@
                         <span class="info-label" style="display: block; margin-bottom: 12px;">Lampiran Dokumen</span>
                         <div style="display: flex; flex-direction: column; gap: 12px;">
                             @if($permohonan->file_surat_pengantar)
-                            <a href="{{ asset('storage/' . $permohonan->file_surat_pengantar) }}" target="_blank" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; background: white; transition: all 0.2s;">
+                            <a href="#" onclick="openDocumentModal('{{ asset('storage/' . $permohonan->file_surat_pengantar) }}', 'Surat Pengantar Sekolah'); return false;" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; background: white; transition: all 0.2s;">
                                 <div style="background: #eff6ff; color: #3b82f6; padding: 8px; border-radius: 8px;"><i data-lucide="file-text"></i></div>
                                 <div style="flex: 1;">
                                     <div style="font-weight: 700; font-size: 0.9rem;">Surat Pengantar Sekolah</div>
@@ -416,7 +413,7 @@
                     <div class="info-grid">
                         <div class="info-row">
                             <span class="info-label">Nomor HP</span>
-                            <span class="info-value">{{ $permohonan->masyarakat->no_hp ?? '-' }}</span>
+                            <span class="info-value">{{ $permohonan->no_hp ?? $permohonan->masyarakat->no_hp ?? '-' }}</span>
                         </div>
                         <div class="info-row">
                             <span class="info-label">Email</span>
@@ -425,14 +422,14 @@
                     </div>
                     <div class="info-row">
                         <span class="info-label">Alamat</span>
-                        <span class="info-value">{{ $permohonan->masyarakat->alamat ?? '-' }}</span>
+                        <span class="info-value">{{ $permohonan->alamat ?? $permohonan->masyarakat->alamat ?? '-' }}</span>
                     </div>
 
                     <div style="margin-top: 12px;">
                         <span class="info-label" style="display: block; margin-bottom: 12px;">Lampiran Dokumen</span>
                         <div style="display: flex; flex-direction: column; gap: 12px;">
                             @if($permohonan->file_ktp)
-                            <a href="{{ asset('storage/' . $permohonan->file_ktp) }}" target="_blank" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; background: white; transition: all 0.2s;">
+                            <a href="#" onclick="openDocumentModal('{{ asset('storage/' . $permohonan->file_ktp) }}', 'Berkas KTP'); return false;" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; background: white; transition: all 0.2s;">
                                 <div style="background: #eff6ff; color: #3b82f6; padding: 8px; border-radius: 8px;"><i data-lucide="file-image"></i></div>
                                 <div style="flex: 1;">
                                     <div style="font-weight: 700; font-size: 0.9rem;">Berkas KTP</div>
@@ -441,7 +438,7 @@
                             </a>
                             @endif
                             @if($permohonan->file_kk)
-                            <a href="{{ asset('storage/' . $permohonan->file_kk) }}" target="_blank" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; background: white; transition: all 0.2s;">
+                            <a href="#" onclick="openDocumentModal('{{ asset('storage/' . $permohonan->file_kk) }}', 'Kartu Keluarga'); return false;" style="display: flex; align-items: center; gap: 12px; padding: 12px 16px; border: 1px solid #e2e8f0; border-radius: 12px; text-decoration: none; color: inherit; background: white; transition: all 0.2s;">
                                 <div style="background: #eff6ff; color: #3b82f6; padding: 8px; border-radius: 8px;"><i data-lucide="users"></i></div>
                                 <div style="flex: 1;">
                                     <div style="font-weight: 700; font-size: 0.9rem;">Kartu Keluarga</div>
@@ -540,9 +537,12 @@
                         <div style="font-weight: 600; font-size: 0.9rem;">Kartu Identitas Anak</div>
                     </div>
                     <div class="info-list">
+                        @php
+                            $detailKIA = json_decode($permohonan->detail_pengajuan, true) ?? [];
+                        @endphp
                         <div class="info-grid">
-                            <div class="info-row"><span class="info-label">NIK Anak</span><span class="info-value">{{ $permohonan->nik_anak ?? '-' }}</span></div>
-                            <div class="info-row"><span class="info-label">Nama Anak</span><span class="info-value">{{ $permohonan->nama_anak ?? '-' }}</span></div>
+                            <div class="info-row"><span class="info-label">NIK Anak</span><span class="info-value">{{ $permohonan->nik_anak ?? $detailKIA['nik_anak'] ?? '-' }}</span></div>
+                            <div class="info-row"><span class="info-label">Nama Anak</span><span class="info-value">{{ $permohonan->nama_anak ?? $detailKIA['nama_anak'] ?? '-' }}</span></div>
                         </div>
                         <div class="info-row"><span class="info-label">Nama Orang Tua</span><span class="info-value">{{ $permohonan->masyarakat->nama ?? '-' }}</span></div>
                     </div>
@@ -599,7 +599,24 @@
                     </div>
                     <div class="info-row">
                         <span class="info-label">Jadwal Pelayanan</span>
-                        <span class="info-value">{{ $permohonan->tanggal_kedatangan ? \Carbon\Carbon::parse($permohonan->tanggal_kedatangan)->translatedFormat('d F Y') : '-' }}</span>
+                        <span class="info-value">
+                            @php
+                                $jadwalText = '-';
+                                $dtl = json_decode($permohonan->detail_pengajuan, true) ?? [];
+                                $jadwalConfirmed = \App\Models\JadwalJebol::where('nama_kegiatan', 'Layanan Tiket ' . $permohonan->id_pengajuan)->first();
+                                
+                                if ($jadwalConfirmed) {
+                                    $jadwalText = \Carbon\Carbon::parse($jadwalConfirmed->tanggal_pelayanan)->translatedFormat('d F Y');
+                                } elseif (!empty($dtl['usulan_tanggal'])) {
+                                    $jadwalText = '<span style="color: #0369a1; background: #e0f2fe; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; margin-right: 6px;">USULAN</span>' . \Carbon\Carbon::parse($dtl['usulan_tanggal'])->translatedFormat('d F Y');
+                                } elseif ($permohonan->tanggal_kedatangan) {
+                                    $jadwalText = \Carbon\Carbon::parse($permohonan->tanggal_kedatangan)->translatedFormat('d F Y');
+                                } else {
+                                    $jadwalText = '<span style="color: var(--text-muted); font-style: italic;">Belum Dijadwalkan</span>';
+                                }
+                            @endphp
+                            {!! $jadwalText !!}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -841,6 +858,19 @@
             <button type="button" class="modal-close" onclick="closeScheduleModal()">&times;</button>
         </div>
         <div class="modal-body">
+            @php
+                $detailData = json_decode($permohonan->detail_pengajuan, true) ?? [];
+                $usulanTanggal = $detailData['usulan_tanggal'] ?? null;
+            @endphp
+            @if($usulanTanggal)
+            <div style="margin-bottom: 16px; padding: 12px; background-color: #f0f9ff; border-left: 4px solid #0284c7; border-radius: 8px;">
+                <div style="font-size: 0.85rem; font-weight: 600; color: #0369a1; margin-bottom: 4px;">Usulan Jadwal dari Pemohon:</div>
+                <div style="font-size: 0.95rem; font-weight: 700; color: #0f172a;">
+                    <i data-lucide="calendar" style="width: 14px; height: 14px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i> 
+                    {{ \Carbon\Carbon::parse($usulanTanggal)->format('d F Y') }}
+                </div>
+            </div>
+            @endif
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
                 <div class="form-group">
                     <label>Tanggal Pelayanan *</label>
@@ -958,6 +988,24 @@
             <button type="button" class="btn btn-outline" onclick="closeRejectionModal()">Batal</button>
             <button type="button" class="btn btn-danger" onclick="submitRejection()">Konfirmasi Tolak</button>
         </div>
+</div>
+</div>
+
+<!-- MODAL: PREVIEW DOKUMEN -->
+<div id="documentModal" class="modal-backdrop" style="z-index: 9999;">
+    <div class="modal-content" style="max-width: 900px; width: 90%; height: 90vh; display: flex; flex-direction: column;">
+        <div class="modal-header" style="background: var(--primary);">
+            <h3 class="modal-title" id="documentModalTitle"><i data-lucide="file-search" style="width: 20px;"></i> Pratinjau Dokumen</h3>
+            <button type="button" class="modal-close" onclick="closeDocumentModal()">&times;</button>
+        </div>
+        <div class="modal-body" style="flex: 1; padding: 0; background: #e2e8f0; display: flex; justify-content: center; align-items: center; overflow: hidden; position: relative;">
+            <iframe id="documentIframe" style="width: 100%; height: 100%; border: none; display: none;"></iframe>
+            <img id="documentImage" style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;" />
+            <div id="documentLoading" style="position: absolute; display: flex; flex-direction: column; align-items: center; gap: 10px; color: #64748b;">
+                <i data-lucide="loader-2" class="animate-spin" style="width: 32px; height: 32px;"></i>
+                <span>Memuat dokumen...</span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -981,6 +1029,50 @@
     function closeCompletionModal() { closeModal('completionModal'); }
     function openRejectionModal() { openModal('rejectionModal'); }
     function closeRejectionModal() { closeModal('rejectionModal'); }
+
+    /* Preview Dokumen */
+    function openDocumentModal(url, title) {
+        document.getElementById('documentModalTitle').innerHTML = '<i data-lucide="file-search" style="width: 20px;"></i> ' + title;
+        
+        document.getElementById('documentIframe').style.display = 'none';
+        document.getElementById('documentImage').style.display = 'none';
+        document.getElementById('documentLoading').style.display = 'flex';
+        
+        openModal('documentModal');
+        lucide.createIcons();
+        
+        const isImage = url.match(/\.(jpeg|jpg|gif|png|webp)$/i) != null;
+        
+        if (isImage) {
+            const img = document.getElementById('documentImage');
+            img.onload = function() {
+                document.getElementById('documentLoading').style.display = 'none';
+                img.style.display = 'block';
+            };
+            img.onerror = function() {
+                document.getElementById('documentLoading').innerHTML = '<span>Gagal memuat dokumen.</span>';
+            };
+            img.src = url;
+        } else {
+            const iframe = document.getElementById('documentIframe');
+            iframe.onload = function() {
+                document.getElementById('documentLoading').style.display = 'none';
+                iframe.style.display = 'block';
+            };
+            iframe.onerror = function() {
+                document.getElementById('documentLoading').innerHTML = '<span>Gagal memuat dokumen.</span>';
+            };
+            iframe.src = url;
+        }
+    }
+    
+    function closeDocumentModal() {
+        closeModal('documentModal');
+        setTimeout(() => {
+            document.getElementById('documentIframe').src = '';
+            document.getElementById('documentImage').src = '';
+        }, 300);
+    }
 
     /* Submit Verifikasi */
     function submitApproval() {

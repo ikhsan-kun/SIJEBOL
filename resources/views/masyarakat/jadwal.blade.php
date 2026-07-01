@@ -1,39 +1,9 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jadwal Kegiatan - SI JEBOL Kota Tegal</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    @include('partials.head-dependencies')
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" />
-    <style>
-        :root {
-            --primary: #003178;
-            --primary-dark: #001e50;
-            --accent: #f59e0b;
-        }
+@extends('layouts.masyarakat')
 
-        body { background-color: #f6f9fc !important; background-image: url('/img/batik-pattern.png') !important; background-size: 400px !important; background-attachment: fixed !important;
-            background-color: #f8fafc !important;
-            background-image: none !important;
-            font-family: 'Inter', sans-serif;
-            color: #0f172a;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-        }
-
-        .main-content {
-            padding-top: 80px; /* Adjust for navbar */
-            min-width: 0;
-            transition: all 0.3s ease;
-        }
-
-        .content-container {
-            padding: 40px 96px;
+@push('styles')
+<style>
+.content-container {
+            padding: 40px 24px;
         }
 
         @media (max-width: 1024px) {
@@ -47,7 +17,7 @@
             background-color: var(--primary);
             border-radius: 0;
             padding: 60px 0;
-            margin: 0;
+            margin: -24px -24px 32px -24px;
             color: white;
             position: relative;
             overflow: hidden;
@@ -55,7 +25,7 @@
         }
 
         .hero-inner {
-            padding: 0 96px;
+            padding: 0 24px;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -227,9 +197,13 @@
         }
 
         @media (max-width: 1024px) {
+            
             .hero-banner {
-                margin: 0 -20px 40px -20px;
-                padding: 40px 40px;
+                margin: -16px -16px 40px -16px !important;
+                padding: 40px 24px;
+            }
+            .content-container {
+                padding: 32px 24px;
             }
             .bottom-grid { grid-template-columns: 1fr; }
             .filter-bar { flex-wrap: wrap; }
@@ -238,15 +212,32 @@
 
         @media (max-width: 768px) {
             .hero-banner {
-                padding: 32px 20px;
+                padding: 32px 16px;
+                margin: -16px -16px 16px -16px !important;
+                border-radius: 0 !important;
+                width: calc(100% + 32px) !important;
+                display: block !important;
+                box-sizing: border-box !important;
             }
             .hero-banner h1 {
                 font-size: 2.2rem !important;
             }
+            .content-container {
+                padding: 24px 16px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .schedule-item { grid-template-columns: 1fr !important; gap: 8px !important; justify-items: start !important; padding: 12px !important; }
+            .sch-icon { display: none !important; }
         }
 
         @media (max-width: 640px) {
             .stats-grid { grid-template-columns: 1fr; }
+            .cal-cell { width: 28px; height: 28px; font-size: 0.75rem; border-radius: 50%; }
+            .cal-grid { gap: 4px; }
+            .cal-day-header { font-size: 0.7rem; padding-bottom: 8px; }
+            .panel-card { padding: 16px; }
         }
 
         .panel-card {
@@ -286,7 +277,9 @@
         }
 
         .cal-cell {
-            height: 40px;
+            width: 32px;
+            height: 32px;
+            margin: 0 auto;
             display: grid;
             place-items: center;
             font-size: 0.9rem;
@@ -294,34 +287,24 @@
             color: #334155;
             position: relative;
             cursor: pointer;
-            border-radius: 8px;
-            transition: background 0.2s;
+            border-radius: 50%;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            background: transparent;
+            padding: 0;
+            font-family: inherit;
         }
 
         .cal-cell:hover:not(.muted) {
             background: #f1f5f9;
         }
 
-        .cal-cell.active-date {
-            background: #dbeafe;
-        }
-
         .cal-cell.muted { color: #cbd5e1; }
 
-        .cal-indicator {
-            position: absolute;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            z-index: 0;
-        }
-
-        .cal-indicator.blue { border: 2px solid #3b82f6; background: #eff6ff; }
-        .cal-indicator.yellow { border: 2px solid #eab308; background: #fefce8; }
-        .cal-indicator.green { border: 2px solid #22c55e; background: #f0fdf4; }
-
-        .cal-cell span { position: relative; z-index: 1; }
-
+        .cal-cell.blue { border-color: #3b82f6; background: #eff6ff; color: #2563eb; font-weight: 700; }
+        .cal-cell.yellow { border-color: #f59e0b; background: #fefce8; color: #d97706; font-weight: 700; }
+        .cal-cell.green { border-color: #10b981; background: #f0fdf4; color: #059669; font-weight: 700; }
+        
         .cal-legend {
             display: flex;
             gap: 20px;
@@ -343,31 +326,34 @@
         .schedule-list {
             display: flex;
             flex-direction: column;
+            gap: 12px;
         }
 
         .schedule-item {
             display: grid;
-            grid-template-columns: 32px 1.5fr 1fr 1fr 80px;
+            grid-template-columns: 40px 1.5fr 1fr 1fr 90px;
             align-items: center;
             gap: 12px;
-            padding: 16px 12px;
-            margin: 0 -12px;
-            border-bottom: 1px solid #f1f5f9;
+            padding: 16px;
+            border: 1px solid #f1f5f9;
+            border-radius: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            border-radius: 8px;
+            transition: all 0.2s;
         }
 
         .schedule-item:hover {
-            background: #eff6ff;
-            transform: translateX(4px);
+            background: #f8fafc;
+            border-color: #e2e8f0;
         }
 
-        .schedule-item:last-child { border-bottom: none; }
-
-        .sch-icon { color: #3b82f6; }
-        .sch-name { font-size: 0.85rem; font-weight: 700; color: #0f172a; }
-        .sch-detail { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; color: #64748b; }
+        .sch-icon { 
+            width: 40px; height: 40px; 
+            border-radius: 10px; 
+            background: #eff6ff; color: #3b82f6; 
+            display: grid; place-items: center; 
+        }
+        .sch-name { font-size: 0.95rem; font-weight: 700; color: #0f172a; }
+        .sch-detail { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #64748b; font-weight: 500;}
         
         .status-badge {
             padding: 4px 12px;
@@ -387,13 +373,11 @@
             color: #2563eb;
             text-decoration: none;
         }
-    </style>
-</head>
-<body x-data="{ sidebarOpen: false }">
-    <div class="dashboard-layout jbl-1293">
-        @include('partials.sidebar-masyarakat')
-        <main class="main-content">
-        <!-- Hero Banner -->
+</style>
+@endpush
+
+@section('content')
+<!-- Hero Banner -->
         <div class="hero-banner" style="display: block;">
             <div class="hero-inner">
                 <h1>Jadwal <span style="color: #fbbf24;">Mobile</span></h1>
@@ -486,7 +470,7 @@
             <!-- Calendar Panel -->
             <div class="panel-card" id="calendar-panel">
                 <div class="panel-header">
-                    <h3 class="panel-title">Kalender {{ $monthName }} {{ $currentDate->year }}</h3>
+                    <h3 class="panel-title">Kalender {{ $monthName }}</h3>
                 </div>
                 <div class="cal-grid">
                     <div class="cal-day-header">Sen</div>
@@ -511,21 +495,19 @@
                                 else $indicatorClass = 'blue';
                             }
                         @endphp
-                        <div class="cal-cell {{ !$item['isCurrentMonth'] ? 'muted' : '' }}" 
+                        <button class="cal-cell {{ !$item['isCurrentMonth'] ? 'muted' : '' }} {{ $hasEvent ? $indicatorClass : '' }}" 
                             @if($hasEvent) 
                                 onclick="showCalDetail('{{ $dateString }}', this)" 
                                 data-date="{{ $dateString }}"
                             @endif
                         >
-                            @if($hasEvent) <div class="cal-indicator {{ $indicatorClass }}"></div> @endif
-                            <span>{{ $item['date']->day }}</span>
-                        </div>
+                            {{ $item['date']->day }}
+                        </button>
                     @endforeach
                 </div>
                 <div class="cal-legend">
                     <div class="legend-item"><div class="legend-dot dot-blue"></div> Terjadwal</div>
                     <div class="legend-item"><div class="legend-dot dot-green"></div> Selesai</div>
-                    <div class="legend-item"><div class="legend-dot dot-yellow"></div> Ditunda</div>
                 </div>
 
                 <div id="cal-detail" style="display:none; margin-top: 16px; padding: 16px; background: #f8fafc; border-radius: 12px; border: 1px solid #e2e8f0;">
@@ -540,8 +522,9 @@
             <!-- Schedule List Panel -->
             <div class="panel-card">
                 <div class="panel-header">
-                    <h3 class="panel-title">Jadwal Terdekat</h3>
-                    <a href="#calendar-panel" class="view-all">Lihat Semua</a>
+                    <h3 class="panel-title">
+                        <i data-lucide="clock"></i> Jadwal Mendatang
+                    </h3>
                 </div>
                 <div class="schedule-list">
                     @forelse($upcoming as $index => $act)
@@ -555,12 +538,15 @@
                             } else {
                                 $statusClass = 'badge-terjadwal';
                             }
+                            
+                            $iconBg = (strtolower($statusText) == 'ditunda') ? '#fffbeb' : ((strtolower($statusText) == 'selesai') ? '#ecfdf5' : '#eff6ff');
+                            $iconColor = (strtolower($statusText) == 'ditunda') ? '#f59e0b' : ((strtolower($statusText) == 'selesai') ? '#10b981' : '#3b82f6');
                         @endphp
                         <div class="schedule-item" onclick="showCalDetail('{{ $act->tanggal_pelayanan->format('Y-m-d') }}')">
-                            <div class="sch-icon"><i data-lucide="calendar-days"></i></div>
+                            <div class="sch-icon" style="background: {{ $iconBg }}; color: {{ $iconColor }};"><i data-lucide="calendar-days" style="width: 20px; height: 20px;"></i></div>
                             <div class="sch-name">{{ $act->lokasi }}</div>
-                            <div class="sch-detail"><i data-lucide="calendar" style="width:14px;"></i> {{ $act->tanggal_pelayanan->format('d M Y') }}</div>
-                            <div class="sch-detail"><i data-lucide="clock" style="width:14px;"></i> {{ \Carbon\Carbon::parse($act->jam_mulai)->format('H.i') }} - {{ \Carbon\Carbon::parse($act->jam_selesai)->format('H.i') }} WIB</div>
+                            <div class="sch-detail"><i data-lucide="calendar" style="width:16px; height: 16px;"></i> {{ $act->tanggal_pelayanan->format('d M Y') }}</div>
+                            <div class="sch-detail"><i data-lucide="clock" style="width:16px; height: 16px;"></i> {{ \Carbon\Carbon::parse($act->jam_mulai)->format('H.i') }} - {{ \Carbon\Carbon::parse($act->jam_selesai)->format('H.i') }}</div>
                             <div class="status-badge {{ $statusClass }}">{{ $statusText }}</div>
                         </div>
                     @empty
@@ -571,162 +557,163 @@
 
                     @if($upcoming->isEmpty())
                         <div class="schedule-item">
-                            <div class="sch-icon"><i data-lucide="calendar-days"></i></div>
+                            <div class="sch-icon"><i data-lucide="calendar-days" style="width: 20px; height: 20px;"></i></div>
                             <div class="sch-name">Kecamatan Tegal Barat</div>
-                            <div class="sch-detail"><i data-lucide="calendar" style="width:14px;"></i> 20 Mei 2025</div>
-                            <div class="sch-detail"><i data-lucide="clock" style="width:14px;"></i> 08.00 - 12.00 WIB</div>
+                            <div class="sch-detail"><i data-lucide="calendar" style="width:16px; height: 16px;"></i> 20 Mei 2025</div>
+                            <div class="sch-detail"><i data-lucide="clock" style="width:16px; height: 16px;"></i> 08.00 - 12.00</div>
                             <div class="status-badge badge-terjadwal">Terjadwal</div>
                         </div>
                         <div class="schedule-item">
-                            <div class="sch-icon"><i data-lucide="calendar-days"></i></div>
+                            <div class="sch-icon"><i data-lucide="calendar-days" style="width: 20px; height: 20px;"></i></div>
                             <div class="sch-name">SMP Negeri 4 Tegal</div>
-                            <div class="sch-detail"><i data-lucide="calendar" style="width:14px;"></i> 21 Mei 2025</div>
-                            <div class="sch-detail"><i data-lucide="clock" style="width:14px;"></i> 08.00 - 12.00 WIB</div>
+                            <div class="sch-detail"><i data-lucide="calendar" style="width:16px; height: 16px;"></i> 21 Mei 2025</div>
+                            <div class="sch-detail"><i data-lucide="clock" style="width:16px; height: 16px;"></i> 08.00 - 12.00</div>
                             <div class="status-badge badge-terjadwal">Terjadwal</div>
                         </div>
                         <div class="schedule-item">
-                            <div class="sch-icon"><i data-lucide="calendar-days"></i></div>
+                            <div class="sch-icon" style="background: #fffbeb; color: #f59e0b;"><i data-lucide="calendar-days" style="width: 20px; height: 20px;"></i></div>
                             <div class="sch-name">Kelurahan Margadana</div>
-                            <div class="sch-detail"><i data-lucide="calendar" style="width:14px;"></i> 22 Mei 2025</div>
-                            <div class="sch-detail"><i data-lucide="clock" style="width:14px;"></i> 08.00 - 12.00 WIB</div>
+                            <div class="sch-detail"><i data-lucide="calendar" style="width:16px; height: 16px;"></i> 22 Mei 2025</div>
+                            <div class="sch-detail"><i data-lucide="clock" style="width:16px; height: 16px;"></i> 08.00 - 12.00</div>
                             <div class="status-badge badge-ditunda">Ditunda</div>
                         </div>
                         <div class="schedule-item">
-                            <div class="sch-icon"><i data-lucide="calendar-days"></i></div>
+                            <div class="sch-icon"><i data-lucide="calendar-days" style="width: 20px; height: 20px;"></i></div>
                             <div class="sch-name">Kecamatan Tegal Timur</div>
-                            <div class="sch-detail"><i data-lucide="calendar" style="width:14px;"></i> 24 Mei 2025</div>
-                            <div class="sch-detail"><i data-lucide="clock" style="width:14px;"></i> 08.00 - 12.00 WIB</div>
+                            <div class="sch-detail"><i data-lucide="calendar" style="width:16px; height: 16px;"></i> 24 Mei 2025</div>
+                            <div class="sch-detail"><i data-lucide="clock" style="width:16px; height: 16px;"></i> 08.00 - 12.00</div>
                             <div class="status-badge badge-terjadwal">Terjadwal</div>
                         </div>
                         <div class="schedule-item">
-                            <div class="sch-icon"><i data-lucide="calendar-days"></i></div>
+                            <div class="sch-icon"><i data-lucide="calendar-days" style="width: 20px; height: 20px;"></i></div>
                             <div class="sch-name">Kelurahan Panggung</div>
-                            <div class="sch-detail"><i data-lucide="calendar" style="width:14px;"></i> 27 Mei 2025</div>
-                            <div class="sch-detail"><i data-lucide="clock" style="width:14px;"></i> 08.00 - 12.00 WIB</div>
+                            <div class="sch-detail"><i data-lucide="calendar" style="width:16px; height: 16px;"></i> 27 Mei 2025</div>
+                            <div class="sch-detail"><i data-lucide="clock" style="width:16px; height: 16px;"></i> 08.00 - 12.00</div>
                             <div class="status-badge badge-terjadwal">Terjadwal</div>
                         </div>
                     @endif
                 </div>
             </div>
         </div>
-            <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </main>
-    </div>
+        </div>
 
-    <script>
-        lucide.createIcons();
-
-        @php
-            $jadwalJson = $activities->map(function($dayItems) {
-                return $dayItems->map(function($item) {
+@push('scripts')
+<script>
+    @php
+        $jadwalJson = $activities->mapWithKeys(function($dayItems, $date) {
+            return [
+                $date => $dayItems->map(function($item) {
                     return [
+                        'id' => $item->id_jadwal ?? $item->id,
                         'lokasi' => $item->lokasi,
                         'tanggal' => \Carbon\Carbon::parse($item->tanggal_pelayanan)->translatedFormat('d F Y'),
+                        'tanggal_raw' => \Carbon\Carbon::parse($item->tanggal_pelayanan)->format('Y-m-d'),
+                        'jam_mulai_raw' => \Carbon\Carbon::parse($item->jam_mulai)->format('H:i'),
+                        'jam_selesai_raw' => \Carbon\Carbon::parse($item->jam_selesai)->format('H:i'),
                         'jam' => \Carbon\Carbon::parse($item->jam_mulai)->format('H.i') . ' - ' . \Carbon\Carbon::parse($item->jam_selesai)->format('H.i') . ' WIB',
                         'status' => ucfirst($item->status ?? 'Terjadwal'),
-                        'kegiatan' => $item->nama_kegiatan ?? '-',
+                        'kegiatan' => $item->nama_kegiatan ?? 'Jemput Bola ' . $item->lokasi,
                         'deskripsi' => $item->deskripsi ?? 'Tidak ada deskripsi.',
                         'petugas' => $item->petugas ?? '-',
                         'jenis_layanan' => $item->jenis_layanan ?? '-',
                         'foto' => $item->foto ? asset('storage/' . $item->foto) : null,
                     ];
-                })->values();
-            });
-        @endphp
-        const jadwalData = @json($jadwalJson);
+                })->values()
+            ];
+        });
+    @endphp
+    const jadwalData = @json($jadwalJson);
 
-        function showCalDetail(dateStr, el) {
-            document.querySelectorAll('.cal-cell.active-date').forEach(c => c.classList.remove('active-date'));
-            if (el) el.classList.add('active-date');
+    function showCalDetail(dateStr, el) {
+        document.querySelectorAll('.cal-cell.active-date').forEach(c => c.classList.remove('active-date'));
+        if (!el && dateStr) {
+            el = document.querySelector('.cal-cell[data-date="' + dateStr + '"]');
+        }
+        if (el) el.classList.add('active-date');
 
-            const detail = document.getElementById('cal-detail');
-            const title = document.getElementById('cal-detail-title');
-            const list = document.getElementById('cal-detail-list');
+        const detail = document.getElementById('cal-detail');
+        const title = document.getElementById('cal-detail-title');
+        const list = document.getElementById('cal-detail-list');
 
-            const items = jadwalData[dateStr] || [];
-            if (items.length === 0) {
-                detail.style.display = 'none';
-                return;
+        const items = jadwalData[dateStr] || [];
+        if (items.length === 0) {
+            detail.style.display = 'none';
+            return;
+        }
+
+        title.textContent = 'Jadwal ' + items[0].tanggal + ' (' + items.length + ' kegiatan)';
+
+        let html = '';
+        items.forEach(function(item) {
+            let badgeClass = 'badge-terjadwal';
+            let iconColor = '#3b82f6';
+            let bgClass = '#eff6ff';
+            
+            if (item.status.toLowerCase() === 'ubah jadwal' || item.status.toLowerCase() === 'ditunda') {
+                badgeClass = 'badge-ditunda';
+                iconColor = '#f59e0b';
+                bgClass = '#fffbeb';
+            } else if (item.status.toLowerCase() === 'selesai') {
+                badgeClass = 'badge-selesai';
+                iconColor = '#10b981';
+                bgClass = '#ecfdf5';
             }
 
-            title.textContent = 'Jadwal ' + items[0].tanggal + ' (' + items.length + ' kegiatan)';
+            html += '<div style="display:flex; flex-direction:column; gap:12px; padding:16px; background:white; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.02);">';
+            html += '  <div style="display:grid; grid-template-columns: 40px 1fr auto auto; align-items:center; gap:16px;">';
+            html += '    <div style="width:40px; height:40px; border-radius:10px; background:'+bgClass+'; color:'+iconColor+'; display:grid; place-items:center;"><i data-lucide="calendar-days" style="width:20px;"></i></div>';
+            html += '    <div style="flex:1;">';
+            html += '      <div style="font-weight:700; font-size:0.95rem; color:#0f172a; margin-bottom:2px;">' + item.lokasi + '</div>';
+            html += '      <div style="font-size:0.85rem; color:#64748b; font-weight:500;">' + item.kegiatan + '</div>';
+            html += '    </div>';
+            html += '    <div style="font-size:0.85rem; color:#64748b; font-weight:600; display:flex; align-items:center; gap:6px;"><i data-lucide="clock" style="width:16px;"></i> ' + item.jam + '</div>';
+            html += '    <div class="status-badge ' + badgeClass + '">' + item.status + '</div>';
+            html += '  </div>';
+            
+            html += '  <div style="padding-top:10px; border-top:1px dashed #e2e8f0; display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.8rem; color:#64748b;">';
+            html += '    <div><strong>Layanan:</strong> ' + item.jenis_layanan + '</div>';
+            html += '    <div><strong>Petugas:</strong> ' + item.petugas + '</div>';
+            html += '    <div style="grid-column: span 2;"><strong>Keterangan:</strong> ' + item.deskripsi + '</div>';
+            html += '  </div>';
 
-            let html = '';
-            items.forEach(function(item) {
-                let badgeClass = 'badge-terjadwal';
-                let iconColor = '#3b82f6';
-                let bgClass = '#eff6ff';
-                
-                if (item.status.toLowerCase() === 'ditunda') {
-                    badgeClass = 'badge-ditunda';
-                    iconColor = '#f59e0b';
-                    bgClass = '#fffbeb';
-                } else if (item.status.toLowerCase() === 'selesai') {
-                    badgeClass = 'badge-selesai';
-                    iconColor = '#10b981';
-                    bgClass = '#ecfdf5';
-                }
-
-                html += '<div style="display:flex; flex-direction:column; gap:12px; padding:16px; background:white; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.02); margin-bottom:12px;">';
-                html += '  <div style="display:grid; grid-template-columns: 40px 1fr auto auto; align-items:center; gap:16px;">';
-                html += '    <div style="width:40px; height:40px; border-radius:10px; background:'+bgClass+'; color:'+iconColor+'; display:grid; place-items:center;"><i data-lucide="calendar-days" style="width:20px;"></i></div>';
-                html += '    <div style="flex:1;">';
-                html += '      <div style="font-weight:700; font-size:0.95rem; color:var(--text-main); margin-bottom:2px;">' + item.lokasi + '</div>';
-                html += '      <div style="font-size:0.85rem; color:var(--text-muted); font-weight:500;">' + item.kegiatan + '</div>';
-                html += '    </div>';
-                html += '    <div style="font-size:0.85rem; color:var(--text-muted); font-weight:600; display:flex; align-items:center; gap:6px;"><i data-lucide="clock" style="width:16px;"></i> ' + item.jam + '</div>';
-                html += '    <div class="status-badge ' + badgeClass + '">' + item.status + '</div>';
+            if (item.foto) {
+                html += '  <div style="margin-top:8px; border-radius:8px; overflow:hidden; border:1px solid #e2e8f0; max-height:220px; width:100%; display:flex; align-items:center; justify-content:center; background:#f8fafc;">';
+                html += '    <a href="javascript:void(0)" onclick="openLightbox(\'' + item.foto + '\')" style="display:flex; width:100%; height:100%; align-items:center; justify-content:center;" title="Klik untuk memperbesar">';
+                html += '      <img src="' + item.foto + '" style="max-width:100%; max-height:220px; object-fit:contain; cursor:pointer;" alt="Foto/Brosur Kegiatan">';
+                html += '    </a>';
                 html += '  </div>';
-                
-                html += '  <div style="padding-top:10px; border-top:1px dashed #e2e8f0; display:grid; grid-template-columns:1fr 1fr; gap:12px; font-size:0.8rem; color:#64748b;">';
-                html += '    <div><strong>Layanan:</strong> ' + item.jenis_layanan + '</div>';
-                html += '    <div><strong>Petugas:</strong> ' + item.petugas + '</div>';
-                html += '    <div style="grid-column: span 2;"><strong>Keterangan:</strong> ' + item.deskripsi + '</div>';
-                html += '  </div>';
+            }
+            html += '</div>';
+        });
 
-                if (item.foto) {
-                    html += '  <div style="margin-top:8px; border-radius:8px; overflow:hidden; border:1px solid #e2e8f0; max-height:220px; width:100%; display:flex; align-items:center; justify-content:center; background:#f8fafc;">';
-                    html += '    <a href="javascript:void(0)" onclick="openLightbox(\'' + item.foto + '\')" style="display:flex; width:100%; height:100%; align-items:center; justify-content:center;" title="Klik untuk memperbesar">';
-                    html += '      <img src="' + item.foto + '" style="max-width:100%; max-height:220px; object-fit:contain; cursor:pointer;" alt="Foto/Brosur Kegiatan">';
-                    html += '    </a>';
-                    html += '  </div>';
-                }
+        list.innerHTML = html;
+        detail.style.display = 'block';
 
-                html += '</div>';
-            });
-
-            list.innerHTML = html;
-            detail.style.display = 'block';
-
-            lucide.createIcons();
-            detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        if(window.lucide) {
+            window.lucide.createIcons();
         }
 
-        function openLightbox(src) {
-            const lightbox = document.getElementById('image-lightbox');
-            const img = document.getElementById('lightbox-img');
-            img.src = src;
-            lightbox.style.display = 'flex';
-            if(window.lucide) window.lucide.createIcons();
-        }
-        function closeLightbox() {
-            document.getElementById('image-lightbox').style.display = 'none';
-        }
-    </script>
+        detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
 
-    <!-- Modal Lightbox for Image Preview -->
-    <div id="image-lightbox" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; flex-direction:column; padding:20px; backdrop-filter:blur(8px);">
-        <div style="position:relative; max-width:90%; max-height:80%;">
-            <img id="lightbox-img" src="" style="max-width:100%; max-height:75vh; border-radius:12px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); border:3px solid white; object-fit:contain;">
-        </div>
-        <button onclick="closeLightbox()" style="margin-top:20px; background:#ffffff; color:#1e293b; border:none; padding:12px 24px; border-radius:30px; font-weight:700; font-size:0.9rem; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 10px 15px -3px rgba(0,0,0,0.3); transition:all 0.2s;"><i data-lucide="arrow-left" style="width:18px; height:18px;"></i> Kembali</button>
+    function openLightbox(src) {
+        const lightbox = document.getElementById('image-lightbox');
+        const img = document.getElementById('lightbox-img');
+        img.src = src;
+        lightbox.style.display = 'flex';
+        if(window.lucide) window.lucide.createIcons();
+    }
+    function closeLightbox() {
+        document.getElementById('image-lightbox').style.display = 'none';
+    }
+</script>
+@endpush
+
+<!-- Modal Lightbox for Image Preview -->
+<div id="image-lightbox" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); z-index:9999; align-items:center; justify-content:center; flex-direction:column; padding:20px; backdrop-filter:blur(8px);">
+    <div style="position:relative; max-width:90%; max-height:80%;">
+        <img id="lightbox-img" src="" style="max-width:100%; max-height:75vh; border-radius:12px; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); border:3px solid white; object-fit:contain;">
     </div>
-</body>
-</html>
+    <button onclick="closeLightbox()" style="margin-top:20px; background:#ffffff; color:#1e293b; border:none; padding:12px 24px; border-radius:30px; font-weight:700; font-size:0.9rem; cursor:pointer; display:flex; align-items:center; gap:8px; box-shadow:0 10px 15px -3px rgba(0,0,0,0.3); transition:all 0.2s;"><i data-lucide="arrow-left" style="width:18px; height:18px;"></i> Kembali</button>
+</div>
+@endsection

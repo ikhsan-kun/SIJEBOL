@@ -1,63 +1,14 @@
-@php
-    $hour = now()->hour;
-    $greeting = 'Selamat Malam';
-    if ($hour >= 5 && $hour < 11) {
-        $greeting = 'Selamat Pagi';
-    } elseif ($hour >= 11 && $hour < 15) {
-        $greeting = 'Selamat Siang';
-    } elseif ($hour >= 15 && $hour < 18) {
-        $greeting = 'Selamat Sore';
-    }
-@endphp
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - SI JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    
-    <style>
-        body { 
-            background-color: #f8fafc;
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            color: #1e293b;
-            position: relative;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
+@extends('layouts.masyarakat')
 
-        .dashboard-layout {
-            display: flex;
-            min-height: 100vh;
-        }
-
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 0 0 0;
-            background: transparent;
-            min-width: 0;
-            transition: all 0.3s ease;
-            display: flex; flex-direction: column; min-height: 100vh;
-}
-
-        @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-                padding: 80px 20px 0 ;
-                display: flex; flex-direction: column; min-height: 100vh;
-}
+@push('styles')
+<style>
+@media (max-width: 1024px) {
+            
         }
 
         /* Top Grid: Hero & Profile */
         .top-grid {
-            margin-bottom: 0;
+            margin: -24px -24px 32px -24px;
             display: grid;
             grid-template-columns: 2.5fr 1fr;
             gap: 0;
@@ -66,6 +17,23 @@
 
         @media (max-width: 1200px) {
             .top-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 1024px) {
+            .top-grid { margin: -16px -16px 32px -16px !important; }
+        }
+        @media (max-width: 768px) {
+            .top-grid { 
+                margin: -16px -16px 16px -16px !important; 
+                width: calc(100% + 32px) !important;
+                display: block !important; 
+            }
+            .hero-banner, .profile-card {
+                border-radius: 0 !important;
+                margin-bottom: 0 !important;
+                width: 100% !important;
+                box-sizing: border-box !important;
+            }
+            .profile-card { border-bottom: 1px solid #e2e8f0 !important; border-top: none !important; }
         }
 
         .hero-banner {
@@ -278,22 +246,13 @@
         }
         @media (max-width: 640px) { 
             .action-grid, .stats-grid { 
-                display: flex; 
-                flex-wrap: nowrap; 
-                overflow-x: auto; 
-                padding-bottom: 16px;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                margin-left: -20px;
-                margin-right: -20px;
-                padding-left: 20px;
-                padding-right: 20px;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 12px;
             } 
-            .action-grid::-webkit-scrollbar, .stats-grid::-webkit-scrollbar { 
-                display: none; 
+            .action-card, .stat-card {
+                border-radius: 12px;
             }
-            .action-card { flex: 0 0 280px; }
-            .stat-card { flex: 0 0 240px; }
         }
 
         .action-card {
@@ -404,7 +363,7 @@
 
         @media (max-width: 640px) {
             .table-responsive {
-                margin: 0 -24px;
+                margin: 0 -16px;
                 padding: 0 24px;
             }
             .table-riwayat {
@@ -487,16 +446,11 @@
             font-size: 0.75rem;
             color: #64748b;
         }
-    </style>
-</head>
-<body x-data="{ sidebarOpen: false }">
+</style>
+@endpush
 
-    <div class="dashboard-layout">
-        @include('partials.sidebar-masyarakat')
-
-        <main class="main-content">
-            
-            <div class="top-grid">
+@section('content')
+<div class="top-grid">
                 <!-- Hero Banner -->
                 <div class="hero-banner">
                     <div class="hero-content">
@@ -705,57 +659,4 @@
 
 
             </div>
-
-            
-
-                    <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <script>
-        lucide.createIcons();
-    </script>
-    <!-- Chart.js Logic -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const rekapCtx = document.getElementById('rekapLayananChart').getContext('2d');
-            new Chart(rekapCtx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['IKD', 'KTP-el', 'KIA'],
-                    datasets: [{
-                        data: {!! json_encode($rekapSelesaiData ?? [0,0,0]) !!},
-                        backgroundColor: ['#2563eb', '#10b981', '#fb923c'],
-                        borderWidth: 0,
-                        hoverOffset: 4
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    cutout: '75%',
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: '#1e293b',
-                            padding: 12,
-                            titleFont: { family: 'Inter', size: 12 },
-                            bodyFont: { family: 'Inter', size: 11 },
-                            displayColors: true,
-                        }
-                    }
-                }
-            });
-        });
-    </script>
-</body>
-</html>
-
+@endsection

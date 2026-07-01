@@ -18,9 +18,9 @@
         pointer-events: none;
     }
     .footer-container {
-        max-width: 1280px;
+        max-width: 100%;
         margin: 0 auto;
-        padding: 0 24px;
+        padding: 0 40px;
         position: relative;
         z-index: 2;
     }
@@ -87,8 +87,16 @@
         transition: all 0.3s;
     }
     .footer-social-link:hover {
-        background: #3b82f6;
         transform: translateY(-3px);
+    }
+    .footer-social-link.instagram:hover {
+        background: #e1306c;
+    }
+    .footer-social-link.facebook:hover {
+        background: #1877f2;
+    }
+    .footer-social-link.twitter:hover {
+        background: #1da1f2;
     }
     .footer-heading {
         color: white;
@@ -175,52 +183,6 @@
         color: white;
         font-weight: 600;
     }
-    .footer-uhn-container {
-        display: flex;
-        align-items: center;
-        gap: 14px;
-        margin-top: 24px;
-        padding-top: 20px;
-        border-top: 1px solid rgba(255, 255, 255, 0.08);
-        transition: all 0.3s ease;
-    }
-    .footer-uhn-container:hover {
-        border-top-color: rgba(59, 130, 246, 0.3);
-    }
-    .footer-uhn-logo {
-        width: 46px;
-        height: 46px;
-        object-fit: contain;
-        background: rgba(255, 255, 255, 0.95);
-        border-radius: 50%;
-        padding: 4px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-        transition: transform 0.3s ease;
-    }
-    .footer-uhn-container:hover .footer-uhn-logo {
-        transform: scale(1.1) rotate(5deg);
-    }
-    .footer-uhn-info {
-        display: flex;
-        flex-direction: column;
-    }
-    .footer-uhn-name {
-        font-family: 'Outfit', 'Inter', sans-serif;
-        font-size: 0.95rem;
-        font-weight: 700;
-        color: #f1f5f9;
-        letter-spacing: 0.3px;
-        line-height: 1.3;
-    }
-    .footer-uhn-prodi {
-        font-family: 'Inter', sans-serif;
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: #3b82f6;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-top: 2px;
-    }
     .footer-bottom {
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         padding: 24px 0;
@@ -277,22 +239,18 @@
                 <p class="footer-desc">
                     Sistem Informasi Jemput Bola (SI JEBOL) merupakan layanan administrasi kependudukan berbasis digital yang memudahkan masyarakat dalam mengakses layanan KTP-el, KIA, dan IKD melalui program pelayanan jemput bola.
                 </p>
-                <div class="footer-socials">
-                    <a href="#" class="footer-social-link" title="Instagram">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-                    </a>
-                    <a href="#" class="footer-social-link" title="Facebook">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-                    </a>
-                    <a href="#" class="footer-social-link" title="Twitter">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/></svg>
-                    </a>
-                </div>
-                <div class="footer-uhn-container">
-                    <img src="{{ asset('images/uhn.png') }}" alt="Universitas Harkat Negeri" class="footer-uhn-logo">
-                    <div class="footer-uhn-info">
-                        <span class="footer-uhn-name">Universitas Harkat Negeri</span>
-                        <span class="footer-uhn-prodi">D3 Teknik Komputer</span>
+
+
+                <!-- Universitas Harkat Negeri -->
+                <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid rgba(255, 255, 255, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 24px;">
+                    <div style="display: flex; align-items: center; gap: 16px;">
+                        <div style="width: 56px; height: 56px; border-radius: 50%; background: white; display: flex; align-items: center; justify-content: center; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.2);">
+                            <img src="{{ asset('harkat.png') }}" alt="Logo HN" style="width: 40px; height: 40px; object-fit: contain;">
+                        </div>
+                        <div>
+                            <h3 style="color: white; margin: 0; font-size: 1.15rem; font-weight: 800; font-family: 'Outfit', sans-serif;">Universitas Harkat Negeri</h3>
+                            <p style="color: #3b82f6; margin: 0; font-weight: 700; font-size: 0.85rem; letter-spacing: 1px;">D3 TEKNIK KOMPUTER</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -371,33 +329,29 @@
                 <ul class="footer-contact-list">
                     <li class="footer-contact-item">
                         <span class="material-symbols-outlined footer-contact-icon">location_on</span>
-                        <span>Dinas Kependudukan dan Pencatatan Sipil Kota Tegal</span>
+                        <span>Jl. Lele No.14, Tegalsari, Kec. Tegal Bar., Kota Tegal, Jawa Tengah 52111</span>
                     </li>
                     <li class="footer-contact-item">
                         <span class="material-symbols-outlined footer-contact-icon">call</span>
-                        <a href="tel:0283351001">(0283) 351001</a>
+                        <a href="tel:0283343262">0896-8002-21212</a>
                     </li>
                     <li class="footer-contact-item">
                         <span class="material-symbols-outlined footer-contact-icon">mail</span>
-                        <a href="mailto:disdukcapil@tegalkota.go.id">disdukcapil@tegalkota.go.id</a>
-                    </li>
-                    <li class="footer-contact-item">
-                        <span class="material-symbols-outlined footer-contact-icon">language</span>
-                        <a href="https://disdukcapil.tegalkota.go.id" target="_blank">Website Resmi</a>
+                        <a href="mailto:disdukcapil@tegalkota.go.id">hdisdukcapiltegalkota@gmail.com</a>
                     </li>
                 </ul>
             </div>
         </div>
 
-        <!-- Bottom Footer -->
-        <div class="footer-bottom">
-            <p style="margin: 0;">
-                &copy; {{ date('Y') }} Dinas Kependudukan dan Pencatatan Sipil Kota Tegal.
-            </p>
-            <div class="footer-bottom-links">
-                <a href="#">Syarat & Ketentuan</a>
-                <a href="#">Kebijakan Privasi</a>
-            </div>
+    </div>
+
+    <!-- Bottom Footer -->
+    <div class="footer-bottom" style="padding-left: 40px; padding-right: 40px; position: relative; z-index: 2;">
+        <p style="margin: 0;">
+            &copy; {{ date('Y') }} Dinas Kependudukan dan Pencatatan Sipil Kota Tegal.
+        </p>
+        <div class="footer-bottom-links">
+            <span>Crafted with ❤️ by Siti Nurhalizah</span>
         </div>
     </div>
 </footer>

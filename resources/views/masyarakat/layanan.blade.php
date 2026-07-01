@@ -1,26 +1,8 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Layanan - JEBOL</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/custom-style.css') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    <style>
-        :root {
-            --primary: #003178;
-            --primary-light: #e0f2fe;
-            --text-main: #1e293b;
-            --text-muted: #64748b;
-        }
+@extends('layouts.masyarakat')
 
-        body {
-            background-color: #f8faff;
-            background-image: url('{{ asset('img/batik-pattern.png') }}');
+@push('styles')
+<style>
+}');
             background-size: 400px;
             font-family: 'Inter', sans-serif;
             color: var(--text-main);
@@ -28,27 +10,12 @@
         }
 
         /* Sidebar Layout Integration */
-        .dashboard-layout {
-            display: flex;
-            min-height: 100vh;
-        }
+        
 
-        .main-content {
-            flex-grow: 1;
-            margin-left: 260px;
-            padding: 80px 48px 0 ;
-            background: #f4f7fb;
-            min-width: 0;
-            transition: all 0.3s ease;
-            display: flex; flex-direction: column; min-height: 100vh;
-}
+        
 
         @media (max-width: 1024px) {
-            .main-content {
-                margin-left: 0;
-                padding: 100px 20px 0 ;
-                display: flex; flex-direction: column; min-height: 100vh;
-}
+            
         }
 
         .hero-banner {
@@ -90,8 +57,8 @@
 
         @media (max-width: 1024px) {
             .hero-banner {
-                margin: 0 -20px 40px -20px;
-                padding: 40px 40px;
+                margin: -16px -16px 40px -16px;
+                padding: 40px 24px;
                 border-radius: 0;
             }
         }
@@ -402,16 +369,11 @@
                 margin-top: 10px;
             }
         }
-    </style>
-</head>
-<body x-data="{ sidebarOpen: false, showDetailModal: false, activeService: '' }">
-    
+</style>
+@endpush
 
-    <div class="dashboard-layout">
-        @include('partials.sidebar-masyarakat')
-
-        <main class="main-content">
-            <section class="hero-banner">
+@section('content')
+<section class="hero-banner">
                 <div class="jbl-1109 jbl-1117 jbl-1401 jbl-1293 jbl-1541 jbl-1426 jbl-141">
                     <h1>Layanan <span style="color: #F59E0B;">SI JEBOL</span></h1>
                     <p style="margin-left: auto !important; margin-right: auto !important;">Pilih layanan administrasi kependudukan yang Anda butuhkan dengan mudah, cepat, dan aman.</p>
@@ -481,246 +443,4 @@
             </div>
         </div>
             </div>
-                    <!-- Global Footer -->
-            <div style="margin-top: auto; padding: 24px; background: white; border-top: 1px solid #e2e8f0; display: flex; justify-content: space-between; font-size: 0.75rem; color: #64748b;">
-                <div>&copy; 2026 Dinas Kependudukan dan Pencatatan Sipil Kota Tegal. All rights reserved.</div>
-                <div style="display:flex; gap:16px;">
-                    <a href="#" style="color:#64748b; text-decoration:none;">Kebijakan Privasi</a>
-                    <a href="#" style="color:#64748b; text-decoration:none;">Syarat & Ketentuan</a>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- Alpine JS Modal for Detail & Syarat -->
-    <div x-show="showDetailModal" class="jbl-524 jbl-1062 jbl-377 jbl-685" aria-labelledby="modal-title" role="dialog" aria-modal="true" style="display: none;">
-        <!-- Background backdrop -->
-        <div x-show="showDetailModal" 
-             x-transition:enter="ease-out duration-300" 
-             x-transition:enter-start="opacity-0" 
-             x-transition:enter-end="opacity-100" 
-             x-transition:leave="ease-in duration-200" 
-             x-transition:leave-start="opacity-100" 
-             x-transition:leave-end="opacity-0" 
-             class="jbl-524 jbl-1062 jbl-1085 jbl-637 jbl-729" 
-             @click="showDetailModal = false"></div>
-
-        <div class="jbl-1293 jbl-167 jbl-1426 jbl-141 jbl-156 jbl-1401 jbl-282">
-            <!-- Modal panel -->
-            <div x-show="showDetailModal" 
-                 x-transition:enter="ease-out duration-300" 
-                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
-                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100" 
-                 x-transition:leave="ease-in duration-200" 
-                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100" 
-                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95" 
-                 class="jbl-1109 jbl-753 jbl-35 jbl-1382 jbl-434 jbl-1103 jbl-641 jbl-1288 jbl-1447 jbl-690 jbl-997 jbl-333 jbl-1319">
-                
-                <!-- Modal Header -->
-                <div class="jbl-1547 jbl-725 jbl-371 jbl-1293 jbl-1426 jbl-1409 jbl-1109 jbl-35">
-                    <div class="jbl-91 jbl-1062 jbl-6 bg-[url('{{ asset('img/batik-pattern.png') }}')] bg-cover"></div>
-                    <div class="jbl-1109 jbl-1117 jbl-1293 jbl-1426 jbl-985 jbl-1361">
-                        <i data-lucide="file-text" width="24" height="24"></i>
-                        <h3 class="jbl-390 jbl-959 jbl-1361" id="modal-title" x-text="'Persyaratan ' + activeService">Detail & Syarat</h3>
-                    </div>
-                    <button @click="showDetailModal = false" class="jbl-1109 jbl-1117 jbl-860 jbl-1554 jbl-632 jbl-1112 jbl-1296 jbl-518 jbl-835">
-                        <i data-lucide="x" width="20" height="20"></i>
-                    </button>
-                </div>
-
-                <!-- Modal Body -->
-                <div class="jbl-725 jbl-1078 jbl-1134 jbl-99 jbl-685">
-                    
-                    <!-- KTP-el Specific Content -->
-                    <div x-show="activeService.includes('KTP')" style="display: none;">
-                        <div class="jbl-1342">
-                            <!-- Persyaratan -->
-                            <div>
-                                <h4 class="jbl-1080 jbl-959 jbl-497 jbl-1462 jbl-422 jbl-897 jbl-1293 jbl-1426 jbl-745">
-                                    <i data-lucide="check-square" width="16"></i> Persyaratan Pelayanan
-                                </h4>
-                                <div class="jbl-434 jbl-1406 jbl-1545 jbl-333 jbl-121 jbl-160 jbl-285">
-                                    <div>
-                                        <p class="jbl-959 jbl-386 jbl-166 jbl-1429">Pengurusan KTP-el Baru:</p>
-                                        <ul class="jbl-1405 jbl-660 jbl-166 jbl-1574 jbl-1327 jbl-1003">
-                                            <li>Fotocopy Kartu Keluarga (KK)</li>
-                                        </ul>
-                                    </div>
-                                    <div class="jbl-1378 jbl-1234 jbl-1319">
-                                        <p class="jbl-959 jbl-386 jbl-166 jbl-1429">Cetak KTP-el Pengganti:</p>
-                                        <ul class="jbl-1405 jbl-660 jbl-166 jbl-1574 jbl-1327 jbl-1003">
-                                            <li>Fotocopy Kartu Keluarga (KK)</li>
-                                            <li>Membawa KTP-el yang rusak (jika karena rusak)</li>
-                                            <li>Surat Kehilangan dari Kepolisian (jika hilang)</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Prosedur Removed as requested -->
-
-                            <!-- Waktu & Biaya -->
-                            <div class="jbl-174 jbl-1576 jbl-701">
-                                <div class="jbl-434 jbl-1406 jbl-156 jbl-333 jbl-121 jbl-160">
-                                    <p class="jbl-843 jbl-959 jbl-13 jbl-1462 jbl-1195">Jangka Waktu</p>
-                                    <p class="jbl-166 jbl-959 jbl-386"><i data-lucide="clock" width="14" class="jbl-1189 jbl-1381 jbl-1457"></i> 2 Hari Kerja</p>
-                                </div>
-                                <div class="jbl-434 jbl-1406 jbl-156 jbl-333 jbl-121 jbl-160">
-                                    <p class="jbl-843 jbl-959 jbl-13 jbl-1462 jbl-1195">Biaya / Tarif</p>
-                                    <p class="jbl-166 jbl-959 jbl-625"><i data-lucide="check-circle" width="14" class="jbl-1189 jbl-1457"></i> GRATIS</p>
-                                </div>
-                            </div>
-
-                            <!-- Dasar Hukum -->
-                            <div>
-                                <h4 class="jbl-1080 jbl-959 jbl-497 jbl-1462 jbl-422 jbl-1429 jbl-1293 jbl-1426 jbl-745">
-                                    <i data-lucide="book-open" width="16"></i> Dasar Hukum
-                                </h4>
-                                <div class="jbl-995 jbl-1320 jbl-156 jbl-596 jbl-147 jbl-1003">
-                                    <p>1. UU No. 24 Tahun 2013 tentang perubahan atas UU No. 23 Th. 2006 tentang Administrasi Kependudukan.</p>
-                                    <p>2. Perpres No. 96 Tahun 2018 Tentang Persyaratan dan Tata Cara Pendaftaran Penduduk dan Pencatatan Sipil.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- KIA Specific Content -->
-                    <div x-show="activeService.includes('KIA')" style="display: none;">
-                        <div class="jbl-1342">
-                            <!-- Persyaratan -->
-                            <div>
-                                <h4 class="jbl-1080 jbl-959 jbl-497 jbl-1462 jbl-422 jbl-897 jbl-1293 jbl-1426 jbl-745">
-                                    <i data-lucide="check-square" width="16"></i> Persyaratan Pelayanan
-                                </h4>
-                                <div class="jbl-434 jbl-1406 jbl-1545 jbl-333 jbl-121 jbl-160 jbl-285">
-                                    <div>
-                                        <p class="jbl-959 jbl-386 jbl-166 jbl-1429">Penerbitan KIA Baru:</p>
-                                        <ul class="jbl-1405 jbl-660 jbl-166 jbl-1574 jbl-1327 jbl-1003">
-                                            <li>Fotocopy Kutipan Akta Kelahiran</li>
-                                            <li>Fotocopy KK Orang Tua/Wali</li>
-                                            <li>Fotocopy KTP-el kedua Orang Tua/Wali</li>
-                                            <li>Pas Foto Anak berwarna ukuran 2x3 (khusus usia 5 - 17 tahun kurang satu hari)</li>
-                                        </ul>
-                                    </div>
-                                    <div class="jbl-1378 jbl-1234 jbl-1319">
-                                        <p class="jbl-959 jbl-386 jbl-166 jbl-1429">Penerbitan KIA Pengganti:</p>
-                                        <ul class="jbl-1405 jbl-660 jbl-166 jbl-1574 jbl-1327 jbl-1003">
-                                            <li>Membawa KIA yang rusak (jika karena rusak)</li>
-                                            <li>Surat Kehilangan dari Kepolisian (jika hilang)</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Waktu & Biaya -->
-                            <div class="jbl-174 jbl-1576 jbl-701">
-                                <div class="jbl-434 jbl-1406 jbl-156 jbl-333 jbl-121 jbl-160">
-                                    <p class="jbl-843 jbl-959 jbl-13 jbl-1462 jbl-1195">Jangka Waktu</p>
-                                    <p class="jbl-166 jbl-959 jbl-386"><i data-lucide="clock" width="14" class="jbl-1189 jbl-1381 jbl-1457"></i> 2 Hari Kerja</p>
-                                </div>
-                                <div class="jbl-434 jbl-1406 jbl-156 jbl-333 jbl-121 jbl-160">
-                                    <p class="jbl-843 jbl-959 jbl-13 jbl-1462 jbl-1195">Biaya / Tarif</p>
-                                    <p class="jbl-166 jbl-959 jbl-625"><i data-lucide="check-circle" width="14" class="jbl-1189 jbl-1457"></i> GRATIS</p>
-                                </div>
-                            </div>
-
-                            <!-- Dasar Hukum -->
-                            <div>
-                                <h4 class="jbl-1080 jbl-959 jbl-497 jbl-1462 jbl-422 jbl-1429 jbl-1293 jbl-1426 jbl-745">
-                                    <i data-lucide="book-open" width="16"></i> Dasar Hukum
-                                </h4>
-                                <div class="jbl-995 jbl-1320 jbl-156 jbl-596 jbl-147 jbl-1003">
-                                    <p>1. Permendagri No. 2 Tahun 2016 tentang Kartu Identitas Anak.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- IKD Specific Content -->
-                    <div x-show="activeService.includes('IKD')" style="display: none;">
-                        <div class="jbl-1342">
-                            <!-- Persyaratan -->
-                            <div>
-                                <h4 class="jbl-1080 jbl-959 jbl-497 jbl-1462 jbl-422 jbl-897 jbl-1293 jbl-1426 jbl-745">
-                                    <i data-lucide="check-square" width="16"></i> Persyaratan Pelayanan
-                                </h4>
-                                <div class="jbl-434 jbl-1406 jbl-1545 jbl-333 jbl-121 jbl-160 jbl-285">
-                                    <div>
-                                        <p class="jbl-959 jbl-386 jbl-166 jbl-1429">Aktivasi Identitas Kependudukan Digital (IKD):</p>
-                                        <ul class="jbl-1405 jbl-660 jbl-166 jbl-1574 jbl-1327 jbl-1003">
-                                            <li>Telah memiliki KTP-el Fisik atau pernah melakukan perekaman biometrik</li>
-                                            <li>Memiliki Smartphone (Android / iOS)</li>
-                                            <li>Memiliki alamat Email yang aktif</li>
-                                            <li>Smartphone terhubung dengan koneksi internet</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Waktu & Biaya -->
-                            <div class="jbl-174 jbl-1576 jbl-701">
-                                <div class="jbl-434 jbl-1406 jbl-156 jbl-333 jbl-121 jbl-160">
-                                    <p class="jbl-843 jbl-959 jbl-13 jbl-1462 jbl-1195">Jangka Waktu</p>
-                                    <p class="jbl-166 jbl-959 jbl-386"><i data-lucide="clock" width="14" class="jbl-1189 jbl-1381 jbl-1457"></i> Langsung Aktif</p>
-                                </div>
-                                <div class="jbl-434 jbl-1406 jbl-156 jbl-333 jbl-121 jbl-160">
-                                    <p class="jbl-843 jbl-959 jbl-13 jbl-1462 jbl-1195">Biaya / Tarif</p>
-                                    <p class="jbl-166 jbl-959 jbl-625"><i data-lucide="check-circle" width="14" class="jbl-1189 jbl-1457"></i> GRATIS</p>
-                                </div>
-                            </div>
-
-                            <!-- Dasar Hukum -->
-                            <div>
-                                <h4 class="jbl-1080 jbl-959 jbl-497 jbl-1462 jbl-422 jbl-1429 jbl-1293 jbl-1426 jbl-745">
-                                    <i data-lucide="book-open" width="16"></i> Dasar Hukum
-                                </h4>
-                                <div class="jbl-995 jbl-1320 jbl-156 jbl-596 jbl-147 jbl-1003">
-                                    <p>1. Permendagri No. 72 Tahun 2022 tentang Penyelenggaraan Identitas Kependudukan Digital.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Generic Default Content -->
-                    <div x-show="!activeService.includes('KTP') && !activeService.includes('KIA') && !activeService.includes('IKD')" style="display: none;">
-                        <div class="jbl-285">
-                            <p class="jbl-1574 jbl-772 jbl-166">Berikut adalah persyaratan umum yang wajib dipenuhi sebelum melakukan pengajuan secara online:</p>
-                            
-                            <div class="jbl-434 jbl-1406 jbl-1545 jbl-333 jbl-1319 jbl-160 jbl-285">
-                                <div class="jbl-1293 jbl-701 jbl-1046">
-                                    <div class="jbl-1374 jbl-1224 jbl-835 jbl-176 jbl-184 jbl-1293 jbl-1426 jbl-141 jbl-959 jbl-166 jbl-795 jbl-1213">1</div>
-                                    <p class="jbl-166 jbl-1397 jbl-431">Mempunyai akun SI JEBOL yang telah terverifikasi NIK-nya.</p>
-                                </div>
-                                <div class="jbl-1293 jbl-701 jbl-1046">
-                                    <div class="jbl-1374 jbl-1224 jbl-835 jbl-176 jbl-184 jbl-1293 jbl-1426 jbl-141 jbl-959 jbl-166 jbl-795 jbl-1213">2</div>
-                                    <p class="jbl-166 jbl-1397 jbl-431">Dokumen asli harus dipindai (scan) atau difoto dengan jelas, terang, dan berwarna.</p>
-                                </div>
-                                <div class="jbl-1293 jbl-701 jbl-1046">
-                                    <div class="jbl-1374 jbl-1224 jbl-835 jbl-176 jbl-184 jbl-1293 jbl-1426 jbl-141 jbl-959 jbl-166 jbl-795 jbl-1213">3</div>
-                                    <p class="jbl-166 jbl-1397 jbl-431">Format file yang didukung: JPG/PNG/PDF dengan ukuran maksimal 2MB per file.</p>
-                                </div>
-                                <div class="jbl-1293 jbl-701 jbl-1046">
-                                    <div class="jbl-1374 jbl-1224 jbl-835 jbl-176 jbl-184 jbl-1293 jbl-1426 jbl-141 jbl-959 jbl-166 jbl-795 jbl-1213">4</div>
-                                    <p class="jbl-166 jbl-1397 jbl-431">Pastikan Nomor WhatsApp yang terdaftar selalu aktif untuk notifikasi status berkas.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal Footer -->
-                <div class="jbl-434 jbl-725 jbl-371 jbl-1234 jbl-1319 jbl-1293 jbl-594 jbl-985">
-                    <button @click="showDetailModal = false" type="button" class="jbl-823 jbl-1539 jbl-141 jbl-1320 jbl-1547 jbl-725 jbl-1569 jbl-166 jbl-959 jbl-1361 jbl-160 jbl-402 jbl-28 jbl-632">
-                        Tutup
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        lucide.createIcons();
-    </script>
-</body>
-</html>
-
+@endsection

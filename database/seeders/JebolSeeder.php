@@ -4,10 +4,8 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\User;
-use App\Models\Masyarakat;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class JebolSeeder extends Seeder
 {
@@ -44,7 +42,7 @@ class JebolSeeder extends Seeder
         );
 
         // 3. Masyarakat (User)
-        $mUser = User::updateOrCreate(
+        User::updateOrCreate(
             ['email' => 'masyarakat@gmail.com'],
             [
                 'name' => 'Ahmad Subarjo',
@@ -58,75 +56,43 @@ class JebolSeeder extends Seeder
             ]
         );
 
-        Masyarakat::updateOrCreate(
-            ['nik' => $mUser->nik],
-            [
-                'nama' => $mUser->name,
-                'email' => $mUser->email,
-                'password' => $mUser->password,
-                'no_hp' => $mUser->phone,
-                'alamat' => 'Kelurahan Mintaragen, Tegal Timur',
-                'role' => 'user'
-            ]
-        );
-
         // 4. Sample Jadwal
-        DB::table('jadwal_jebol')->insert([
+        DB::table('jadwal_petugas')->insert([
             [
-                'nama_kegiatan' => 'Jemput Bola Kelurahan Mintaragen',
-                'jenis_lokasi' => 'Kecamatan',
-                'lokasi' => 'Kec. Tegal Timur - Kelurahan Mintaragen',
-                'tanggal_pelayanan' => now()->addDays(2)->format('Y-m-d'),
+                'lokasi' => 'Kelurahan Mintaragen',
+                'tanggal' => now()->addDays(2)->format('Y-m-d'),
                 'jam_mulai' => '09:00:00',
                 'jam_selesai' => '12:00:00',
                 'kuota' => 50,
-                'petugas' => 'Tim Disdukcapil Tegal Timur',
-                'jenis_layanan' => 'KTP-el',
-                'status' => 'Terjadwal',
+                'terisi' => 5,
+                'status' => 'aktif',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'nama_kegiatan' => 'Jemput Bola SMKN 3 Kota Tegal',
-                'jenis_lokasi' => 'Sekolah',
                 'lokasi' => 'SMKN 3 Kota Tegal',
-                'tanggal_pelayanan' => now()->addDays(3)->format('Y-m-d'),
+                'tanggal' => now()->addDays(3)->format('Y-m-d'),
                 'jam_mulai' => '10:00:00',
                 'jam_selesai' => '15:00:00',
                 'kuota' => 100,
-                'petugas' => 'Tim Disdukcapil Kota Tegal',
-                'jenis_layanan' => 'KIA',
-                'status' => 'Terjadwal',
+                'terisi' => 12,
+                'status' => 'aktif',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]
         ]);
 
         // 5. Sample Permohonan
-        DB::table('pengajuan_layanan')->insert([
+        DB::table('permohonan')->insert([
             [
-                'nik' => $mUser->nik,
-                'nomor_tiket' => 'JB-' . date('Ymd') . '-' . strtoupper(Str::random(4)),
+                'user_id' => User::where('role', 'user')->first()->id,
+                'nomor_tiket' => 'TBL-' . strtoupper(uniqid()),
                 'jenis_layanan' => 'KTP-el Baru',
-                'jenis_pengajuan' => 'Baru',
-                'no_hp' => $mUser->phone,
-                'alamat' => 'Kelurahan Mintaragen, Tegal Timur',
+                'status' => 'pending',
                 'keterangan' => 'Permohonan KTP-el karena baru berusia 17 tahun.',
-                'lokasi_pelayanan' => 'Kec. Tegal Timur - Kelurahan Mintaragen',
-                'status' => 'menunggu_verifikasi',
                 'tanggal_pengajuan' => now(),
-                'detail_pengajuan' => json_encode([
-                    'nama' => $mUser->name,
-                    'nik' => $mUser->nik,
-                    'tempat_lahir' => 'Tegal',
-                    'tanggal_lahir' => '2009-06-22',
-                    'jenis_kelamin' => 'Laki-laki',
-                    'golongan_darah' => 'O',
-                    'agama' => 'Islam',
-                    'status_perkawinan' => 'Belum Kawin',
-                    'pekerjaan' => 'Pelajar/Mahasiswa',
-                    'kewarganegaraan' => 'WNI'
-                ])
+                'created_at' => now(),
+                'updated_at' => now(),
             ]
         ]);
     }

@@ -227,7 +227,7 @@
     </div>
 @endif
 
-<form action="{{ request()->routeIs('cabang_dinas.*') ? route('cabang_dinas.jadwal.store') : route('cabang.jadwal.store') }}" method="POST">
+<form action="{{ request()->routeIs('cabang_dinas.*') ? route('cabang_dinas.jadwal.store') : route('cabang.jadwal.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     
     <!-- Section 1: Informasi Dasar -->
@@ -237,14 +237,22 @@
         </h2>
         
         <div class="form-grid">
-            <div class="field-group field-group-full">
+            <div class="field-group">
                 <span class="field-label">Nama Kegiatan</span>
                 <input type="text" name="nama_kegiatan" placeholder="Contoh: JEBOL KTP-el Kecamatan Tegal Barat" required class="field-input" value="{{ old('nama_kegiatan') }}">
             </div>
 
-            <div class="field-group field-group-full">
+            <div class="field-group">
                 <span class="field-label">Lokasi Pelayanan</span>
                 <input type="text" name="lokasi" id="lokasi" required class="field-input" placeholder="Contoh: SMAN 1 Tegal atau Balai Desa" value="{{ old('lokasi') }}">
+            </div>
+        </div>
+        
+        <div class="form-grid" style="margin-top: 16px;">
+            <div class="field-group">
+                <span class="field-label">Foto Brosur / Banner (Opsional)</span>
+                <input type="file" name="foto" accept="image/*" class="field-input" style="padding: 10px;">
+                <small style="color: var(--text-muted); font-size: 0.8rem; display: block; margin-top: 4px;">Upload foto terkait kegiatan JEBOL ini (Maks. 2MB).</small>
             </div>
         </div>
     </div>
@@ -255,7 +263,7 @@
             <i data-lucide="clock" style="width: 20px; color: var(--primary);"></i> Waktu Pelaksanaan
         </h2>
         
-        <div class="form-grid">
+        <div class="form-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
             <div class="field-group">
                 <span class="field-label">Tanggal Pelayanan</span>
                 <input type="date" name="tanggal_pelayanan" required class="field-input" value="{{ old('tanggal_pelayanan') }}">

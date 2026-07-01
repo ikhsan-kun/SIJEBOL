@@ -24,10 +24,7 @@
         mix-blend-mode: luminosity;
     }
     .settings-container {
-        display: grid;
-        grid-template-columns: 280px 1fr;
-        gap: 30px;
-        align-items: start;
+        display: block;
     }
     .settings-sidebar {
         background: white;
@@ -81,38 +78,10 @@
     .status-failed { background: #ef4444; }
 </style>
 
-<div class="settings-header">
-    <div style="position: relative; z-index: 10; display: flex; align-items: center; gap: 24px;">
-        <div style="width: 64px; height: 64px; background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 20px; display: grid; place-items: center;">
-            <i data-lucide="shield" style="width: 32px; height: 32px;"></i>
-        </div>
-        <div>
-            <h1 style="margin: 0 0 8px; font-size: 2rem; font-weight: 800;">Keamanan Akun</h1>
-            <p style="margin: 0; font-size: 1.1rem; opacity: 0.9;">Pantau aktivitas login dan perangkat Anda.</p>
-        </div>
-    </div>
-</div>
+
 
 <div class="settings-container">
-    <!-- Sidebar Menu -->
-    <div class="settings-sidebar">
 
-        <a href="{{ route('admin.settings.users') }}" class="settings-item">
-            <div class="settings-icon"><i data-lucide="users"></i></div>
-            <div class="settings-text">
-                <h3>Pengguna</h3><p>Kelola akses admin</p>
-            </div>
-        </a>
-
-        <a href="{{ route('admin.settings.security') ?? '#' }}" class="settings-item active">
-            <div class="settings-icon"><i data-lucide="shield"></i></div>
-            <div class="settings-text">
-                <h3>Keamanan</h3><p>Aktivitas perangkat</p>
-            </div>
-        </a>
-    </div>
-
-    <!-- Main Content -->
     <div>
         <div class="settings-content-card">
             <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
