@@ -816,10 +816,7 @@ class CabangController extends Controller
         $data = $request->except(['jenis_layanan', 'foto']);
         
         if ($request->hasFile('foto')) {
-            $file = $request->file('foto');
-            $filename = time() . '_' . $file->getClientOriginalName();
-            $file->move(public_path('uploads/jadwal'), $filename);
-            $data['foto'] = 'uploads/jadwal/' . $filename;
+            $data['foto'] = $request->file('foto')->store('uploads/jadwal', 'public');
         }
 
         $data['jenis_layanan'] = implode(', ', $request->jenis_layanan);
